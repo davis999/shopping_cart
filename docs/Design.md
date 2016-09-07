@@ -18,9 +18,10 @@ If product has been added successfully, return "success" message to the caller.
 
 ## Error Handle
 
-- If SKU is a wrong number, return error: *GRPC_STATUS_UNIMPLEMENTED*.
-- If request qty (merge the qty that cart database stored) is larger than inventory, return error: *GRPC_STATUS_UNIMPLEMENTED*.
-- Other exception, log it and return error: *GRPC_STATUS_UNKNOWN*.
+- If SKU has a wrong formatter, return error: *INVALID_ARGUMENT*.
+- If SKU is a wrong number, return error: *NOT_FOUND*.
+- If request qty (merge the qty that cart database stored) is larger than inventory, return error: *RESOURCE_EXHAUSTED*.
+- Other exception, log it and return error: *INTERNAL*.
 
 ## GRPC API
 
@@ -34,19 +35,33 @@ session_id | No | If customer_id does not exist, required
 customer_id | No | If session_id does not exist, required
 sku | Yes |
 qty | No | Default: 1
+inventory | Yes |
 
 Example:  
-`TBD
-`
+```
+message AddRequest {
+    string session_id = 1;
+    string customer_id = 2;
+    string sku = 3;
+    int32 qty = 4;
+    int32 inventory = 5;
+}
+```
 
 #### Response:
 
 Example:  
-`TBD
-`
+```
+message AddReply {
+    string message = 1;
+}
+```
 
 #### Error Code
-TBD
+* `INVALID_ARGUMENT`
+* `NOT_FOUND`
+* `RESOURCE_EXHAUSTED`
+* `INTERNAL`
 
 ## Database Model
 
@@ -54,7 +69,7 @@ TBD
 
 Field Name | Not Null | Data Type | Description | Related
 ---------- | -------- | --------- | ----------- | -------
-cart_id | Yes | String | PK |
+shopping_cart_id | Yes | String | PK |
 customer_id | No | String | FK | Customer
 session_id | No | String |  |
 sku | Yes | String | FK | SKU

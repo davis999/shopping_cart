@@ -27,6 +27,15 @@ If product has been added successfully, return the shopping cart id to the clien
 
 ### Add product to shopping cart
 
+#### Service:
+```
+service ShoppingCart {
+    // Sends a product to add product to shopping cart service
+    rpc AddProductToShoppingCart(AddRequest) returns (AddReply) {}
+
+}
+```
+
 #### Request:  
 
 Param Name | Required | Description

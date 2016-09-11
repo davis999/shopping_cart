@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_package = "io.reactivesw.grpc";
+
+
+// The add to cart service definition.
+service ShoppingCart {
+    // Sends a product to add product to shopping cart service
+    rpc AddProductToShoppingCart (AddRequest) returns (AddReply) {}
+
+}
+
+// The request message containing:
+// session id, customer id, sku, qty, inventory.
+message AddRequest {
+    string session_id = 1;
+    string customer_id = 2;
+    string sku = 3;
+    int32 qty = 4;
+    int32 inventory = 5;
+}
+
+// The response message containing the shopping cart id.
+message AddReply {
+    string shopping_cart_id = 1;
+}

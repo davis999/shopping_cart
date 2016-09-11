@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate: 
+      ddl-auto: update
+  datasource: 
+    url: jdbc:mysql://localhost/sample?useSSL=false
+    username: sample
+    password: sample
+    driver-class-name: com.mysql.jdbc.Driver
+grpc: 
+  port : sample

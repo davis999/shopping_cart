@@ -1,0 +1,21 @@
+apply plugin: "com.palantir.jacoco-coverage"
+apply plugin: 'groovy'
+
+//config of coverage check, see document: https://github.com/palantir/gradle-jacoco-coverage
+jacocoTestReport {
+  afterEvaluate {
+    classDirectories = files(classDirectories.files.collect {
+      fileTree(dir: it, exclude: [
+        'io/reactivesw/shopping/cart/ShoppingCartServiceStarter*',
+        'io/reactivesw/shopping/cart/common/ConstantsUtility*',
+        'io/reactivesw/shopping/cart/domain/*',
+        'io/reactivesw/shopping/cart/grpc/*',
+        'io/reactivesw/grpc/*'
+      ])
+    })
+  }
+}
+
+jacocoCoverage { // Enforce minimum code coverage of 80% for every Java file.
+  fileThreshold 0.8 }
+

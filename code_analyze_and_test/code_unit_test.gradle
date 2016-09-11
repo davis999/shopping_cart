@@ -8,9 +8,9 @@ jacocoTestReport {
       fileTree(dir: it, exclude: [
         'io/reactivesw/shoppingcart/ShoppingCartServiceStarter*',
         'io/reactivesw/shoppingcart/common/ConstantsUtility*',
-        'io/reactivesw/shoppingcart/domain/*',
-        'io/reactivesw/shoppingcart/grpc/*',
-        'io/reactivesw/grpc/*'
+        'io/reactivesw/shoppingcart/domain/model/*',
+        'io/reactivesw/shoppingcart/application/grpc/*',
+        'io/reactivesw/shoppingcart/grpc/*'
       ])
     })
   }

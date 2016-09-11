@@ -1,9 +1,9 @@
-package io.reactivesw.shoppingcart.service.impl;
+package io.reactivesw.shoppingcart.domain.service.impl;
 
 import io.reactivesw.shoppingcart.common.ConstantsUtility;
-import io.reactivesw.shoppingcart.domain.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
 import io.reactivesw.shoppingcart.infrastructure.ShoppingCartRepository;
-import io.reactivesw.shoppingcart.service.ShoppingCartService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

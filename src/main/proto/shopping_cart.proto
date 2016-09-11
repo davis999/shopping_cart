@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option java_package = "io.reactivesw.grpc";
+option java_package = "io.reactivesw.shoppingcart.grpc";
 
 
 // The add to cart service definition.

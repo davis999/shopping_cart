@@ -1,8 +1,8 @@
-package io.reactivesw.shoppingcart.service
+package io.reactivesw.shoppingcart.domain.service
 
-import io.reactivesw.shoppingcart.domain.ShoppingCart
+import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
 import io.reactivesw.shoppingcart.ShoppingCartServiceStarter
-import io.reactivesw.shoppingcart.service.ShoppingCartService
 
 import javax.annotation.Resource
 

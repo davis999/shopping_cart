@@ -18,7 +18,7 @@ checkstyle{
   sourceSets = [sourceSets.main]
   configFile = 'code_analyze_and_test/config/checkstyle/checkstyle.xml' as File
   //exclude the package you do not want to check
-  checkstyleMain.exclude 'io/reactivesw/grpc/*'
+  checkstyleMain.exclude 'io/reactivesw/shoppingcart/grpc/*'
 }
 
 /*************PMD(Project Manager Design)***************/
@@ -31,7 +31,7 @@ pmd  {
 }
 tasks.withType(Pmd) {
   //exclude the package you do not want to check
-  exclude 'io/reactivesw/grpc/*'
+  exclude 'io/reactivesw/shoppingcart/grpc/*'
   exclude 'io/reactivesw/shoppingcart/ShoppingCartServiceStarter*'
   exclude 'io/reactivesw/shoppingcart/common/*'
 }
@@ -47,7 +47,7 @@ findbugs {
 tasks.withType(FindBugs) {
   //exclude the package you do not want to check
   classes = classes.filter {
-    !it.path.contains('io/reactivesw/grpc/')
+    !it.path.contains('io/reactivesw/shoppingcart/grpc/')
   }
   reports {
     xml.enabled false

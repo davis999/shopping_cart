@@ -1,6 +1,6 @@
 package io.reactivesw.shoppingcart.infrastructure;
 
-import io.reactivesw.shoppingcart.domain.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

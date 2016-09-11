@@ -1,9 +1,9 @@
-package io.reactivesw.shoppingcart.grpc;
+package io.reactivesw.shoppingcart.application.grpc;
 
 import io.grpc.stub.StreamObserver;
-import io.reactivesw.grpc.ShoppingCartGrpc;
-import io.reactivesw.grpc.ShoppingCartOuterClass;
 import io.reactivesw.shoppingcart.application.AddProductToShoppingCart;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartGrpc;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartOuterClass;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

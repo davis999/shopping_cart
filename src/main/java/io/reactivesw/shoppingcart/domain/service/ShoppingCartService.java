@@ -1,6 +1,6 @@
-package io.reactivesw.shoppingcart.service;
+package io.reactivesw.shoppingcart.domain.service;
 
-import io.reactivesw.shoppingcart.domain.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 
 /**
  * shopping cart service for repository.

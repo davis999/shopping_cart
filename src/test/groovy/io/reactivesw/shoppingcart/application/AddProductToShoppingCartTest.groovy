@@ -2,11 +2,11 @@ package io.reactivesw.shoppingcart.application
 
 import javax.annotation.Resource
 
-import io.reactivesw.grpc.ShoppingCartOuterClass
-import io.reactivesw.shoppingcart.domain.ShoppingCart
+import io.reactivesw.shoppingcart.grpc.ShoppingCartOuterClass
+import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
 import io.reactivesw.shoppingcart.ShoppingCartServiceStarter
 import io.reactivesw.shoppingcart.application.AddProductToShoppingCart
-import io.reactivesw.shoppingcart.service.ShoppingCartService
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootContextLoader

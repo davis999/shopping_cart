@@ -1,21 +1,21 @@
 buildscript {
-	ext {
-		springBootVersion = '1.4.0.RELEASE'
-		grpcVersion = '1.0.0'
-        grpcSpringBootVersion = '0.0.5'
-        protobufGradleVersion = '0.8.0'
-        protobufProtocVersion = '3.0.0'
-        logslfVersion = '1.7.21'
-        logbackVersion = '1.1.7'
-	}
-	repositories {
-		jcenter()
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath "com.google.protobuf:protobuf-gradle-plugin:${protobufGradleVersion}"
-	}
+  ext {
+    springBootVersion = '1.4.0.RELEASE'
+    grpcVersion = '1.0.0'
+    grpcSpringBootVersion = '0.0.5'
+    protobufGradleVersion = '0.8.0'
+    protobufProtocVersion = '3.0.0'
+    logslfVersion = '1.7.21'
+    logbackVersion = '1.1.7'
+  }
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    classpath "com.google.protobuf:protobuf-gradle-plugin:${protobufGradleVersion}"
+  }
 }
 
 apply plugin: 'java'
@@ -30,102 +30,80 @@ version = '0.1'
 description = 'shopping cart service'
 
 jar {
-	baseName = 'shopping-cart-service'
-	version = '0.0.1-SNAPSHOT'
+  baseName = 'shopping-cart-service'
+  version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	jcenter()
-	mavenCentral()
+  jcenter()
+  mavenCentral()
 }
 
 
 dependencies {
-	compile('org.springframework.cloud:spring-cloud-starter-stream-kafka')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    runtime("mysql:mysql-connector-java")
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	
-    compile("io.grpc:grpc-stub:${grpcVersion}")
-    compile("io.grpc:grpc-protobuf:${grpcVersion}")
-    compile("io.grpc:grpc-netty:${grpcVersion}")
-	compile("org.lognet:grpc-spring-boot-starter:${grpcSpringBootVersion}")
-	
-	//bridge logging from JCL to SLF4j
-	compile("org.slf4j:jcl-over-slf4j:${logslfVersion}")
-	// Logback
-	compile("ch.qos.logback:logback-classic:${logbackVersion}")
-	
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.spockframework:spock-spring:1.0-groovy-2.4')
-	
-	compileOnly('org.projectlombok:lombok:1.16.6')
-	compileOnly("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+  compile('org.springframework.cloud:spring-cloud-starter-stream-kafka')
+  compile('org.springframework.boot:spring-boot-starter-data-jpa')
+  runtime("mysql:mysql-connector-java")
+  compile("org.springframework.boot:spring-boot-starter-jdbc")
+  compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+  compile('org.springframework.boot:spring-boot-starter-web')
+
+  compile("io.grpc:grpc-stub:${grpcVersion}")
+  compile("io.grpc:grpc-protobuf:${grpcVersion}")
+  compile("io.grpc:grpc-netty:${grpcVersion}")
+  compile("org.lognet:grpc-spring-boot-starter:${grpcSpringBootVersion}")
+
+  //bridge logging from JCL to SLF4j
+  compile("org.slf4j:jcl-over-slf4j:${logslfVersion}")
+  // Logback
+  compile("ch.qos.logback:logback-classic:${logbackVersion}")
+
+  testCompile('org.springframework.boot:spring-boot-starter-test')
+  testCompile('org.spockframework:spock-spring:1.0-groovy-2.4')
+
+  compileOnly('org.projectlombok:lombok:1.16.6')
+  compileOnly("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR5"
-	}
-}
+dependencyManagement { imports { mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR5" } }
 
 
 sourceSets {
-	main {
-		java {
-			srcDir 'src/main/protoGen'
-		}
-	}
+  main { java { srcDir 'src/main/protoGen' } }
 }
 protobuf {
-	protoc {
-	  // The version of protoc must match protobuf-java. If you don't depend on
-	  // protobuf-java directly, you will be transitively depending on the
-	  // protobuf-java version that grpc depends on.
-	  artifact = "com.google.protobuf:protoc:${protobufProtocVersion}"
-	}
-	plugins {
-	  grpc {
-		artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
-	  }
-	}
-	
-    generateProtoTasks {
-        ofSourceSet('main').each { task ->
-            task.builtins {
-                java{
-                    outputSubDir = 'protoGen'
-                }
-            }
-            task.plugins {
-                grpc {
-                    outputSubDir = 'protoGen'
-                }
-            }
-        }
+  protoc {
+    // The version of protoc must match protobuf-java. If you don't depend on
+    // protobuf-java directly, you will be transitively depending on the
+    // protobuf-java version that grpc depends on.
+    artifact = "com.google.protobuf:protoc:${protobufProtocVersion}"
+  }
+  plugins {
+    grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+  }
+
+  generateProtoTasks {
+    ofSourceSet('main').each { task ->
+      task.builtins { java{ outputSubDir = 'protoGen' } }
+      task.plugins { grpc { outputSubDir = 'protoGen' } }
     }
-    generatedFilesBaseDir = "$projectDir/src/"
+  }
+  generatedFilesBaseDir = "$projectDir/src/"
 }
 task cleanProtoGen{
-	doFirst{
-		   delete("$projectDir/src/main/protoGen")
-	}
+  doFirst{ delete("$projectDir/src/main/protoGen") }
 }
 clean.dependsOn cleanProtoGen
 
 apply from: 'code_analyze_and_test/code_unit_test.gradle'
 apply from: 'code_analyze_and_test/code_analyzer.gradle'
 buildscript {
-    repositories {
-        jcenter()
-        mavenLocal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath('com.palantir:jacoco-coverage:0.4.0')
-    }
+  repositories {
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+  }
+  dependencies { classpath('com.palantir:jacoco-coverage:0.4.0') }
 }

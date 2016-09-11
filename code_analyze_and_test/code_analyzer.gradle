@@ -29,10 +29,11 @@ pmd  {
 
   sourceSets = [sourceSets.main]
 }
-tasks.withType(Pmd) {  //exclude the package you do not want to check
-  exclude 'io/reactivesw/grpc/*'  
-  exclude 'io/reactivesw/shopping/cart/ShoppingCartServiceStarter*'  
-  exclude 'io/reactivesw/shopping/cart/common/*'  
+tasks.withType(Pmd) {
+  //exclude the package you do not want to check
+  exclude 'io/reactivesw/grpc/*'
+  exclude 'io/reactivesw/shopping/cart/ShoppingCartServiceStarter*'
+  exclude 'io/reactivesw/shopping/cart/common/*'
 }
 
 

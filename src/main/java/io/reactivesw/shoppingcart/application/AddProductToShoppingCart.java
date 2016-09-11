@@ -1,12 +1,12 @@
-package io.reactivesw.shopping.cart.handler;
+package io.reactivesw.shoppingcart.application;
 
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.reactivesw.grpc.ShoppingCartOuterClass;
-import io.reactivesw.shopping.cart.common.ConstantsUtility;
-import io.reactivesw.shopping.cart.domain.ShoppingCart;
-import io.reactivesw.shopping.cart.grpc.ShoppingCartGrpcService;
-import io.reactivesw.shopping.cart.service.ShoppingCartService;
+import io.reactivesw.shoppingcart.common.ConstantsUtility;
+import io.reactivesw.shoppingcart.domain.ShoppingCart;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartGrpcService;
+import io.reactivesw.shoppingcart.service.ShoppingCartService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  *
  */
 @Service
-public class AddProductToShoppingCartService {
+public class AddProductToShoppingCart {
 
   /**
    * class logger.

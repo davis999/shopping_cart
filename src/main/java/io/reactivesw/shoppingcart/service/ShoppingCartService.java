@@ -1,18 +1,22 @@
-package io.reactivesw.shopping.cart.repository;
+package io.reactivesw.shoppingcart.service;
 
-import io.reactivesw.shopping.cart.domain.ShoppingCart;
-
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import io.reactivesw.shoppingcart.domain.ShoppingCart;
 
 /**
- * shopping cart repository.S
+ * shopping cart service for repository.
  * 
  * @author janeli
  *
  */
-@Repository
-public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Long> {
+public interface ShoppingCartService {
+
+  /**
+   * save shopping cart record.
+   * 
+   * @param shoppingCart ShoppingCart
+   * @return shoppingCart ShoppingCart
+   */
+  ShoppingCart save(ShoppingCart shoppingCart);
 
   /**
    * find shopping cart record by customer id and sku.

@@ -1,9 +1,9 @@
-package io.reactivesw.shopping.cart.grpc;
+package io.reactivesw.shoppingcart.grpc;
 
 import io.grpc.stub.StreamObserver;
 import io.reactivesw.grpc.ShoppingCartGrpc;
 import io.reactivesw.grpc.ShoppingCartOuterClass;
-import io.reactivesw.shopping.cart.handler.AddProductToShoppingCartService;
+import io.reactivesw.shoppingcart.application.AddProductToShoppingCart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
    * add to product normal service.
    */
   @Resource
-  private transient AddProductToShoppingCartService addProductToShoppingCartHandler;
+  private transient AddProductToShoppingCart addProductToShoppingCartHandler;
 
   /**
    * add product to shopping cart and reply to the grpc client.

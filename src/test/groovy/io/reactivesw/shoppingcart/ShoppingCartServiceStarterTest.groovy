@@ -1,4 +1,4 @@
-package io.reactivesw.shopping.cart
+package io.reactivesw.shoppingcart
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

@@ -1,4 +1,6 @@
-package io.reactivesw.shopping.cart;
+package io.reactivesw.shoppingcart;
+
+import io.reactivesw.shoppingcart.ShoppingCartServiceStarter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

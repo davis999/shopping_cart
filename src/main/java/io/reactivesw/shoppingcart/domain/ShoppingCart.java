@@ -1,4 +1,4 @@
-package io.reactivesw.shopping.cart.domain;
+package io.reactivesw.shoppingcart.domain;
 
 import java.util.Date;
 import java.util.Objects;

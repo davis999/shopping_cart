@@ -1,11 +1,12 @@
-package io.reactivesw.shopping.cart.handler
+package io.reactivesw.shoppingcart.application
 
-import javax.annotation.Resource;
+import javax.annotation.Resource
 
 import io.reactivesw.grpc.ShoppingCartOuterClass
-import io.reactivesw.shopping.cart.ShoppingCartServiceStarter
-import io.reactivesw.shopping.cart.domain.ShoppingCart
-import io.reactivesw.shopping.cart.service.ShoppingCartService;
+import io.reactivesw.shoppingcart.domain.ShoppingCart
+import io.reactivesw.shoppingcart.ShoppingCartServiceStarter
+import io.reactivesw.shoppingcart.application.AddProductToShoppingCart
+import io.reactivesw.shoppingcart.service.ShoppingCartService
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootContextLoader
@@ -17,16 +18,16 @@ import spock.lang.Specification
 
 @SpringBootTest
 @ContextConfiguration(classes=[ShoppingCartServiceStarter.class])
-class AddProductToShoppingCartServiceTest extends Specification {
+class AddProductToShoppingCartTest extends Specification {
 
   @Shared
-  String customerId = "1001"
+  String customerId = "test_customer_1001"
 
   @Shared
-  String sessionId = "session_001"
+  String sessionId = "test_session_001"
 
   @Shared
-  String sku = "sku_001"
+  String sku = "test_sku_001"
 
   @Shared
   int qty = 1
@@ -35,7 +36,7 @@ class AddProductToShoppingCartServiceTest extends Specification {
   int inventory = 10
 
   @Resource
-  AddProductToShoppingCartService addProductToShoppingCartService
+  AddProductToShoppingCart addProductToShoppingCartService
   
   @Resource
   ShoppingCartService shoppingCartService

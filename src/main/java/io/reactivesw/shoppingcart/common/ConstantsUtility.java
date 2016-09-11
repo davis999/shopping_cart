@@ -1,4 +1,4 @@
-package io.reactivesw.shopping.cart.common;
+package io.reactivesw.shoppingcart.common;
 
 /**
  * constants declare for shopping cart service.

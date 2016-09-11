@@ -1,7 +1,8 @@
-package io.reactivesw.shopping.cart.service
+package io.reactivesw.shoppingcart.service
 
-import io.reactivesw.shopping.cart.ShoppingCartServiceStarter
-import io.reactivesw.shopping.cart.domain.ShoppingCart
+import io.reactivesw.shoppingcart.domain.ShoppingCart
+import io.reactivesw.shoppingcart.ShoppingCartServiceStarter
+import io.reactivesw.shoppingcart.service.ShoppingCartService
 
 import javax.annotation.Resource
 
@@ -19,13 +20,13 @@ class ShoppingCartServiceTest extends Specification {
   ShoppingCartService shoppingCartService
 
   @Shared
-  String customerId = "1002"
+  String customerId = "test_customer_1002"
 
   @Shared
-  String sessionId = "session_002"
+  String sessionId = "test_session_002"
 
   @Shared
-  String sku = "sku_002"
+  String sku = "test_sku_002"
 
   @Shared
   int qty = 1

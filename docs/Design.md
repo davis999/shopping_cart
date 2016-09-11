@@ -8,18 +8,18 @@ This service will be called when customer click the "add to cart" button.
 ## Add Product to Shopping Cart
 Product supplies SKU, qty, inventory, customer_id, session_id.
 
-Validate product SKU, inventory.
+Validate product parameters, inventory.
 
 If product has enough inventory, save the product to database.
 - If product has existed in cart, merge the record.
 - If product is new in cart, add the product record.
 
-If product has been added successfully, return "success" message to the caller.
+If product has been added successfully, return the shopping cart id to the client caller.
 
 ## Error Handle
 
-- If SKU has a wrong formatter, return error: *INVALID_ARGUMENT*.
-- If SKU is a wrong number, return error: *NOT_FOUND*.
+- If SKU or inventory is null, return error: *INVALID_ARGUMENT*.
+- If both customer id and session id are null, return error: *INVALID_ARGUMENT*.
 - If request qty (merge the qty that cart database stored) is larger than inventory, return error: *RESOURCE_EXHAUSTED*.
 - Other exception, log it and return error: *INTERNAL*.
 
@@ -37,7 +37,7 @@ sku | Yes |
 qty | No | Default: 1
 inventory | Yes |
 
-Example:  
+Request:  
 ```
 message AddRequest {
     string session_id = 1;
@@ -50,16 +50,15 @@ message AddRequest {
 
 #### Response:
 
-Example:  
+Reply:  
 ```
 message AddReply {
-    string message = 1;
+  string shopping_cart_id = 1;
 }
 ```
 
 #### Error Code
 * `INVALID_ARGUMENT`
-* `NOT_FOUND`
 * `RESOURCE_EXHAUSTED`
 * `INTERNAL`
 

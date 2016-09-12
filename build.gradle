@@ -71,7 +71,8 @@ dependencyManagement { imports { mavenBom "org.springframework.cloud:spring-clou
 
 
 sourceSets {
-  main { java { srcDir 'src/main/protoGen' } }
+  main { java { srcDir 'src/main/java' } }
+  test { java { srcDir 'src/test/groovy' } }
 }
 protobuf {
   protoc {

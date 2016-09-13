@@ -11,6 +11,7 @@ import io.reactivesw.shoppingcart.grpc.ShoppingCartOuterClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -68,10 +69,10 @@ public class AddProductToShoppingCart {
   protected void validateRequestParams(ShoppingCartOuterClass.AddRequest grpcRequest) {
     LOGGER.debug("check parameters of request---");
     // need one of customer id and session id.
-    final boolean customerEmpty = ConstantsUtility.stringEmpty(grpcRequest.getCustomerId());
-    final boolean sessionEmpty = ConstantsUtility.stringEmpty(grpcRequest.getSessionId());
+    final boolean customerEmpty = StringUtils.isEmpty(grpcRequest.getCustomerId());
+    final boolean sessionEmpty = StringUtils.isEmpty(grpcRequest.getSessionId());
     // sku required.
-    final boolean skuEmpty = ConstantsUtility.stringEmpty(grpcRequest.getSku());
+    final boolean skuEmpty = StringUtils.isEmpty(grpcRequest.getSku());
     // inventory required.
     final boolean inventoryEmpty = grpcRequest.getInventory() == ConstantsUtility.ZERO_QTY;
     final boolean validParams = (!customerEmpty || !sessionEmpty) && !skuEmpty && !inventoryEmpty;
@@ -94,7 +95,7 @@ public class AddProductToShoppingCart {
     LOGGER.debug("convert request to shopping cart---");
     final ShoppingCart shoppingCart = new ShoppingCart();
     // only when customer empty, choose session.
-    if (ConstantsUtility.stringEmpty(grpcRequest.getCustomerId())) {
+    if (StringUtils.isEmpty(grpcRequest.getCustomerId())) {
       shoppingCart.setSessionId(grpcRequest.getSessionId());
     } else {
       shoppingCart.setCustomerId(grpcRequest.getCustomerId());
@@ -134,7 +135,7 @@ public class AddProductToShoppingCart {
     LOGGER.debug("merge request and stored qty---");
     ShoppingCart oldCart;
     // only when customer is empty, find existed sku record of session.
-    if (ConstantsUtility.stringEmpty(shoppingCart.getCustomerId())) {
+    if (StringUtils.isEmpty(shoppingCart.getCustomerId())) {
       oldCart =
           shoppingCartService.findOneBySessionIdAndSku(shoppingCart.getSessionId(),
               shoppingCart.getSku());

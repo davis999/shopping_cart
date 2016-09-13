@@ -7,6 +7,7 @@ import io.reactivesw.shoppingcart.infrastructure.ShoppingCartRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -47,8 +48,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
    */
   public ShoppingCart findOneByCustomerIdAndSku(String customerId, String sku) {
     ShoppingCart shoppingCart = null;
-    final boolean customerEmpty = ConstantsUtility.stringEmpty(customerId);
-    final boolean skuEmpty = ConstantsUtility.stringEmpty(sku);
+    final boolean customerEmpty = StringUtils.isEmpty(customerId);
+    final boolean skuEmpty = StringUtils.isEmpty(sku);
     if (!customerEmpty && !skuEmpty) {
       shoppingCart = shoppingCartRepository.findOneByCustomerIdAndSku(customerId, sku);
     }
@@ -64,8 +65,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
    */
   public ShoppingCart findOneBySessionIdAndSku(String sessionId, String sku) {
     ShoppingCart shoppingCart = null;
-    final boolean sessionEmpty = ConstantsUtility.stringEmpty(sessionId);
-    final boolean skuEmpty = ConstantsUtility.stringEmpty(sku);
+    final boolean sessionEmpty = StringUtils.isEmpty(sessionId);
+    final boolean skuEmpty = StringUtils.isEmpty(sku);
     if (!sessionEmpty && !skuEmpty) {
       shoppingCart = shoppingCartRepository.findOneBySessionIdAndSku(sessionId, sku);
     }
@@ -82,8 +83,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
   @Transactional
   public Long deleteByCustomerIdAndSku(String customerId, String sku) {
     Long deleteCount = ConstantsUtility.ERROR_COUNT;
-    final boolean customerEmpty = ConstantsUtility.stringEmpty(customerId);
-    final boolean skuEmpty = ConstantsUtility.stringEmpty(sku);
+    final boolean customerEmpty = StringUtils.isEmpty(customerId);
+    final boolean skuEmpty = StringUtils.isEmpty(sku);
     if (!customerEmpty && !skuEmpty) {
       deleteCount = shoppingCartRepository.deleteByCustomerIdAndSku(customerId, sku);
     }
@@ -100,8 +101,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
   @Transactional
   public Long deleteBySessionIdAndSku(String sessionId, String sku) {
     Long deleteCount = ConstantsUtility.ERROR_COUNT;
-    final boolean sessionEmpty = ConstantsUtility.stringEmpty(sessionId);
-    final boolean skuEmpty = ConstantsUtility.stringEmpty(sku);
+    final boolean sessionEmpty = StringUtils.isEmpty(sessionId);
+    final boolean skuEmpty = StringUtils.isEmpty(sku);
     if (!sessionEmpty && !skuEmpty) {
       deleteCount = shoppingCartRepository.deleteBySessionIdAndSku(sessionId, sku);
     }

@@ -151,7 +151,7 @@ public class ShoppingCart {
    * @return modifiedDate the modifiedDate
    */
   public Date getModifiedDate() {
-    return (Date) modifiedDate.clone();
+    return new Date(modifiedDate.getTime());
   }
 
   /**
@@ -160,7 +160,7 @@ public class ShoppingCart {
    * @param modifiedDate the modifiedDate to set
    */
   public void setModifiedDate(Date modifiedDate) {
-    this.modifiedDate = (Date) modifiedDate.clone();
+    this.modifiedDate = new Date(modifiedDate.getTime());
   }
 
   /**

@@ -43,14 +43,4 @@ public final class ConstantsUtility {
    */
   public static final String GRPC_INTERNAL_MSG = "add product to shopping cart failed";
 
-  /**
-   * check if string is empty.
-   * 
-   * @param str String
-   * @return boolean
-   */
-  public static boolean stringEmpty(String str) {
-    return str == null || str.equals(ConstantsUtility.BLANK_VALUE);
-  }
-
 }

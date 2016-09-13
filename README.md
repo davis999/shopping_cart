@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/reactivesw/shoppingcart.svg?branch=master)](https://travis-ci.org/reactivesw/shoppingcart)
+
 # shoppingcart
 Shopping cart service
 

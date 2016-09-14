@@ -22,7 +22,7 @@ public class ShoppingCart {
    */
   @Id
   @GeneratedValue
-  @Column(name = "shopping_cart_id")
+  @Column(name = "id")
   private Long shoppingCartId;
 
   /**
@@ -40,14 +40,14 @@ public class ShoppingCart {
   /**
    * product sku number.
    */
-  @Column(name = "sku")
-  private String sku;
+  @Column(name = "sku_id")
+  private String skuId;
 
   /**
-   * sku qty.
+   * sku quantity.
    */
-  @Column(name = "qty")
-  private int qty;
+  @Column(name = "quantity")
+  private int quantity;
 
   /**
    * modified date.
@@ -56,9 +56,9 @@ public class ShoppingCart {
   private Date modifiedDate;
 
   /**
-   * get ther shopping cart id.
+   * get the shopping cart id.
    * 
-   * @return shoppingCartId the shoppingCartId
+   * @return id the shopping cart id
    */
   public Long getShoppingCartId() {
     return shoppingCartId;
@@ -67,7 +67,7 @@ public class ShoppingCart {
   /**
    * set the shopping cart id.
    * 
-   * @param shoppingCartId the shoppingCartId to set
+   * @param shoppingCartId the shopping cart id to set
    */
   public void setShoppingCartId(Long shoppingCartId) {
     this.shoppingCartId = shoppingCartId;
@@ -76,7 +76,7 @@ public class ShoppingCart {
   /**
    * get the customer id of the shopping cart.
    * 
-   * @return shoppingCartId the customerId
+   * @return customerId the customerId
    */
   public String getCustomerId() {
     return customerId;
@@ -110,39 +110,39 @@ public class ShoppingCart {
   }
 
   /**
-   * get the sku of the shopping cart.
+   * get the sku id of the shopping cart.
    * 
-   * @return sku the sku
+   * @return skuId the sku id
    */
-  public String getSku() {
-    return sku;
+  public String getSkuId() {
+    return skuId;
   }
 
   /**
-   * set the sku of the shopping cart.
+   * set the sku id of the shopping cart.
    * 
-   * @param sku the sku to set
+   * @param skuId the sku id to set
    */
-  public void setSku(String sku) {
-    this.sku = sku;
+  public void setSkuId(String skuId) {
+    this.skuId = skuId;
   }
 
   /**
-   * get the qty of the shopping cart.
+   * get the quantity of the shopping cart.
    * 
-   * @return qty the qty
+   * @return quantity the quantity
    */
-  public int getQty() {
-    return qty;
+  public int getQuantity() {
+    return quantity;
   }
 
   /**
-   * set the qty of the shopping cart.
+   * set the quantity of the shopping cart.
    * 
-   * @param qty the qty to set
+   * @param quantity the quantity to set
    */
-  public void setQty(int qty) {
-    this.qty = qty;
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
   }
 
   /**
@@ -170,7 +170,7 @@ public class ShoppingCart {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(customerId, sessionId, sku, qty);
+    return Objects.hash(customerId, sessionId, skuId, quantity);
   }
 
   /**
@@ -187,8 +187,8 @@ public class ShoppingCart {
       final ShoppingCart other = (ShoppingCart) obj;
       equalsResult =
           Objects.equals(customerId, other.customerId)
-              && Objects.equals(sessionId, other.sessionId) && Objects.equals(qty, other.qty)
-              && Objects.equals(sku, other.sku);
+              && Objects.equals(sessionId, other.sessionId)
+              && Objects.equals(quantity, other.quantity) && Objects.equals(skuId, other.skuId);
     }
     return equalsResult;
   }

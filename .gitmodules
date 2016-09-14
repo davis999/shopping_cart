@@ -1,0 +1,3 @@
+[submodule "code_analyzer"]
+	path = code_analyzer
+	url = git@github.com:reactivesw/code_analyzer.git

@@ -8,4 +8,4 @@ spring:
     password: sample
     driver-class-name: com.mysql.jdbc.Driver
 grpc: 
-  port : 6565
+  port : sample

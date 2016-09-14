@@ -1,9 +1,9 @@
 package io.reactivesw.shoppingcart.domain.service.impl;
 
-import io.reactivesw.shoppingcart.common.ConstantsUtility;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
-import io.reactivesw.shoppingcart.infrastructure.ShoppingCartRepository;
+import io.reactivesw.shoppingcart.infrastructure.common.ConstantsUtility;
+import io.reactivesw.shoppingcart.infrastructure.persistence.ShoppingCartRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,71 +40,71 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
   }
 
   /**
-   * find shopping cart record by customer id and sku.
+   * find shopping cart record by customer id and sku id.
    * 
    * @param customerId String
-   * @param sku String
+   * @param skuId String
    * @return shoppingCart ShoppingCart
    */
-  public ShoppingCart findOneByCustomerIdAndSku(String customerId, String sku) {
+  public ShoppingCart findOneByCustomerIdAndSkuId(String customerId, String skuId) {
     ShoppingCart shoppingCart = null;
     final boolean customerEmpty = StringUtils.isEmpty(customerId);
-    final boolean skuEmpty = StringUtils.isEmpty(sku);
+    final boolean skuEmpty = StringUtils.isEmpty(skuId);
     if (!customerEmpty && !skuEmpty) {
-      shoppingCart = shoppingCartRepository.findOneByCustomerIdAndSku(customerId, sku);
+      shoppingCart = shoppingCartRepository.findOneByCustomerIdAndSkuId(customerId, skuId);
     }
     return shoppingCart;
   }
 
   /**
-   * find shopping cart record by session id and sku.
+   * find shopping cart record by session id and sku id.
    * 
    * @param sessionId String
-   * @param sku String
+   * @param skuId String
    * @return shoppingCart ShoppingCart
    */
-  public ShoppingCart findOneBySessionIdAndSku(String sessionId, String sku) {
+  public ShoppingCart findOneBySessionIdAndSkuId(String sessionId, String skuId) {
     ShoppingCart shoppingCart = null;
     final boolean sessionEmpty = StringUtils.isEmpty(sessionId);
-    final boolean skuEmpty = StringUtils.isEmpty(sku);
+    final boolean skuEmpty = StringUtils.isEmpty(skuId);
     if (!sessionEmpty && !skuEmpty) {
-      shoppingCart = shoppingCartRepository.findOneBySessionIdAndSku(sessionId, sku);
+      shoppingCart = shoppingCartRepository.findOneBySessionIdAndSkuId(sessionId, skuId);
     }
     return shoppingCart;
   }
 
   /**
-   * delete shopping cart record by customer id and sku.
+   * delete shopping cart record by customer id and sku id.
    * 
    * @param customerId String
-   * @param sku String
+   * @param skuId String
    * @return Long
    */
   @Transactional
-  public Long deleteByCustomerIdAndSku(String customerId, String sku) {
+  public Long deleteByCustomerIdAndSkuId(String customerId, String skuId) {
     Long deleteCount = ConstantsUtility.ERROR_COUNT;
     final boolean customerEmpty = StringUtils.isEmpty(customerId);
-    final boolean skuEmpty = StringUtils.isEmpty(sku);
+    final boolean skuEmpty = StringUtils.isEmpty(skuId);
     if (!customerEmpty && !skuEmpty) {
-      deleteCount = shoppingCartRepository.deleteByCustomerIdAndSku(customerId, sku);
+      deleteCount = shoppingCartRepository.deleteByCustomerIdAndSkuId(customerId, skuId);
     }
     return deleteCount;
   }
 
   /**
-   * delete shopping cart record by session id and sku.
+   * delete shopping cart record by session id and sku id.
    * 
    * @param sessionId String
-   * @param sku String
+   * @param skuId String
    * @return Long
    */
   @Transactional
-  public Long deleteBySessionIdAndSku(String sessionId, String sku) {
+  public Long deleteBySessionIdAndSkuId(String sessionId, String skuId) {
     Long deleteCount = ConstantsUtility.ERROR_COUNT;
     final boolean sessionEmpty = StringUtils.isEmpty(sessionId);
-    final boolean skuEmpty = StringUtils.isEmpty(sku);
+    final boolean skuEmpty = StringUtils.isEmpty(skuId);
     if (!sessionEmpty && !skuEmpty) {
-      deleteCount = shoppingCartRepository.deleteBySessionIdAndSku(sessionId, sku);
+      deleteCount = shoppingCartRepository.deleteBySessionIdAndSkuId(sessionId, skuId);
     }
     return deleteCount;
   }

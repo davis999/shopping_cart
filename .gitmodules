@@ -1,3 +1,4 @@
 [submodule "code_analyzer"]
 	path = code_analyzer
 	url = https://github.com/reactivesw/code_analyzer.git
+	branch = shoppingcart

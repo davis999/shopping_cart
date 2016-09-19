@@ -1,180 +1,150 @@
-//package io.reactivesw.shoppingcart.application
-//
-//import io.reactivesw.shoppingcart.ShoppingCartServiceStarter
-//import io.reactivesw.shoppingcart.domain.model.ShoppingCart
-//import io.reactivesw.shoppingcart.domain.service.ShoppingCartService
-//import io.reactivesw.shoppingcart.domain.service.impl.ShoppingCartServiceImpl
-//import io.reactivesw.shoppingcart.grpc.ShoppingCartOuterClass
-//import io.reactivesw.shoppingcart.infrastructure.persistence.ShoppingCartRepository
-//
-//import org.springframework.boot.test.context.SpringBootTest
-//import org.springframework.test.context.ContextConfiguration
-//
-//import spock.lang.Shared
-//import spock.lang.Specification
-//
-//import javax.annotation.Resource
-//
-//@SpringBootTest
-//@ContextConfiguration(classes=[ShoppingCartServiceStarter.class])
-//class AddProductToShoppingCartTest extends Specification {
-//
-//  @Shared
-//  String customerId = "test_customer_1001"
-//
-//  @Shared
-//  String sessionId = "test_session_001"
-//
-//  @Shared
-//  String sku = "test_sku_001"
-//
-//  @Shared
-//  int qty = 1
-//
-//  @Shared
-//  int inventory = 10
-//
-//  @Resource
-//  AddProductToShoppingCartApp addProductToShoppingCartService
-//  
-//  @Resource
-//  ShoppingCartService shoppingCartService
-//  
-//  ShoppingCart shoppingCartModel = Mock(ShoppingCart)
-//  ShoppingCartRepository shoppingCartRepo = Mock(ShoppingCartRepository)
-//  
-//  def setup() {
-//    shoppingCartRepo.save(ShoppingCart.class) >> shoppingCartModel
-//    shoppingCartService.setShoppingCartRepository(shoppingCartRepo)
-//    addProductToShoppingCartService.setShoppingCartService(shoppingCartService)
-//  }
-//
-//  def "add with customer and session" () {
-//    setup:
-//    shoppingCartService.deleteByCustomerIdAndSku(customerId, sku)
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setCustomerId(customerId).
-//    setSessionId(sessionId).
-//    setSku(sku).
-//    setQty(qty).
-//    setInventory(inventory).build()
-//    
-//    when: "grpc request to shopping cart not existed"
-//    String addResult = addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add success"
-//    1 * shoppingCartRepo.save(_)
-//    
-//    when: "grpc request to shopping cart existed"
-//    String addResultExisted = addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add success"
-//    1 * shoppingCartRepo.save(_)
-//  }
-//
-//  def "add product to shopping cart with customer" () {
-//    setup:
-//    shoppingCartService.deleteByCustomerIdAndSku(customerId, sku)
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setCustomerId(customerId).
-//    setSku(sku).
-//    setQty(qty).
-//    setInventory(inventory).build()
-//    
-//    when: "grpc request to shopping cart not existed"
-//    String addResult = addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add success"
-//    1 * shoppingCartRepo.save(_)
-//    
-//    when: "grpc request to shopping cart existed"
-//    String addResultExisted = addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add success"
-//    1 * shoppingCartRepo.save(_)
-//  }
-//
-//  def "add product to shopping cart with session" () {
-//    setup:
-//    shoppingCartService.deleteBySessionIdAndSku(sessionId, sku)
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setSessionId(sessionId).
-//    setSku(sku).
-//    setQty(qty).
-//    setInventory(inventory).build()
-//    
-//    when: "grpc request to shopping cart not existed"
-//    String addResult = addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add success"
-//    1 * shoppingCartRepo.save(_)
-//    
-//    when: "grpc request to shopping cart existed"
-//    String addResultExisted = addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add success"
-//    1 * shoppingCartRepo.save(_)
-//  }
-//
-//  def "add product to shopping cart without customer and session" () {
-//    setup:
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setSku(sku).
-//    setQty(qty).
-//    setInventory(inventory).build()
-//    when: "grpc request to shopping cart"
-//    addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add failed"
-//    RuntimeException e = thrown()
-//    assert e.message == "INVALID_ARGUMENT: grpc request parameters are invalid"
-//  }
-//
-//  def "add product to shopping cart without sku" () {
-//    setup:
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setCustomerId(customerId).
-//    setQty(qty).
-//    setInventory(inventory).build()
-//    when: "grpc request to shopping cart"
-//    addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add failed"
-//    RuntimeException e = thrown()
-//    assert e.message == "INVALID_ARGUMENT: grpc request parameters are invalid"
-//  }
-//
-//  def "add product to shopping cart without inventory" () {
-//    setup:
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setCustomerId(customerId).
-//    setSku(sku).
-//    setQty(qty).
-//    setInventory(0).build()
-//    when: "grpc request to shopping cart"
-//    addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add failed"
-//    RuntimeException e = thrown()
-//    assert e.message == "INVALID_ARGUMENT: grpc request parameters are invalid"
-//  }
-//
-//  def "add product to shopping cart with exhausted inventory by customer" () {
-//    setup:
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setCustomerId(customerId).
-//    setSku(sku).
-//    setQty(qty+1).
-//    setInventory(1).build()
-//    when: "grpc request to shopping cart"
-//    addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add failed"
-//    RuntimeException e = thrown()
-//    assert e.message == "RESOURCE_EXHAUSTED: resource is exhausted"
-//  }
-//
-//  def "add product to shopping cart with exhausted inventory by session" () {
-//    setup:
-//    ShoppingCartOuterClass.AddRequest grpcRequest = new ShoppingCartOuterClass.AddRequest().newBuilder().
-//    setSessionId(sessionId).
-//    setSku(sku).
-//    setQty(qty+1).
-//    setInventory(1).build()
-//    when: "grpc request to shopping cart"
-//    addProductToShoppingCartService.addProductToShoppingCart(grpcRequest)
-//    then: "add failed"
-//    RuntimeException e = thrown()
-//    assert e.message == "RESOURCE_EXHAUSTED: resource is exhausted"
-//  }
-//}
+package io.reactivesw.shoppingcart.application
+
+import io.reactivesw.shoppingcart.domain.model.ShoppingCart
+import io.reactivesw.shoppingcart.domain.service.ShoppingCartService
+import io.reactivesw.shoppingcart.infrastructure.common.ShoppingCartException
+
+import spock.lang.Shared
+import spock.lang.Specification
+
+class AddProductToShoppingCartTest extends Specification {
+
+  @Shared
+  String customerId = "test_customer_1001"
+
+  @Shared
+  String sessionId = "test_session_001"
+
+  @Shared
+  String skuId = "test_sku_001"
+
+  @Shared
+  int quantity = 1
+
+  @Shared
+  int inventory = 10
+
+  AddProductToShoppingCartApp addProductToShoppingCartService = new AddProductToShoppingCartApp()
+
+  def "add with customer and shopping cart not existed" () {
+    setup:
+    ShoppingCart requestSC = new ShoppingCart()
+    requestSC.setCustomerId(customerId)
+    requestSC.setSkuId(skuId)
+    requestSC.setQuantity(quantity)
+    
+    ShoppingCartService shoppingCartService = Mock(ShoppingCartService)
+    shoppingCartService.findOneByCustomerIdAndSkuId(String, String) >> null
+    ShoppingCart addedSC = new ShoppingCart()
+    addedSC.setShoppingCartId(1001L)
+    shoppingCartService.save(_) >> addedSC
+    addProductToShoppingCartService.shoppingCartService = shoppingCartService
+    
+    when: "add to shopping cart not existed"
+    ShoppingCart addResult = addProductToShoppingCartService.addProductToShoppingCart(requestSC, inventory)
+    then: "add success"
+    addResult == addedSC
+  }
+  
+  def "add with customer and shopping cart existed" () {
+    setup:
+    ShoppingCart requestSC = new ShoppingCart()
+    requestSC.setCustomerId(customerId)
+    requestSC.setSkuId(skuId)
+    requestSC.setQuantity(quantity)
+    
+    ShoppingCart addedSC = new ShoppingCart()
+    addedSC.setShoppingCartId(1001L)
+    addedSC.setSkuId(skuId)
+    addedSC.setQuantity(2)
+    ShoppingCartService shoppingCartService = Mock(ShoppingCartService)
+    shoppingCartService.findOneByCustomerIdAndSkuId(String, String) >> addedSC
+    addedSC.setQuantity(quantity+2)
+    shoppingCartService.save(_) >> addedSC
+    addProductToShoppingCartService.shoppingCartService = shoppingCartService
+    
+    when: "add to shopping cart existed"
+    ShoppingCart addResult = addProductToShoppingCartService.addProductToShoppingCart(requestSC, inventory)
+    then: "add success"
+    addResult == addedSC
+  }
+
+  def "add with session and shopping cart not existed" () {
+    setup:
+    ShoppingCart requestSC = new ShoppingCart()
+    requestSC.setSessionId(sessionId)
+    requestSC.setSkuId(skuId)
+    requestSC.setQuantity(quantity)
+    
+    ShoppingCartService shoppingCartService = Mock(ShoppingCartService)
+    shoppingCartService.findOneBySessionIdAndSkuId(String, String) >> null
+    ShoppingCart addedSC = new ShoppingCart()
+    addedSC.setShoppingCartId(1001L)
+    shoppingCartService.save(_) >> addedSC
+    addProductToShoppingCartService.shoppingCartService = shoppingCartService
+    
+    when: "add to shopping cart not existed"
+    ShoppingCart addResult = addProductToShoppingCartService.addProductToShoppingCart(requestSC, inventory)
+    then: "add success"
+    addResult == addedSC
+  }
+
+  def "add with session and shopping cart existed" () {
+    setup:
+    ShoppingCart requestSC = new ShoppingCart()
+    requestSC.setSessionId(sessionId)
+    requestSC.setSkuId(skuId)
+    requestSC.setQuantity(quantity)
+    
+    ShoppingCart addedSC = new ShoppingCart()
+    addedSC.setShoppingCartId(1001L)
+    addedSC.setSkuId(skuId)
+    addedSC.setQuantity(2)
+    ShoppingCartService shoppingCartService = Mock(ShoppingCartService)
+    shoppingCartService.findOneBySessionIdAndSkuId(String, String) >> null
+    addedSC.setQuantity(quantity+2)
+    shoppingCartService.save(_) >> addedSC
+    addProductToShoppingCartService.shoppingCartService = shoppingCartService
+    
+    when: "add to shopping cart not existed"
+    ShoppingCart addResult = addProductToShoppingCartService.addProductToShoppingCart(requestSC, inventory)
+    then: "add success"
+    addResult == addedSC
+  }
+
+  def "add product to shopping cart with exhausted inventory by customer" () {
+    setup:
+    ShoppingCart requestSC = new ShoppingCart()
+    requestSC.setCustomerId(customerId)
+    requestSC.setSkuId(skuId)
+    requestSC.setQuantity(quantity+1)
+    
+    ShoppingCartService shoppingCartService = Mock(ShoppingCartService)
+    shoppingCartService.findOneByCustomerIdAndSkuId(String, String) >> null
+    addProductToShoppingCartService.shoppingCartService = shoppingCartService
+    
+    when: "add to shopping cart"
+    addProductToShoppingCartService.addProductToShoppingCart(requestSC, 1)
+    then: "add failed"
+    ShoppingCartException e = thrown()
+    assert e.message == ShoppingCartException.RESOURCE_EXHAUSTED
+  }
+
+  def "add product to shopping cart with exhausted inventory by session" () {
+    setup:
+    ShoppingCart requestSC = new ShoppingCart()
+    requestSC.setSessionId(sessionId)
+    requestSC.setSkuId(skuId)
+    requestSC.setQuantity(quantity+1)
+    
+    ShoppingCartService shoppingCartService = Mock(ShoppingCartService)
+    shoppingCartService.findOneBySessionIdAndSkuId(String, String) >> null
+    addProductToShoppingCartService.shoppingCartService = shoppingCartService
+    
+    when: "add to shopping cart"
+    addProductToShoppingCartService.addProductToShoppingCart(requestSC, 1)
+    then: "add failed"
+    ShoppingCartException e = thrown()
+    assert e.message == ShoppingCartException.RESOURCE_EXHAUSTED
+  }
+}

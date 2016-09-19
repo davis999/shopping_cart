@@ -54,6 +54,7 @@ dependencies {
   compile("io.grpc:grpc-protobuf:${grpcVersion}")
   compile("io.grpc:grpc-netty:${grpcVersion}")
   compile("org.lognet:grpc-spring-boot-starter:${grpcSpringBootVersion}")
+  compile('org.modelmapper:modelmapper:0.7.6')
 
   //bridge logging from JCL to SLF4j
   compile("org.slf4j:jcl-over-slf4j:${logslfVersion}")

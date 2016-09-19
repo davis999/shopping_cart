@@ -92,8 +92,7 @@ public class AddProductToShoppingCartApp {
     // inventory exhausted exception.
     if (!validateInventory) {
       LOGGER.error("add product to shopping cart start failed: RESOURCE_EXHAUSTED---");
-      throw new ShoppingCartException(
-          ShoppingCartException.RESOURCE_EXHAUSTED);
+      throw new ShoppingCartException(ShoppingCartException.RESOURCE_EXHAUSTED);
     }
   }
 }

@@ -4,14 +4,18 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import io.reactivesw.shoppingcart.application.AddProductToShoppingCartApp;
+import io.reactivesw.shoppingcart.application.ListShoppingCartApp;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartGrpc;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartOuterClass;
 import io.reactivesw.shoppingcart.infrastructure.common.ConstantsUtility;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -51,6 +55,12 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
   public transient AddProductToShoppingCartApp addProductToShoppingCartHandler;
 
   /**
+   * list shopping cart normal service.
+   */
+  @Resource
+  public transient ListShoppingCartApp listShoppingCartHandler;
+
+  /**
    * add product to shopping cart and reply to the grpc client.
    * 
    * @param request ShoppingCartOuterClass.AddRequest
@@ -67,9 +77,77 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
     // grpc reply message
     LOGGER.debug("add product to shopping cart finished----");
     final ShoppingCartOuterClass.AddReply.Builder replyBuilder =
-        ShoppingCartOuterClass.AddReply.newBuilder().setId(addedId);
+        ShoppingCartOuterClass.AddReply.newBuilder().setShoppingCartId(addedId);
+    LOGGER.debug("grpc server: add product to shopping cart reply----");
     responseObserver.onNext(replyBuilder.build());
     responseObserver.onCompleted();
+  }
+
+  /**
+   * list customer shopping cart and reply to grpc client.
+   * 
+   * @param request ShoppingCartOuterClass.CustomerListRequest
+   * @param responseObserver StreamObserver ShoppingCartListReply
+   */
+  @Override
+  public void listShoppingCartForCustomer(ShoppingCartOuterClass.CustomerListRequest request,
+      StreamObserver<ShoppingCartOuterClass.ShoppingCartListReply> responseObserver) {
+    LOGGER.debug("grpc server: list shopping cart for customer start----");
+    final List<ShoppingCart> cartList =
+        listShoppingCartHandler.listCustomerShoppingCart(request.getCustomerId());
+    LOGGER.debug("list shopping cart for customer finished----");
+    // convert shopping cart list to reply builder
+    final ShoppingCartOuterClass.ShoppingCartListReply.Builder replyBuilder =
+        repeatShoppingCart(cartList);
+    LOGGER.debug("grpc server: list shopping cart for customer reply----");
+    responseObserver.onNext(replyBuilder.build());
+    responseObserver.onCompleted();
+  }
+
+  /**
+   * list session shopping cart and reply to grpc client.
+   * 
+   * @param request ShoppingCartOuterClass.SessionListRequest
+   * @param responseObserver StreamObserver ShoppingCartListReply
+   */
+  @Override
+  public void listShoppingCartForSession(ShoppingCartOuterClass.SessionListRequest request,
+      StreamObserver<ShoppingCartOuterClass.ShoppingCartListReply> responseObserver) {
+    LOGGER.debug("grpc server: list shopping cart for customer start----");
+    final List<ShoppingCart> cartList =
+        listShoppingCartHandler.listCustomerShoppingCart(request.getSessionId());
+    LOGGER.debug("list shopping cart for customer finished----");
+    // convert shopping cart list to reply builder
+    final ShoppingCartOuterClass.ShoppingCartListReply.Builder replyBuilder =
+        repeatShoppingCart(cartList);
+    LOGGER.debug("grpc server: list shopping cart for customer reply----");
+    responseObserver.onNext(replyBuilder.build());
+    responseObserver.onCompleted();
+  }
+
+  /**
+   * convert shopping cart list to reply builder.
+   * 
+   * @param scList List ShoppingCart
+   * @return builder
+   */
+  protected ShoppingCartOuterClass.ShoppingCartListReply.Builder repeatShoppingCart(
+      List<ShoppingCart> scList) {
+    LOGGER.debug("grpc repeated list shopping cart----");
+    final ShoppingCartOuterClass.ShoppingCartListReply.Builder replyBuilder =
+        ShoppingCartOuterClass.ShoppingCartListReply.newBuilder();
+//    int itemIndex = 0;
+    final ModelMapper modelMapper = new ModelMapper();
+    for (final ShoppingCart scItem : scList) {
+      // use model mapper to convert java class to grpc message class
+      final ShoppingCartOuterClass.GrpcShoppingCart.Builder scbuilder =
+          modelMapper.map(scItem, ShoppingCartOuterClass.GrpcShoppingCart.Builder.class);
+      final ShoppingCartOuterClass.GrpcShoppingCart grpcShoppingCart = scbuilder.build();
+      // repeated shopping cart
+      replyBuilder.addShoppingCart(grpcShoppingCart);
+//      itemIndex++;
+    }
+    return replyBuilder;
   }
 
   /**
@@ -78,7 +156,7 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
    * @param request ShoppingCartOuterClass.AddRequest
    * @return shoppingCart ShoppingCart
    */
-  public ShoppingCart requestToShoppingCart(ShoppingCartOuterClass.AddRequest request) {
+  private ShoppingCart requestToShoppingCart(ShoppingCartOuterClass.AddRequest request) {
     LOGGER.debug("format grpc request to valid shopping cart---");
     // validate grpc request parameters.
     validateRequestParams(request);
@@ -93,7 +171,7 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
    * @param inventory Long inventory
    * @return Long
    */
-  public Long addToShoppingCart(ShoppingCart shoppingCart, int inventory) {
+  private Long addToShoppingCart(ShoppingCart shoppingCart, int inventory) {
     LOGGER.debug("call shopping cart service to add product---");
     // add requested product(sku) to shopping cart
     final ShoppingCart addResult =

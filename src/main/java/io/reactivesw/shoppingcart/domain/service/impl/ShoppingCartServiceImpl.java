@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -107,6 +109,34 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
       deleteCount = shoppingCartRepository.deleteBySessionIdAndSkuId(sessionId, skuId);
     }
     return deleteCount;
+  }
+  
+  /**
+   * list shopping cart record by customer id.
+   * 
+   * @param customerId String customer id
+   * @return List
+   */
+  public List<ShoppingCart> listShoppingCartByCustomerId(String customerId) {
+    List<ShoppingCart> resultList = new ArrayList<>();
+    if (!StringUtils.isEmpty(customerId)) {
+      resultList = shoppingCartRepository.findByCustomerId(customerId);
+    }
+    return resultList;
+  }
+  
+  /**
+   * list shopping cart record by session id.
+   * 
+   * @param sessionId String session id
+   * @return List
+   */
+  public List<ShoppingCart> listShoppingCartBySessionId(String sessionId) {
+    List<ShoppingCart> resultList = new ArrayList<>();
+    if (!StringUtils.isEmpty(sessionId)) {
+      resultList = shoppingCartRepository.findBySessionId(sessionId);
+    }
+    return resultList;
   }
 
 }

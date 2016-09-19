@@ -2,6 +2,8 @@ package io.reactivesw.shoppingcart.domain.service;
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 
+import java.util.List;
+
 /**
  * shopping cart service for repository.
  * 
@@ -53,5 +55,21 @@ public interface ShoppingCartService {
    * @return Long
    */
   Long deleteBySessionIdAndSkuId(String sessionId, String skuId);
+  
+  /**
+   * list shopping cart record by customer id.
+   * 
+   * @param customerId String customer id
+   * @return List
+   */
+  List<ShoppingCart> listShoppingCartByCustomerId(String customerId);
+  
+  /**
+   * list shopping cart record by session id.
+   * 
+   * @param sessionId String session id
+   * @return List
+   */
+  List<ShoppingCart> listShoppingCartBySessionId(String sessionId);
 
 }

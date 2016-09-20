@@ -28,7 +28,7 @@ When the session of an anonymous customer is expired, the shopping cart will be 
 
 
 ## 2. Error Handling
-We have some check for shopping cart:
+We have some checks when updating shopping cart:
 * Quantity limit.   
  - There is a max value for the total number of item in a shopping cart. It is a configurable value.
  - Quantity > max: alert max quantity message for customer.

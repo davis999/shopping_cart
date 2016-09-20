@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/reactivesw/shoppingcart.svg?branch=master)](https://travis-ci.org/reactivesw/shoppingcart)
+[![codecov](https://codecov.io/gh/reactivesw/shopping_cart/branch/master/graph/badge.svg)](https://codecov.io/gh/reactivesw/shopping_cart)
 
 # shoppingcart
 Shopping cart service

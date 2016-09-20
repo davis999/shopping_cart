@@ -2,17 +2,5 @@ sudo: required
 language: java
 jdk: oraclejdk8
 
-#services:
-#  - docker
-#script:
-#  - gradle clean
-#  - gradle wrapper
-#  - ./gradlew build buildDocker --info
-
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t 76aa4e85-79ee-4528-8161-b0120af54a59
-
-
-#after_script:
-#  - docker login --username="" --password="";
-#    docker push go6d/customer_authentication;
+  - bash <(curl -s https://codecov.io/bash)

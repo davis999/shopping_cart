@@ -1,163 +1,106 @@
 # Shopping Cart Design
-This service will be called when customer click the "add to cart" button.
-* Add Product to Shopping Cart
-* List Shopping Cart for Customer
-* Error Handle
-* GRPC API
-* Database Model
+This service provides these features for use cases.
+* Infrastructure
+* Adding a Product to a Shopping Cart
+* Displaying Shopping Cart Content
+* Editing Shpping Cart
+* Clearing Shopping Cart 
+* Abandoning Shopping Cart
 
-## Add Product to Shopping Cart
-Request service supplies sku_id, quantity, inventory, customer_id, session_id.
+## Infrastructure
 
-Validate product parameters, inventory.
+### Database Model
 
-If product has enough inventory, save the product to database.
-- If product has existed in cart, merge the record.
-- If product is new in cart, add the product record.
-
-If product has been added successfully, return the shopping cart id to the client caller.
-
-## List Shopping Cart for Customer
-Request service supplies customer_id or session_id.  
-
-Validate parameters required.
-
-- If request shopping cart with customer_id, find the shopping cart list for the customer who has logged in.
-- If request shopping cart with session_id, find the shopping cart list for the customer who has not logged in.
-
-Reply the shopping cart list to the request service.
-
-## Error Handle
-
-- If sku_id or inventory is null, return error: *INVALID_ARGUMENT*.
-- If both customer id and session id are null, return error: *INVALID_ARGUMENT*.
-- If request quantity (merge the quantity that cart database stored) is larger than inventory, thrown SHoppingCartException: *RESOURCE_EXHAUSTED*.
-- Other exception, log it and thrown SHoppingCartException: *INTERNAL*.
-
-## GRPC API
-
-### Service
-```
-service ShoppingCart {
-    // Sends a product to add product to shopping cart service
-    rpc addProductToShoppingCart(AddRequest) returns (AddReply) {}
-
-    // Lists the shopping cart for customer service
-    rpc listShoppingCartForCustomer (CustomerListRequest) returns (ShoppingCartListReply) {}
-
-    // Lists the shopping cart for session service
-    rpc listShoppingCartForSession (SessionListRequest) returns (ShoppingCartListReply) {}
-}
-```
-
-### Grpc DTO definition:
-```
-message GrpcShoppingCart {
-   int64 shopping_cart_id = 1;
-   string session_id = 2;
-   string customer_id = 3;
-   string sku_id = 4;
-   int32 quantity = 5;
-}
-```
-
-### Add product to shopping cart
-
-#### Service API
-`addProductToShoppingCart(AddRequest) returns (AddReply) {}`
-
-#### Request:  
-Param Name | Required | Description
----------- | -------- | -----------
-session_id | No | If customer_id does not exist, required
-customer_id | No | If session_id does not exist, required
-sku_id | Yes |
-quantity | No | Default: 1
-inventory | Yes |
-
-Request:  
-```
-message AddRequest {
-    string session_id = 1;
-    string customer_id = 2;
-    string sku_id = 3;
-    int32 quantity = 4;
-    int32 inventory = 5;
-}
-```
-
-#### Response:
-Reply:  
-```
-message AddReply {
-  string shopping_cart_id = 1;
-}
-```
-
-#### Error Code
-* `INVALID_ARGUMENT`
-* `RESOURCE_EXHAUSTED`
-* `INTERNAL`
-
-### list shopping cart for customer who has logged in
-
-#### Service API
-`listShoppingCartForCustomer (CustomerListRequest) returns (ShoppingCartListReply) {}`
-
-#### Request:  
-Param Name | Required | Description
----------- | -------- | -----------
-customer_id | Yes |
-
-Request:  
-```
-message CustomerListRequest {
-    string customer_id = 1;
-}
-```
-
-#### Response:
-Reply:  
-```
-message ShoppingCartListReply {
-    repeated GrpcShoppingCart shoppingCart = 1;
-}
-```
-
-### list shopping cart for customer who has not logged in
-
-#### Service API
-`listShoppingCartForSession (SessionListRequest) returns (ShoppingCartListReply) {}`
-
-#### Request:  
-Param Name | Required | Description
----------- | -------- | -----------
-session_id | Yes |
-
-Request:  
-```
-message SessionListRequest {
-    string session_id = 1;
-}
-```
-
-#### Response:
-Reply:  
-```
-message ShoppingCartListReply {
-    repeated GrpcShoppingCart shoppingCart = 1;
-}
-```
-
-## Database Model
-
-### Shopping Cart
-
+#### Shopping Cart
 Field Name | Not Null | Data Type | Description | Related
 ---------- | -------- | --------- | ----------- | -------
-shopping_cart_id | Yes | String | PK |
-customer_id | No | String | FK | Customer
+id | Yes | Long | PK | auto generated |
+customer_id | No | Long | FK | Customer
 session_id | No | String |  |
-sku_id | Yes | String | FK | SKU
+sku_id | Yes | Long | FK | SKU
 quantity | Yes | Int | |
 modified_date | Yes | Date | |
+
+#### Shopping Cart Config
+Field Name | Not Null | Data Type | Description | Related
+---------- | -------- | --------- | ----------- | -------
+id | Yes | Long | PK | auto generated |
+key | Yes | String | | 
+value | No | String | |
+modified_date | Yes | Date | |
+
+### Exception
+* Grpc exception: StatusRuntimeException
+* Customerized exception:
+ - ShoppingCartParamException
+ - ShoppingCartLimitException
+ - ShoppingCartInventoryException
+* Java exception
+
+## 1. Adding a Product to a Shopping Cart
+This module is called when a customer clicks "add to cart" button in the product page.  
+Client(e.g. web server) should supplie sku_id, quantity, customer_id, session_id.  
+If the page request client without quantity setting, client should set the quantity to be one.
+
+### 1.1. GRPC API
+
+* service: addToShoppingCart (AddRequest) returns (AddReply)
+* param: AddRequest(sku_id(Long), quantity(int), customer_id(Long), session_id(String))
+* return: AddReply(shoppingCart(GrpcShoppingCart))
+* exception: StatusRuntimeException
+ - INVALID_ARGUMENT
+ - OUT_OF_RANGE
+ - RESOURCE_EXHAUSTED
+ - INTERNAL
+
+### 1.2. Domain Service
+
+#### 1.2.1. Workflow
+* valiadte required parameters (void validateRequestParams(ShoppingCart))
+ - validation success: go ahead
+ - validation failed: throw exception(ShoppingCartParamException)
+* merge existed quantity (ShoppingCart mergeExistedQuantity(ShoppingCart))
+ - If product is new in cart, remain the quantity.
+ - If product has existed in cart, merge the quantity.
+* check quantity limit value (void checkQuantityLimit(ShoppingCart))
+ - check success: go ahead
+ - check failed: throw exception(ShoppingCartLimitException)
+* check inventory (void checkInventoru(ShoppingCart))
+ - call product grpc service to get inventory for this product.
+ - check if the inventory is enough
+  * check success: go ahead
+  * check failed: throw exception(ShoppingCartInventoryException)
+* save shopping cart to database (ShoppingCart saveShoppingCart(ShoppingCart))
+
+#### 1.2.2. Exception
+* ShoppingCartParamException
+ - sku_id is required
+ - one of customer_id and session_id is required
+ - quantity is required
+* ShoppingCartLimitException
+ - total quantity of the shopping cart cannot be larger than the limit value
+* ShoppingCartInventoryException
+ - product is unavailable
+ - inventory is 0
+ - inventory is less than the quantity
+
+### 1.3. Error Handle
+
+Grpc Status | Grpc Message | Customerized Exception | Customerized Message
+----------- | ------------ | ---------------------- | --------------------
+INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | sku_id is required
+INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | one of customer_id and session_id is required
+INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | quantity is required
+OUT_OF_RANGE | quantity is out of range | ShoppingCartLimitException | total quantity of the shopping cart cannot be larger than the limit value
+RESOURCE_EXHAUSTED | inventory is exhausted | ShoppingCartInventoryException | product is unavailable
+RESOURCE_EXHAUSTED | inventory is exhausted | ShoppingCartInventoryException | inventory is 0
+RESOURCE_EXHAUSTED | inventory is exhausted | ShoppingCartInventoryException | inventory is less than the quantity
+INTERNAL | add to shopping cart failed | Exception | 
+
+## 2. Displaying Shopping Cart Content
+
+## 3. Editing Shpping Cart
+
+## 4. Clearing Shopping Cart 
+
+## 5. Abandoning Shopping Cart

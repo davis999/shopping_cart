@@ -19,7 +19,8 @@ customer_id | No | Long | FK | Customer
 session_id | No | String |  |
 sku_id | Yes | Long | FK | SKU
 quantity | Yes | Int | |
-modified_date | Yes | Date | |
+created_time | Yes | Date | |
+modified_time | Yes | Date | |
 
 #### Shopping Cart Config `shopping_cart_config`
 Field Name | Not Null | Data Type | Description | Related
@@ -27,7 +28,8 @@ Field Name | Not Null | Data Type | Description | Related
 id | Yes | Long | PK | auto generated |
 key | Yes | String | configuration key | 
 value | No | String | configuration value |
-modified_date | Yes | Date | |
+created_time | Yes | Date | |
+modified_time | Yes | Date | |
 
 ### Exception
 * Grpc exception: StatusRuntimeException
@@ -35,12 +37,11 @@ modified_date | Yes | Date | |
  - ShoppingCartParamException
  - ShoppingCartLimitException
  - ShoppingCartInventoryException
-* Java exception
 
 ## 1. Adding a Product to a Shopping Cart
 This module is called when a customer clicks "add to cart" button in the product page.  
 Client(e.g. web server) should supplie `sku_id`, `quantity`, `customer_id`, `session_id`.  
-If the page request client without quantity setting, client should set the `quantity` to be one.
+If the page send request to client without quantity setting, client should set the `quantity` to be one.
 
 ### 1.1. GRPC API
 
@@ -57,19 +58,21 @@ If the page request client without quantity setting, client should set the `quan
 
 #### 1.2.1. Workflow
 * valiadte required parameters `void validateRequestParams(ShoppingCart)`
+ - sku id and quantity is required, customer id and session id should be required one
  - validation success: go ahead
  - validation failed: throw exception(ShoppingCartParamException)
 * merge existed quantity `ShoppingCart mergeExistedQuantity(ShoppingCart)`
  - If product is new in cart, remain the quantity.
  - If product has existed in cart, merge the quantity.
 * check quantity limit value `void checkQuantityLimit(ShoppingCart)`
+ - total products quantity of the shopping cart cannot be larger than the limit
  - check success: go ahead
  - check failed: throw exception(ShoppingCartLimitException)
 * check inventory `void checkInventory(ShoppingCart)`
  - call product grpc service to get inventory for this product.
- - check if the inventory is enough
-  * check success: go ahead
-  * check failed: throw exception(ShoppingCartInventoryException)
+ - check if the inventory is enough (cannot be less than quantity)
+ - check success: go ahead
+ - check failed: throw exception(ShoppingCartInventoryException)
 * save shopping cart to database `ShoppingCart saveShoppingCart(ShoppingCart)`
 
 #### 1.2.2. Exception

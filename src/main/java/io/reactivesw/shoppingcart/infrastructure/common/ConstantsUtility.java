@@ -1,32 +1,45 @@
 package io.reactivesw.shoppingcart.infrastructure.common;
 
-
 /**
  * constants declare for shopping cart service.
- * 
  * @author janeli
- *
  */
 public final class ConstantsUtility {
 
   /**
-   * blank string value.
+   * invalid customer id is 0.
    */
-  public static final String BLANK_VALUE = "";
+  public static final long INVALID_CUSTOMER_ID = 0L;
 
   /**
-   * default sku qty.
+   * unlimited config is 0.
    */
-  public static final int DEFAULT_QUANTITY = 1;
+  public static final int INVALID_ZERO_QUANTITY = 0;
 
   /**
-   * zero value qty.
+   * unlimited config is 0.
    */
-  public static final int ZERO_QUANTITY = 0;
+  public static final int QUANTITY_UNLIMITED = 0;
 
   /**
-   * not found value.
+   * inventory is 0.
    */
-  public static final long ERROR_COUNT = -1L;
+  public static final int NULL_INVENTORY = 0;
+
+  /**
+   * shopping cart id is 0.
+   */
+  public static final int NULL_SHOPPING_CART_ID = 0;
+
+  /**
+   * invalid delete value is -1.
+   */
+  public static final long INVALID_DELETE_COUNT = -1L;
+
+  /**
+   * constructor.
+   */
+  private ConstantsUtility() {
+  }
 
 }

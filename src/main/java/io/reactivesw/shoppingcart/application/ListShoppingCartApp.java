@@ -6,17 +6,14 @@ import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 /**
  * business service for shopping cart list.
- * 
  * @author janeli
- *
  */
 @Service
 public class ListShoppingCartApp {
@@ -29,29 +26,29 @@ public class ListShoppingCartApp {
   /**
    * shopping cart service.
    */
-  @Resource
+  @Autowired
   private transient ShoppingCartService shoppingCartService;
 
   /**
    * get shopping cart for customer.
-   * 
-   * @param customerId String customer id
+   * @param customerId long customer id
    * @return List
    */
-  public List<ShoppingCart> listCustomerShoppingCart(String customerId) {
-    LOGGER.debug("list shopping cart for customer---");
+  public List<ShoppingCart> listCustomerShoppingCart(long customerId) {
+    LOGGER.info("list shopping cart for customer----");
+    LOGGER.debug("customer id is: {}", customerId);
     return shoppingCartService.listShoppingCartByCustomerId(customerId);
   }
 
   /**
    * get shopping cart for session.
-   * 
    * @param sessionId String session id
    * @return List
    */
   public List<ShoppingCart> listSessionShoppingCart(String sessionId) {
-    LOGGER.debug("list shopping cart for session---");
+    LOGGER.info("list shopping cart for session----");
+    LOGGER.debug("session id is: {}", sessionId);
     return shoppingCartService.listShoppingCartBySessionId(sessionId);
   }
-  
+
 }

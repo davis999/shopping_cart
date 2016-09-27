@@ -10,9 +10,7 @@ import javax.persistence.Id;
 
 /**
  * shopping cart domain.
- * 
  * @author janeli
- *
  */
 @Entity
 public class ShoppingCart {
@@ -23,13 +21,13 @@ public class ShoppingCart {
   @Id
   @GeneratedValue
   @Column(name = "id")
-  private Long shoppingCartId;
+  private long shoppingCartId;
 
   /**
    * customer id of the login customer.
    */
   @Column(name = "customer_id")
-  private String customerId;
+  private long customerId;
 
   /**
    * session id of the anonymous customer.
@@ -41,7 +39,7 @@ public class ShoppingCart {
    * product sku number.
    */
   @Column(name = "sku_id")
-  private String skuId;
+  private long skuId;
 
   /**
    * sku quantity.
@@ -50,50 +48,51 @@ public class ShoppingCart {
   private int quantity;
 
   /**
-   * modified date.
+   * created time.
    */
-  @Column(name = "modified_date")
-  private Date modifiedDate;
+  @Column(name = "created_time")
+  private Date createdTime;
+
+  /**
+   * modified time.
+   */
+  @Column(name = "modified_time")
+  private Date modifiedTime;
 
   /**
    * get the shopping cart id.
-   * 
    * @return id the shopping cart id
    */
-  public Long getShoppingCartId() {
+  public long getShoppingCartId() {
     return shoppingCartId;
   }
 
   /**
    * set the shopping cart id.
-   * 
    * @param shoppingCartId the shopping cart id to set
    */
-  public void setShoppingCartId(Long shoppingCartId) {
+  public void setShoppingCartId(long shoppingCartId) {
     this.shoppingCartId = shoppingCartId;
   }
 
   /**
    * get the customer id of the shopping cart.
-   * 
    * @return customerId the customerId
    */
-  public String getCustomerId() {
+  public long getCustomerId() {
     return customerId;
   }
 
   /**
    * set the customer id of the shopping cart.
-   * 
    * @param customerId the customerId to set
    */
-  public void setCustomerId(String customerId) {
+  public void setCustomerId(long customerId) {
     this.customerId = customerId;
   }
 
   /**
    * get the session id of the shopping cart.
-   * 
    * @return sessionId the sessionId
    */
   public String getSessionId() {
@@ -102,7 +101,6 @@ public class ShoppingCart {
 
   /**
    * set the session id of the shopping cart.
-   * 
    * @param sessionId the sessionId to set
    */
   public void setSessionId(String sessionId) {
@@ -111,25 +109,22 @@ public class ShoppingCart {
 
   /**
    * get the sku id of the shopping cart.
-   * 
    * @return skuId the sku id
    */
-  public String getSkuId() {
+  public long getSkuId() {
     return skuId;
   }
 
   /**
    * set the sku id of the shopping cart.
-   * 
    * @param skuId the sku id to set
    */
-  public void setSkuId(String skuId) {
+  public void setSkuId(long skuId) {
     this.skuId = skuId;
   }
 
   /**
    * get the quantity of the shopping cart.
-   * 
    * @return quantity the quantity
    */
   public int getQuantity() {
@@ -138,7 +133,6 @@ public class ShoppingCart {
 
   /**
    * set the quantity of the shopping cart.
-   * 
    * @param quantity the quantity to set
    */
   public void setQuantity(int quantity) {
@@ -146,36 +140,49 @@ public class ShoppingCart {
   }
 
   /**
-   * get the modified date of the shopping cart.
-   * 
-   * @return modifiedDate the modifiedDate
+   * get the created time of the shopping cart.
+   * @return createdTime the createdTime
    */
-  public Date getModifiedDate() {
-    return new Date(modifiedDate.getTime());
+  public Date getCreatedTime() {
+    return new Date(createdTime.getTime());
   }
 
   /**
-   * set the modified date of the shopping cart.
-   * 
-   * @param modifiedDate the modifiedDate to set
+   * set the created time of the shopping cart.
+   * @param createdTime the createdTime to set
    */
-  public void setModifiedDate(Date modifiedDate) {
-    this.modifiedDate = new Date(modifiedDate.getTime());
+  public void setCreatedTime(Date createdTime) {
+    this.createdTime = new Date(createdTime.getTime());
+  }
+
+  /**
+   * get the modified time of the shopping cart.
+   * @return modifiedTime the modifiedTime
+   */
+  public Date getModifiedTime() {
+    return new Date(modifiedTime.getTime());
+  }
+
+  /**
+   * set the modified time of the shopping cart.
+   * @param modifiedTime the modifiedTime to set
+   */
+  public void setModifiedTime(Date modifiedTime) {
+    this.modifiedTime = new Date(modifiedTime.getTime());
   }
 
   /**
    * generate hash code.
-   * 
    * @see java.lang.Object#hashCode()
    */
   @Override
   public int hashCode() {
-    return Objects.hash(customerId, sessionId, skuId, quantity);
+    return Objects.hash(shoppingCartId, customerId, sessionId, skuId, quantity, createdTime,
+        modifiedTime);
   }
 
   /**
    * domain equals.
-   * 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
@@ -186,8 +193,11 @@ public class ShoppingCart {
     } else if (obj instanceof ShoppingCart) {
       final ShoppingCart other = (ShoppingCart) obj;
       equalsResult =
-          Objects.equals(customerId, other.customerId)
+          Objects.equals(shoppingCartId, other.shoppingCartId)
+              && Objects.equals(customerId, other.customerId)
               && Objects.equals(sessionId, other.sessionId)
+              && Objects.equals(createdTime, other.createdTime)
+              && Objects.equals(modifiedTime, other.modifiedTime)
               && Objects.equals(quantity, other.quantity) && Objects.equals(skuId, other.skuId);
     }
     return equalsResult;

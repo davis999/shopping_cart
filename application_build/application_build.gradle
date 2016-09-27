@@ -1,0 +1,29 @@
+/**
+ * Application dependencies.
+ * @author janeli
+ */
+
+// for spring boot
+apply plugin: 'spring-boot'
+
+dependencies {
+    // application dependencies
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    runtime("mysql:mysql-connector-java")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('joda-time:joda-time:2.9.4')
+
+    // bridge logging from JCL to SLF4j
+    compile('org.slf4j:jcl-over-slf4j:1.7.21')
+    // Logback
+    compile('ch.qos.logback:logback-classic:1.1.7')
+
+    // for compile support
+    compileOnly('org.projectlombok:lombok:1.16.6')
+    compileOnly("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+}
+
+// apply for grpc supprt
+apply from: 'application_build/grpc_build.gradle'

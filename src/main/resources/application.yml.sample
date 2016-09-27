@@ -9,3 +9,6 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 grpc: 
   port : sample
+  sku:
+    host: localhost
+    port: sample

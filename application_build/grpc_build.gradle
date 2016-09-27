@@ -1,0 +1,52 @@
+/**
+ * Grpc and proto build.
+ * @author janeli
+ */
+
+apply plugin: 'com.google.protobuf'
+
+dependencies {
+    compile("io.grpc:grpc-stub:${grpcVersion}")
+    compile("io.grpc:grpc-protobuf:${grpcVersion}")
+    compile("io.grpc:grpc-netty:${grpcVersion}")
+    compile('org.lognet:grpc-spring-boot-starter:0.0.5')
+    compile('org.modelmapper:modelmapper:0.7.6')
+}
+
+// for protobuf generation
+sourceSets {
+    main { java { srcDir 'src/main/protoGen' } }
+}
+protobuf {
+    protoc {
+        // The version of protoc must match protobuf-java. If you don't depend on
+        // protobuf-java directly, you will be transitively depending on the
+        // protobuf-java version that grpc depends on.
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+    }
+    plugins {
+        grpc { artifact = 'io.grpc:protoc-gen-grpc-java:1.0.0' }
+    }
+
+    generateProtoTasks {
+        ofSourceSet('main').each { task ->
+            task.builtins {
+                java {
+                    outputSubDir = 'protoGen'
+                }
+            }
+            task.plugins {
+                grpc {
+                    outputSubDir = 'protoGen'
+                }
+            }
+        }
+    }
+    generatedFilesBaseDir = "$projectDir/src/"
+}
+
+// clean protobuf generation
+task cleanProtoGen {
+    doFirst { delete("$projectDir/src/main/protoGen") }
+}
+clean.dependsOn cleanProtoGen

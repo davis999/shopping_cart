@@ -1,39 +1,30 @@
-package io.reactivesw.shoppingcart.infrastructure.common;
+package io.reactivesw.shoppingcart.infrastructure.exception;
 
 /**
  * shopping cart exception.
- * 
  * @author janeli
- *
  */
-public class ShoppingCartException  extends RuntimeException {
+public class ShoppingCartException extends RuntimeException {
+
+  /**
+   * product is unavailable.
+   */
+  public static final String INTERNAL = "grpc client cannot shut down";
 
   /**
    * serial version uid.
    */
-  private static final long serialVersionUID = -2268484602450751066L;
-  
-  /**
-   * shopping cart resource exhausted.
-   */
-  public static final String RESOURCE_EXHAUSTED = "RESOURCE_EXHAUSTED";
-  
-  /**
-   * shopping cart internal.
-   */
-  public static final String INTERNAL = "INTERNAL";
+  private static final long serialVersionUID = 5913775916147840081L;
 
   /**
    * constructor.
-   * 
    */
   public ShoppingCartException() {
-      super();
+    super();
   }
 
   /**
    * constructor with message.
-   * 
    * @param message String message
    */
   public ShoppingCartException(String message) {
@@ -42,22 +33,19 @@ public class ShoppingCartException  extends RuntimeException {
 
   /**
    * constructor with throwable.
-   * 
    * @param cause Throwable
    */
   public ShoppingCartException(Throwable cause) {
     super(cause);
   }
 
-
   /**
    * constructor with message and throwable.
-   * 
    * @param message String message
    * @param cause Throwable
    */
   public ShoppingCartException(String message, Throwable cause) {
     super(message, cause);
   }
-  
+
 }

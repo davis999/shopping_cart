@@ -9,60 +9,52 @@ import java.util.List;
 
 /**
  * shopping cart repository.
- * 
  * @author janeli
- *
  */
 @Repository
 public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Long> {
 
   /**
    * find shopping cart record by customer id and sku id.
-   * 
-   * @param customerId String
-   * @param skuId String
+   * @param customerId long
+   * @param skuId long
    * @return shoppingCart ShoppingCart
    */
-  ShoppingCart findOneByCustomerIdAndSkuId(String customerId, String skuId);
+  ShoppingCart findOneByCustomerIdAndSkuId(long customerId, long skuId);
 
   /**
    * find shopping cart record by session id and sku id.
-   * 
    * @param sessionId String
-   * @param skuId String
+   * @param skuId long
    * @return shoppingCart ShoppingCart
    */
-  ShoppingCart findOneBySessionIdAndSkuId(String sessionId, String skuId);
+  ShoppingCart findOneBySessionIdAndSkuId(String sessionId, long skuId);
 
   /**
    * delete shopping cart record by customer id and sku id.
-   * 
-   * @param customerId String
-   * @param skuId String
-   * @return Long
+   * @param customerId long
+   * @param skuId long
+   * @return long
    */
-  Long deleteByCustomerIdAndSkuId(String customerId, String skuId);
+  Long deleteByCustomerIdAndSkuId(long customerId, long skuId);
 
   /**
    * delete shopping cart record by session id and sku id.
-   * 
    * @param sessionId String
-   * @param skuId String
-   * @return Long
+   * @param skuId long
+   * @return long
    */
-  Long deleteBySessionIdAndSkuId(String sessionId, String skuId);
-  
+  Long deleteBySessionIdAndSkuId(String sessionId, long skuId);
+
   /**
    * list shopping cart record by customer id.
-   * 
-   * @param customerId String customer id
+   * @param customerId long customer id
    * @return List
    */
-  List<ShoppingCart> findByCustomerId(String customerId);
-  
+  List<ShoppingCart> findByCustomerId(long customerId);
+
   /**
    * list shopping cart record by session id.
-   * 
    * @param sessionId String session id
    * @return List
    */

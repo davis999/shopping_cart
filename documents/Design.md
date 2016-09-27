@@ -9,7 +9,7 @@ This service provides these features for use cases.
 
 ## Infrastructure
 
-### Database Model
+### Database Model `Entity`
 
 #### Shopping Cart `shopping_cart`
 Field Name | Not Null | Data Type | Description | Related
@@ -58,28 +58,31 @@ If the page send request to client without quantity setting, client should set t
 
 #### 1.2.1. Workflow
 * valiadte required parameters `void validateRequestParams(ShoppingCart)`
- - sku id and quantity is required, customer id and session id should be required one
+ - one of customer_id and session_id is required (both are not null, use customer id)
+ - quantity is required (quantity = 0)
+ - quantity is invalid (quantity < 0)
  - validation success: go ahead
  - validation failed: throw exception(ShoppingCartParamException)
 * merge existed quantity `ShoppingCart mergeExistedQuantity(ShoppingCart)`
- - If product is new in cart, remain the quantity.
- - If product has existed in cart, merge the quantity.
+ - If product is new in cart, remain the quantity
+ - If product has existed in cart, merge the quantity
 * check quantity limit value `void checkQuantityLimit(ShoppingCart)`
+ - default limit: 42, unlimited: 0
  - total products quantity of the shopping cart cannot be larger than the limit
  - check success: go ahead
  - check failed: throw exception(ShoppingCartLimitException)
 * check inventory `void checkInventory(ShoppingCart)`
- - call product grpc service to get inventory for this product.
- - check if the inventory is enough (cannot be less than quantity)
- - check success: go ahead
- - check failed: throw exception(ShoppingCartInventoryException)
+ - call product grpc service to get inventory for this product
+ - check if the inventory is enough (inventory != 0 and inventory >= quantity)
+  * check success: go ahead
+  * check failed: throw exception(ShoppingCartInventoryException)
 * save shopping cart to database `ShoppingCart saveShoppingCart(ShoppingCart)`
 
 #### 1.2.2. Exception
 * ShoppingCartParamException
- - sku_id is required
  - one of customer_id and session_id is required
  - quantity is required
+ - quantity is invalid
 * ShoppingCartLimitException
  - total quantity of the shopping cart cannot be larger than the limit value
 * ShoppingCartInventoryException
@@ -91,11 +94,11 @@ If the page send request to client without quantity setting, client should set t
 
 Grpc Status | Grpc Message | Customerized Exception | Customerized Message
 ----------- | ------------ | ---------------------- | --------------------
-INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | sku_id is required
 INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | one of customer_id and session_id is required
 INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | quantity is required
+INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | quantity is invalid (quantity < 0)
 OUT_OF_RANGE | quantity is out of range | ShoppingCartLimitException | total quantity of the shopping cart cannot be larger than the limit value
-RESOURCE_EXHAUSTED | inventory is exhausted | ShoppingCartInventoryException | product is unavailable
+RESOURCE_EXHAUSTED | inventory is exhausted | ShoppingCartInventoryException | product is unavailable (from product grpc exception)
 RESOURCE_EXHAUSTED | inventory is exhausted | ShoppingCartInventoryException | inventory is 0
 RESOURCE_EXHAUSTED | inventory is exhausted | ShoppingCartInventoryException | inventory is less than the quantity
 INTERNAL | add to shopping cart failed | Exception | 

@@ -26,6 +26,7 @@ When customer submit the order, shopping cart will be cleaned.
 ### 1.5. Abandoning Shopping Cart
 When the session of an anonymous customer is expired, the shopping cart will be abandoned. This can be performed by a separate daemon job. 
 
+### 1.6. Admin Panel
 
 ## 2. Error Handling
 We have some checks when updating shopping cart:

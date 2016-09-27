@@ -1,0 +1,26 @@
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
+
+// apply all configurations
+apply from: 'code_analyzer_test/code_analyzer_config.gradle'
+
+/*************checkstyle(use google java style)***************/
+
+checkstyle {
+    //exclude the package you do not want to check
+    checkstyleMain.exclude 'io/reactivesw/shoppingcart/grpc/*'
+}
+
+/*************PMD(Project Manager Design)***************/
+tasks.withType(Pmd) {
+    //exclude the package you do not want to check
+    exclude 'io/reactivesw/shoppingcart/grpc/*'
+    exclude 'io/reactivesw/shoppingcart/ShoppingCartServiceStarter*'
+}
+
+/*************find bug***************/
+tasks.withType(FindBugs) {
+    //exclude the package you do not want to check
+    !it.path.contains('io/reactivesw/shoppingcart/grpc/')
+}

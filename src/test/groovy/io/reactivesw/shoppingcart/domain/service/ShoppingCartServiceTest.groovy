@@ -1,7 +1,6 @@
 package io.reactivesw.shoppingcart.domain.service
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
-import io.reactivesw.shoppingcart.domain.service.impl.ShoppingCartServiceImpl
 import io.reactivesw.shoppingcart.infrastructure.persistence.ShoppingCartRepository
 
 import spock.lang.Shared
@@ -9,172 +8,194 @@ import spock.lang.Specification
 
 class ShoppingCartServiceTest extends Specification {
 
-  @Shared
-  String customerId = "test_customer_1002"
+    @Shared
+    long customerId = 1001L
 
-  @Shared
-  String sessionId = "test_session_002"
+    @Shared
+    String sessionId = "test_session_001"
 
-  @Shared
-  String skuId = "test_sku_002"
+    @Shared
+    long skuId = 1001L
 
-  @Shared
-  int quantity = 1
-  
-  ShoppingCartServiceImpl shoppingCartService = new ShoppingCartServiceImpl()
-  ShoppingCartRepository shoppingCartRepo = Mock()
-  
-  ShoppingCart savedSC = new ShoppingCart()
-  
-  def setup() {
-    savedSC.setCustomerId(customerId)
-    savedSC.setSessionId(sessionId)
-    savedSC.setSkuId(skuId)
-    savedSC.setQuantity(quantity)
-    savedSC.setShoppingCartId(1001L)
-    savedSC.setModifiedDate(new Date())
-    
-    shoppingCartRepo.save(_) >> savedSC
-    shoppingCartRepo.findOneByCustomerIdAndSkuId(_, _) >> savedSC
-    shoppingCartRepo.findOneBySessionIdAndSkuId(_, _) >> savedSC
-    shoppingCartRepo.deleteByCustomerIdAndSkuId(_, _) >> 1L
-    shoppingCartRepo.deleteBySessionIdAndSkuId(_, _) >> 1L
-    shoppingCartService.shoppingCartRepository = shoppingCartRepo
-  }
+    @Shared
+    int quantity = 1
 
-  def "save a customer shopping cart record"() {
-    setup:
-    ShoppingCart shoppingCartCustomer = new ShoppingCart()
-    shoppingCartCustomer.setCustomerId(customerId)
-    shoppingCartCustomer.setSkuId(skuId)
-    shoppingCartCustomer.setQuantity(quantity)
+    ShoppingCartService shoppingCartService = new ShoppingCartService()
+    ShoppingCartRepository shoppingCartRepo = Mock()
 
-    when: "save to shopping cart"
-    ShoppingCart shoppingCartCustomerSaved = shoppingCartService.save(shoppingCartCustomer)
+    ShoppingCart savedSC1 = new ShoppingCart(shoppingCartId: 1001L, customerId: customerId, skuId: skuId, quantity: quantity, createdTime: new Date(), modifiedTime: new Date())
+    ShoppingCart savedSC2 = new ShoppingCart(shoppingCartId: 1001L, sessionId: sessionId, skuId: skuId, quantity: quantity, createdTime: new Date(), modifiedTime: new Date())
 
-    then: "save success"
-    shoppingCartCustomerSaved == savedSC
-  }
+    def "save a customer shopping cart record"() {
+        setup:
+        ShoppingCart shoppingCartCustomer = new ShoppingCart()
+        shoppingCartCustomer.setCustomerId(customerId)
+        shoppingCartCustomer.setSkuId(skuId)
+        shoppingCartCustomer.setQuantity(quantity)
 
-  def "save a session shopping cart record"() {
-    setup:
-    ShoppingCart shoppingCartSession = new ShoppingCart()
-    shoppingCartSession.setSessionId(sessionId)
-    shoppingCartSession.setSkuId(skuId)
-    shoppingCartSession.setQuantity(quantity)
+        shoppingCartRepo.save(_) >> savedSC1
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
 
-    when: "save to shopping cart"
-    ShoppingCart shoppingCartSessionSaved = shoppingCartService.save(shoppingCartSession)
+        when: "save to shopping cart"
+        ShoppingCart shoppingCartCustomerSaved = shoppingCartService.save(shoppingCartCustomer)
 
-    then: "save success"
-    shoppingCartSessionSaved == savedSC
-  }
+        then: "save success"
+        shoppingCartCustomerSaved == savedSC1
+    }
 
-  def "find a record by customer id and sku"() {
-    when: "find a customer and sku specified shopping cart"
-    ShoppingCart shoppingCartFound = shoppingCartService.findOneByCustomerIdAndSkuId(customerId, skuId)
-    then: "find success"
-    shoppingCartFound == savedSC
-  }
+    def "save existed customer shopping cart record"() {
+        setup:
+        ShoppingCart shoppingCartCustomer = new ShoppingCart()
+        shoppingCartCustomer.setCustomerId(customerId)
+        shoppingCartCustomer.setSkuId(skuId)
+        shoppingCartCustomer.setQuantity(quantity)
+        shoppingCartCustomer.setShoppingCartId(1001L)
 
-  def "find a record by null customer and sku"() {
-    when: "find a null customer and sku specified shopping cart"
-    ShoppingCart shoppingCartFound = shoppingCartService.findOneByCustomerIdAndSkuId(null, skuId)
-    then: "find failed"
-    shoppingCartFound == null
-  }
+        shoppingCartRepo.save(_) >> savedSC1
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
 
-  def "find a record by customer id and null sku"() {
-    when: "find a customer and null sku specified shopping cart"
-    ShoppingCart shoppingCartFound = shoppingCartService.findOneByCustomerIdAndSkuId(customerId, null)
-    then: "find failed"
-    shoppingCartFound == null
-  }
+        when: "save to shopping cart"
+        ShoppingCart shoppingCartCustomerSaved = shoppingCartService.save(shoppingCartCustomer)
 
-  def "find a record by session id and sku"() {
-    when: "find a session and sku specified shopping cart"
-    ShoppingCart shoppingCartFound = shoppingCartService.findOneBySessionIdAndSkuId(sessionId, skuId)
-    then: "find success"
-    shoppingCartFound == savedSC
-  }
+        then: "save success"
+        shoppingCartCustomerSaved == savedSC1
+    }
 
-  def "find a record by session id and null sku"() {
-    when: "find a session and null sku specified shopping cart"
-    ShoppingCart shoppingCartFound = shoppingCartService.findOneBySessionIdAndSkuId(sessionId, null)
-    then: "find failed"
-    shoppingCartFound == null
-  }
+    def "save a session shopping cart record"() {
+        setup:
+        ShoppingCart shoppingCartSession = new ShoppingCart()
+        shoppingCartSession.setSessionId(sessionId)
+        shoppingCartSession.setSkuId(skuId)
+        shoppingCartSession.setQuantity(quantity)
 
-  def "find a record by null session and sku"() {
-    when: "find a null session and sku specified shopping cart"
-    ShoppingCart shoppingCartFound = shoppingCartService.findOneBySessionIdAndSkuId(null, skuId)
-    then: "find failed"
-    shoppingCartFound == null
-  }
+        shoppingCartRepo.save(_) >> savedSC2
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
 
-  def "delete a record by customer id and sku"() {
-    when: "delete a customer and sku specified shopping cart"
-    Long deleteNum = shoppingCartService.deleteByCustomerIdAndSkuId(customerId, skuId)
-    then: "delete success"
-    deleteNum == 1
-  }
+        when: "save to shopping cart"
+        ShoppingCart shoppingCartSessionSaved = shoppingCartService.save(shoppingCartSession)
 
-  def "delete a record by customer id and null sku"() {
-    when: "delete a customer and null sku specified shopping cart"
-    Long deleteNum = shoppingCartService.deleteByCustomerIdAndSkuId(customerId, null)
-    then: "delete failed"
-    deleteNum == -1
-  }
+        then: "save success"
+        shoppingCartSessionSaved == savedSC2
+    }
 
-  def "delete a record by null customer and sku"() {
-    when: "delete a null customer and sku specified shopping cart"
-    Long deleteNum = shoppingCartService.deleteByCustomerIdAndSkuId(null, skuId)
-    then: "delete failed"
-    deleteNum == -1
-  }
+    def "find a record for customer"() {
+        setup:
+        ShoppingCart requestSC1 = new ShoppingCart(customerId: customerId, skuId: skuId)
+        ShoppingCart requestSC2 = new ShoppingCart(sessionId: sessionId, skuId: skuId)
 
-  def "delete a record by session id and sku"() {
-    when: "delete a session and sku specified shopping cart"
-    Long deleteNum = shoppingCartService.deleteBySessionIdAndSkuId(sessionId, skuId)
-    then: "delete success"
-    deleteNum == 1
-  }
+        shoppingCartRepo.findOneByCustomerIdAndSkuId(_, _) >> savedSC1
+        shoppingCartRepo.findOneBySessionIdAndSkuId(_, _) >> savedSC2
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
 
-  def "delete a record by session id and null sku"() {
-    when: "delete a session and null sku specified shopping cart"
-    Long deleteNum = shoppingCartService.deleteBySessionIdAndSkuId(sessionId, null)
-    then: "delete failed"
-    deleteNum == -1
-  }
+        when: "find a customer and sku specified shopping cart"
+        ShoppingCart shoppingCartFound1 = shoppingCartService.findOneBySkuIdForCustomer(requestSC1)
+        ShoppingCart shoppingCartFound2 = shoppingCartService.findOneBySkuIdForCustomer(requestSC2)
+        then: "find success"
+        shoppingCartFound1 == savedSC1
+        shoppingCartFound2 == savedSC2
+    }
 
-  def "delete a record by null session and sku"() {
-    when: "delete a null session and sku specified shopping cart"
-    Long deleteNum = shoppingCartService.deleteBySessionIdAndSkuId(null, skuId)
-    then: "delete failed"
-    deleteNum == -1
-  }
-  
-  def "find shopping cart by customer or session"() {
-    setup:
-    List cartList = Mock()
-    cartList << savedSC
-    shoppingCartRepo.findByCustomerId(_) >> cartList
-    shoppingCartRepo.findBySessionId(_) >> cartList
-    shoppingCartService.shoppingCartRepository = shoppingCartRepo
-    when: "customer and session not null"
-    List shoppingCartListCust = shoppingCartService.listShoppingCartByCustomerId(customerId)
-    List shoppingCartListSess = shoppingCartService.listShoppingCartBySessionId(sessionId)
-    then:
-    shoppingCartListCust == cartList
-    shoppingCartListSess == cartList
-  }
-  
-  def "find shopping cart by null"() {
-    when: "customer and session null"
-    List shoppingCartListCust = shoppingCartService.listShoppingCartByCustomerId(null)
-    List shoppingCartListSess = shoppingCartService.listShoppingCartBySessionId(null)
-    then: "null returen"
-    shoppingCartListCust.size() == 0
-    shoppingCartListSess.size() == 0
-  }
+    def "find a record by null params"() {
+        setup:
+        ShoppingCart requestSC1 = new ShoppingCart(skuId: skuId)
+        ShoppingCart requestSC2 = new ShoppingCart(customerId: customerId)
+        ShoppingCart requestSC3 = new ShoppingCart(sessionId: sessionId)
+
+        shoppingCartRepo.findOneByCustomerIdAndSkuId(_, _) >> null
+        shoppingCartRepo.findOneBySessionIdAndSkuId(_, _) >> null
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
+
+        when: "find a null customer and sku specified shopping cart"
+        ShoppingCart shoppingCartFound1 = shoppingCartService.findOneBySkuIdForCustomer(requestSC1)
+        ShoppingCart shoppingCartFound2 = shoppingCartService.findOneBySkuIdForCustomer(requestSC2)
+        ShoppingCart shoppingCartFound3 = shoppingCartService.findOneBySkuIdForCustomer(requestSC3)
+        then: "find failed"
+        shoppingCartFound1 == null
+        shoppingCartFound2 == null
+        shoppingCartFound3 == null
+    }
+
+    def "delete a record for customer"() {
+        setup:
+        ShoppingCart requestSC1 = new ShoppingCart(customerId: customerId, skuId: skuId)
+        ShoppingCart requestSC2 = new ShoppingCart(sessionId: sessionId, skuId: skuId)
+
+        shoppingCartRepo.deleteByCustomerIdAndSkuId(_, _) >> 1L
+        shoppingCartRepo.deleteBySessionIdAndSkuId(_, _) >> 1L
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
+
+        when: "delete a customer and sku specified shopping cart"
+        long deleteNum1 = shoppingCartService.deleteBySkuIdForCustomer(requestSC1)
+        long deleteNum2 = shoppingCartService.deleteBySkuIdForCustomer(requestSC2)
+        then: "delete success"
+        deleteNum1 == 1
+        deleteNum2 == 1
+    }
+
+    def "delete a record by null params"() {
+        setup:
+        ShoppingCart requestSC1 = new ShoppingCart(skuId: skuId)
+        ShoppingCart requestSC2 = new ShoppingCart(customerId: customerId)
+        ShoppingCart requestSC3 = new ShoppingCart(sessionId: sessionId)
+
+        shoppingCartRepo.deleteByCustomerIdAndSkuId(_, _) >> -1L
+        shoppingCartRepo.deleteBySessionIdAndSkuId(_, _) >> -1L
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
+
+        when: "delete a customer and null sku specified shopping cart"
+        long deleteNum1 = shoppingCartService.deleteBySkuIdForCustomer(requestSC1)
+        long deleteNum2 = shoppingCartService.deleteBySkuIdForCustomer(requestSC2)
+        long deleteNum3 = shoppingCartService.deleteBySkuIdForCustomer(requestSC3)
+        then: "delete failed"
+        deleteNum1 == -1
+        deleteNum2 == -1
+        deleteNum3 == -1
+    }
+
+    def "get total quantity of shopping cart"() {
+        setup:
+        ShoppingCart requestSC1 = new ShoppingCart(customerId: customerId, skuId: skuId, quantity: quantity)
+        ShoppingCart requestSC2 = new ShoppingCart(sessionId: sessionId, skuId: skuId, quantity: quantity)
+        ShoppingCart savedSC3 = new ShoppingCart(shoppingCartId: 1003L, customerId: customerId, skuId: 1002L, quantity: quantity, createdTime: new Date(), modifiedTime: new Date())
+        ShoppingCart savedSC4 = new ShoppingCart(shoppingCartId: 1004L, sessionId: sessionId, skuId: 1002L, quantity: quantity, createdTime: new Date(), modifiedTime: new Date())
+
+        def cartList1 = [savedSC1, savedSC3]
+        def cartList2 = [savedSC2, savedSC4]
+        shoppingCartRepo.findByCustomerId(_) >> cartList1
+        shoppingCartRepo.findBySessionId(_) >> cartList2
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
+
+        when:
+        int total1 = shoppingCartService.getTotalQuantityForCustomer(requestSC1)
+        int total2 = shoppingCartService.getTotalQuantityForCustomer(requestSC2)
+        then:
+        total1 == 2
+        total2 == 2
+    }
+
+    def "find shopping cart by customer or session"() {
+        setup:
+        def cartList1 = [savedSC1]
+        def cartList2 = [savedSC2]
+        shoppingCartRepo.findByCustomerId(_) >> cartList1
+        shoppingCartRepo.findBySessionId(_) >> cartList2
+        shoppingCartService.shoppingCartRepository = shoppingCartRepo
+
+        ShoppingCart requestSC1 = new ShoppingCart(customerId: customerId)
+        ShoppingCart requestSC2 = new ShoppingCart(sessionId: sessionId)
+
+        when: "customer and session not null"
+        List shoppingCartListCust = shoppingCartService.listShoppingCartForCustomer(requestSC1)
+        List shoppingCartListSess = shoppingCartService.listShoppingCartForCustomer(requestSC2)
+        then:
+        shoppingCartListCust == cartList1
+        shoppingCartListSess == cartList2
+    }
+
+    def "find shopping cart by null"() {
+        when: "customer and session null"
+        List shoppingCartListCust = shoppingCartService.listShoppingCartForCustomer(new ShoppingCart())
+        then: "null returen"
+        shoppingCartListCust.size() == 0
+    }
 }

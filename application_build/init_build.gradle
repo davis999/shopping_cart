@@ -1,0 +1,20 @@
+/**
+ * Setting the common Java and gradle wrapper, this should be the first `apply from` file.
+ * @author janeli
+ */
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'java'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+// Specify the gradle wrapper version
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}

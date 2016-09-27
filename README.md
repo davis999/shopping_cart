@@ -17,4 +17,7 @@ GRpc can change port to others:
 ```
 grpc:
   port : 6565
+  sku:
+    host: localhost
+    port: 6565
 ```

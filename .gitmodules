@@ -3,7 +3,7 @@
 	url = https://github.com/reactivesw/code_analyzer.git
 [submodule "src/main/proto/shopping_cart_proto"]
 	path = src/main/proto/shopping_cart_proto
-	url = /Users/janeli/Documents/JaneProject/gitDocs/shopping_cart_proto
+	url = git@github.com:reactivesw/shopping_cart_proto.git
 [submodule "src/main/proto/catalog_proto"]
 	path = src/main/proto/catalog_proto
 	url = git@github.com:reactivesw/catalog_proto.git

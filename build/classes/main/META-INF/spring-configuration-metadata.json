@@ -1,0 +1,23 @@
+{
+  "groups": [{
+    "name": "grpc.sku",
+    "type": "io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig",
+    "sourceType": "io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig"
+  }],
+  "properties": [
+    {
+      "name": "grpc.sku.host",
+      "type": "java.lang.String",
+      "description": "grpc server host.",
+      "sourceType": "io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig"
+    },
+    {
+      "name": "grpc.sku.port",
+      "type": "java.lang.Integer",
+      "description": "grpc port.",
+      "sourceType": "io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig",
+      "defaultValue": 0
+    }
+  ],
+  "hints": []
+}

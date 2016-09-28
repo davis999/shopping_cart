@@ -105,6 +105,45 @@ INTERNAL | add to shopping cart failed | Exception |
 
 ## 2. Displaying Shopping Cart Content
 
+### 2.1. Grpc API
+
+#### 2.1.1. Request by customer id
+* service: listShoppingCartForCustomer (CustomerShoppingCartListRequest) returns (ShoppingCartListReply)
+* param: CustomerShoppingCartListRequest(customer_id(Long))
+* return: ShoppingCartListReply(List<GrpcShoppingCart>)
+* exception: StatusRuntimeException
+ - INVALID_ARGUMENT
+
+#### 2.1.2. Request by session id
+* service: listShoppingCartForSession (SessionShoppingCartListRequest) returns (ShoppingCartListReply)
+* param: SessionShoppingCartListRequest(session_id(String))
+* return: ShoppingCartListReply(List<GrpcShoppingCart>)
+* exception: StatusRuntimeException
+ - INVALID_ARGUMENT
+
+### 2.2. Domain Service
+
+#### 2.2.1. Workflow
+* get shopping cart list
+ - get shopping cart list by customer id `List<ShoppingCart> listCustomerShoppingCart(long customerId)`
+ - get shopping cart list by session id `List<ShoppingCart> listSessionShoppingCart(String sessionId)`
+* call sku grpc service to get product information `List getProductsInfo(List<long> skuIdList)`
+ - list shopping cart sku id
+ - call sku grpc service
+ - list shopping cart product information
+
+#### 2.2.2. Exception
+* ShoppingCartParamException
+ - customer_id is required: `listCustomerShoppingCart`
+ - session_id is required: `listSessionShoppingCart`
+
+### 2.3 Error Handle
+
+Grpc Status | Grpc Message | Customerized Exception | Customerized Message
+----------- | ------------ | ---------------------- | --------------------
+INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | customer_id is required
+INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | session_id is required
+
 ## 3. Editing Shpping Cart
 
 ## 4. Clearing Shopping Cart 

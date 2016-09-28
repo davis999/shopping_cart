@@ -6,7 +6,7 @@ import io.reactivesw.shoppingcart.grpc.GrpcShoppingCart
 import spock.lang.Shared
 import spock.lang.Specification
 
-class ShoppingCartGrpcStreamTest extends Specification {
+class ScGrpcStreamTest extends Specification {
 
     @Shared
     long customerId = 1001L
@@ -35,7 +35,7 @@ class ShoppingCartGrpcStreamTest extends Specification {
                 setQuantity(quantity).build()
 
         when:
-        ShoppingCart shoppingCart = ShoppingCartGrpcStream.grpcRequestToShoppingCart(request)
+        ShoppingCart shoppingCart = ScGrpcStream.grpcRequestToShoppingCart(request)
         then:
         shoppingCart == requestSC
     }
@@ -49,7 +49,7 @@ class ShoppingCartGrpcStreamTest extends Specification {
                 setQuantity(quantity).build()
 
         when:
-        GrpcShoppingCart grpcReply = ShoppingCartGrpcStream.shoppingCartToGrpcReply(requestSC)
+        GrpcShoppingCart grpcReply = ScGrpcStream.shoppingCartToGrpcReply(requestSC)
         then:
         grpcReply == grpcSC
     }

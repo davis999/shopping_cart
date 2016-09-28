@@ -7,9 +7,13 @@ package io.reactivesw.shoppingcart.infrastructure.exception;
 public class ShoppingCartParamException extends ShoppingCartException {
 
   /**
-   * sku id required.
+   * customer id required.
    */
-  public static final String SKUID_REQUIRED = "sku_id is required";
+  public static final String CUSTOMER_ID_REQUIRED = "customer_id is required";
+  /**
+   * session id required.
+   */
+  public static final String SESSION_ID_REQUIRED = "session_id is required";
   /**
    * customer id or session id required.
    */

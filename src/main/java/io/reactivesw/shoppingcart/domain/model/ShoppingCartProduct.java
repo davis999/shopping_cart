@@ -3,60 +3,65 @@ package io.reactivesw.shoppingcart.domain.model;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
 /**
- * shopping cart domain.
+ * shopping cart product just for class mapper.
  * @author janeli
  */
-@Entity
-public class ShoppingCart {
+public class ShoppingCartProduct {
 
   /**
-   * shopping cart id auto generated.
+   * shopping cart id.
    */
-  @Id
-  @GeneratedValue
-  @Column(name = "id")
   private long shoppingCartId;
 
   /**
    * customer id of the login customer.
    */
-  @Column(name = "customer_id")
   private long customerId;
 
   /**
    * session id of the anonymous customer.
    */
-  @Column(name = "session_id")
   private String sessionId;
 
   /**
    * product sku id.
    */
-  @Column(name = "sku_id")
   private long skuId;
+
+  /**
+   * product sku number.
+   */
+  private String skuNumber;
+
+  /**
+   * product sku name.
+   */
+  private String skuName;
+
+  /**
+   * product media url.
+   */
+  private String mediaUrl;
+
+  /**
+   * product price.
+   */
+  private String price;
 
   /**
    * sku quantity.
    */
-  @Column(name = "quantity")
   private int quantity;
 
   /**
    * created time.
    */
-  @Column(name = "created_time")
   private Date createdTime;
 
   /**
    * modified time.
    */
-  @Column(name = "modified_time")
   private Date modifiedTime;
 
   /**
@@ -124,6 +129,70 @@ public class ShoppingCart {
   }
 
   /**
+   * get sku number.
+   * @return String
+   */
+  public String getSkuNumber() {
+    return skuNumber;
+  }
+
+  /**
+   * set sku number.
+   * @param skuNumber String
+   */
+  public void setSkuNumber(String skuNumber) {
+    this.skuNumber = skuNumber;
+  }
+
+  /**
+   * get sku name.
+   * @return String
+   */
+  public String getSkuName() {
+    return skuName;
+  }
+
+  /**
+   * set sku name.
+   * @param skuName String
+   */
+  public void setSkuName(String skuName) {
+    this.skuName = skuName;
+  }
+
+  /**
+   * get media url.
+   * @return String
+   */
+  public String getMediaUrl() {
+    return mediaUrl;
+  }
+
+  /**
+   * set media url.
+   * @param mediaUrl String
+   */
+  public void setMediaUrl(String mediaUrl) {
+    this.mediaUrl = mediaUrl;
+  }
+
+  /**
+   * get sku price.
+   * @return String
+   */
+  public String getPrice() {
+    return price;
+  }
+
+  /**
+   * set sku price.
+   * @param price String
+   */
+  public void setPrice(String price) {
+    this.price = price;
+  }
+
+  /**
    * get the quantity of the shopping cart.
    * @return quantity the quantity
    */
@@ -173,32 +242,38 @@ public class ShoppingCart {
 
   /**
    * generate hash code.
-   * @see java.lang.Object#hashCode()
+   * @see Object#hashCode()
    */
   @Override
   public int hashCode() {
-    return Objects.hash(shoppingCartId, customerId, sessionId, skuId, quantity, createdTime,
-        modifiedTime);
+    return Objects
+        .hash(shoppingCartId, customerId, sessionId, skuId, skuNumber, skuName, mediaUrl, price,
+            quantity, createdTime, modifiedTime);
   }
 
   /**
    * domain equals.
-   * @see java.lang.Object#equals(java.lang.Object)
+   * @see Object#equals(Object)
    */
   @Override
   public boolean equals(Object obj) {
     boolean equalsResult = false;
     if (this == obj) {
       equalsResult = true;
-    } else if (obj instanceof ShoppingCart) {
-      final ShoppingCart other = (ShoppingCart) obj;
+    } else if (obj instanceof ShoppingCartProduct) {
+      final ShoppingCartProduct other = (ShoppingCartProduct) obj;
       equalsResult =
           Objects.equals(shoppingCartId, other.shoppingCartId)
               && Objects.equals(customerId, other.customerId)
               && Objects.equals(sessionId, other.sessionId)
+              && Objects.equals(skuId, other.skuId)
+              && Objects.equals(skuNumber, other.skuNumber)
+              && Objects.equals(skuName, other.skuName)
+              && Objects.equals(mediaUrl, other.mediaUrl)
+              && Objects.equals(price, other.price)
+              && Objects.equals(quantity, other.quantity)
               && Objects.equals(createdTime, other.createdTime)
-              && Objects.equals(modifiedTime, other.modifiedTime)
-              && Objects.equals(quantity, other.quantity) && Objects.equals(skuId, other.skuId);
+              && Objects.equals(modifiedTime, other.modifiedTime);
     }
     return equalsResult;
   }

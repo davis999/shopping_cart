@@ -1,6 +1,7 @@
 package io.reactivesw.shoppingcart.application.grpc;
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct;
 import io.reactivesw.shoppingcart.grpc.AddRequest;
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCart;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
@@ -15,24 +16,32 @@ import java.util.List;
  * supprt grpc request and reply convert.
  * @author janeli
  */
-public class ShoppingCartGrpcStream {
+public final class ScGrpcStream {
 
   /**
    * class logger.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ShoppingCartGrpcStream.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScGrpcStream.class);
+
+  /**
+   * constructor.
+   */
+  private ScGrpcStream() {
+
+  }
 
   /**
    * convert shopping cart list to reply builder.
-   * @param scList List ShoppingCart
+   * @param scList List ShoppingCartProduct
    * @return builder
    */
-  public static ShoppingCartListReply.Builder repeatShoppingCart(List<ShoppingCart> scList) {
-    LOGGER.info("grpc repeated list shopping cart----");
+  public static ShoppingCartListReply.Builder repeatShoppingCart(List<ShoppingCartProduct> scList) {
+    LOGGER.debug("convert to grpc repeated list. shopping cart product list {}", scList);
     final ShoppingCartListReply.Builder replyBuilder =
         ShoppingCartListReply.newBuilder();
     final ModelMapper modelMapper = new ModelMapper();
-    for (final ShoppingCart scItem : scList) {
+    for (final ShoppingCartProduct scItem : scList) {
+      LOGGER.debug("shopping cart product item {}", scItem);
       // use model mapper to convert java class to grpc message class
       final GrpcShoppingCart.Builder scbuilder =
           modelMapper.map(scItem, GrpcShoppingCart.Builder.class);

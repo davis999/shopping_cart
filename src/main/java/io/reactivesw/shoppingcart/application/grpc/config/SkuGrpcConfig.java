@@ -48,7 +48,7 @@ public class SkuGrpcConfig {
 
   /**
    * set grpc port.
-   * @param port
+   * @param port int
    */
   public void setPort(int port) {
     this.port = port;

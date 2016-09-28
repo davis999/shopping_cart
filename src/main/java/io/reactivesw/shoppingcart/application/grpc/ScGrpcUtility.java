@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * constants declare for grpc service of shopping cart.
  * @author janeli
  */
-public final class ShoppingCartGrpcUtility {
+public final class ScGrpcUtility {
 
   /**
    * grpc request parameters are invalid.
@@ -30,12 +30,12 @@ public final class ShoppingCartGrpcUtility {
   /**
    * class logger.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ShoppingCartGrpcUtility.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScGrpcUtility.class);
 
   /**
    * constructor.
    */
-  private ShoppingCartGrpcUtility() {
+  private ScGrpcUtility() {
   }
 
   /**

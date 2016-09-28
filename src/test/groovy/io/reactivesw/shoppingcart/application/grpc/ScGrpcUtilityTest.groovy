@@ -4,7 +4,7 @@ import io.grpc.stub.StreamObserver
 import io.reactivesw.shoppingcart.grpc.AddReply
 import spock.lang.Specification
 
-class ShoppingCartGrpcUtilityTest extends Specification {
+class ScGrpcUtilityTest extends Specification {
 
     StreamObserver<AddReply> responseObserver = Mock()
 
@@ -12,7 +12,7 @@ class ShoppingCartGrpcUtilityTest extends Specification {
         setup:
         AddReply addReply = AddReply.newBuilder().build()
         when:
-        ShoppingCartGrpcUtility.completeResponse(responseObserver, addReply)
+        ScGrpcUtility.completeResponse(responseObserver, addReply)
         then:
         noExceptionThrown()
     }

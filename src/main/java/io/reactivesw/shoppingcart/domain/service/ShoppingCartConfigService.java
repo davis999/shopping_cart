@@ -33,8 +33,8 @@ public class ShoppingCartConfigService {
   public int getTotalQuantityLimit() {
     LOGGER.debug("domain service: get shopping cart config");
     int limit = 0;
-    final ShoppingCartConfig shoppingCartConfig = shoppingCartConfigRepository.
-        findOneByConfigKey("total_limit");
+    final ShoppingCartConfig shoppingCartConfig = shoppingCartConfigRepository
+        .findOneByConfigKey("total_limit");
     if (shoppingCartConfig != null) {
       LOGGER.debug("domain service: find a shopping cart config {}", shoppingCartConfig);
       limit = Integer.parseInt(shoppingCartConfig.getConfigValue());

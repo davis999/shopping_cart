@@ -1,8 +1,8 @@
 package io.reactivesw.shoppingcart.application.grpc
 
 import io.grpc.stub.StreamObserver
-import io.reactivesw.shoppingcart.application.AddToShoppingCartApp
-import io.reactivesw.shoppingcart.application.ListShoppingCartApp
+import io.reactivesw.shoppingcart.application.AddItemApp
+import io.reactivesw.shoppingcart.application.ListItemsApp
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.grpc.AddReply
 import io.reactivesw.shoppingcart.grpc.AddRequest
@@ -14,7 +14,7 @@ import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamExce
 import spock.lang.Shared
 import spock.lang.Specification
 
-class ShoppingCartGrpcServiceTest extends Specification {
+class ScGrpcServiceTest extends Specification {
 
   @Shared
   long customerId = 1001L
@@ -28,14 +28,14 @@ class ShoppingCartGrpcServiceTest extends Specification {
   @Shared
   int quantity = 1
 
-  ShoppingCartGrpcService scGrpc = new ShoppingCartGrpcService()
+  ScGrpcService scGrpc = new ScGrpcService()
   AddRequest request
   GrpcShoppingCart grpcShoppingCart = new GrpcShoppingCart()
   StreamObserver<AddReply> responseObserver = Mock()
 
   ShoppingCart requestSC
-  AddToShoppingCartApp addToShoppingCartHandler = Stub(AddToShoppingCartApp)
-  ListShoppingCartApp listShoppingCartHandler = Stub(ListShoppingCartApp)
+  AddItemApp addItemApp = Stub(AddItemApp)
+  ListItemsApp listItemsApp = Stub(ListItemsApp)
 
   def setup() {
     request = AddRequest.newBuilder().
@@ -45,15 +45,15 @@ class ShoppingCartGrpcServiceTest extends Specification {
             setQuantity(quantity).build()
     requestSC = new ShoppingCart(customerId: customerId, sessionId: sessionId, skuId: skuId, quantity: quantity)
 
-    ShoppingCartGrpcStream.grpcRequestToShoppingCart(_) >> requestSC
-    ShoppingCartGrpcStream.shoppingCartToGrpcReply(_) >> grpcShoppingCart
-    scGrpc.addToShoppingCartHandler = addToShoppingCartHandler
+    ScGrpcStream.grpcRequestToShoppingCart(_) >> requestSC
+    ScGrpcStream.shoppingCartToGrpcReply(_) >> grpcShoppingCart
+    scGrpc.addItemApp = addItemApp
   }
 
   def "add to shopping cart" () {
     setup:
     requestSC.setShoppingCartId(1001L)
-    addToShoppingCartHandler.addToShoppingCart(_) >> requestSC
+    addItemApp.addToShoppingCart(_) >> requestSC
     when:
     scGrpc.addToShoppingCart(request, responseObserver)
     then:
@@ -62,8 +62,8 @@ class ShoppingCartGrpcServiceTest extends Specification {
 
   def "add throw invalid paramter exception" () {
     setup:
-    addToShoppingCartHandler.addToShoppingCart(_) >> {throw new ShoppingCartParamException()}
-    scGrpc.addToShoppingCartHandler = addToShoppingCartHandler
+    addItemApp.addToShoppingCart(_) >> {throw new ShoppingCartParamException()}
+    scGrpc.addItemApp = addItemApp
     when:
     scGrpc.addToShoppingCart(request, responseObserver)
     then:
@@ -73,8 +73,8 @@ class ShoppingCartGrpcServiceTest extends Specification {
 
   def "add throw out of range exception" () {
     setup:
-    addToShoppingCartHandler.addToShoppingCart(_) >> {throw new ShoppingCartLimitException()}
-    scGrpc.addToShoppingCartHandler = addToShoppingCartHandler
+    addItemApp.addToShoppingCart(_) >> {throw new ShoppingCartLimitException()}
+    scGrpc.addItemApp = addItemApp
     when:
     scGrpc.addToShoppingCart(request, responseObserver)
     then:
@@ -84,8 +84,8 @@ class ShoppingCartGrpcServiceTest extends Specification {
 
   def "add throw resource exhausted exception" () {
     setup:
-    addToShoppingCartHandler.addToShoppingCart(_) >> {throw new ShoppingCartInventoryException()}
-    scGrpc.addToShoppingCartHandler = addToShoppingCartHandler
+    addItemApp.addToShoppingCart(_) >> {throw new ShoppingCartInventoryException()}
+    scGrpc.addItemApp = addItemApp
     when:
     scGrpc.addToShoppingCart(request, responseObserver)
     then:

@@ -5,39 +5,47 @@ apply plugin: 'findbugs'
 // apply all configurations
 apply from: 'code_analyzer_test/code_analyzer_config.gradle'
 
+ext {
+    sc_starter = 'io/reactivesw/shoppingcart/ShoppingCartServiceStarter*'
+
+    grpc_sc_folder = 'io/reactivesw/shoppingcart/grpc/'
+    grpc_sc_folder_all = grpc_sc_folder + '*'
+
+    grpc_cat_folder = 'io/reactivesw/catalog/grpc/'
+    grpc_cat_folder_all = grpc_cat_folder + '*'
+
+    grpc_google_folder = 'com/google/protobuf/'
+    grpc_google_folder_all = grpc_google_folder + '*'
+}
+
 /*************checkstyle(use google java style)***************/
 
 checkstyle {
     //exclude the package you do not want to check
-    checkstyleMain.exclude 'io/reactivesw/shoppingcart/application/grpc/*'
-    checkstyleMain.exclude 'io/reactivesw/shoppingcart/grpc/*'
-    checkstyleMain.exclude 'io/reactivesw/catalog/grpc/*'
-    checkstyleMain.exclude 'com/google/protobuf/*'
+    checkstyleMain.exclude grpc_sc_folder_all
+    checkstyleMain.exclude grpc_cat_folder_all
+    checkstyleMain.exclude grpc_google_folder_all
 }
 
 /*************PMD(Project Manager Design)***************/
 tasks.withType(Pmd) {
     //exclude the package you do not want to check
-    exclude 'io/reactivesw/shoppingcart/grpc/*'
-    exclude 'io/reactivesw/shoppingcart/application/grpc/*'
-    exclude 'io/reactivesw/catalog/grpc/*'
-    exclude 'io/reactivesw/shoppingcart/ShoppingCartServiceStarter*'
-    exclude 'com/google/protobuf/*'
+    exclude grpc_sc_folder_all
+    exclude grpc_cat_folder_all
+    exclude grpc_google_folder_all
+    exclude sc_starter
 }
 
 /*************find bug***************/
 tasks.withType(FindBugs) {
     //exclude the package you do not want to check
-    classes = classes.filter {
-	!it.path.contains('io/reactivesw/shoppingcart/application/grpc/')
+    classes = classes.filter{
+        !it.path.contains(grpc_sc_folder)
     }
-    classes = classes.filter {
-	!it.path.contains('io/reactivesw/shoppingcart/grpc/')
+    classes = classes.filter{
+        !it.path.contains(grpc_cat_folder)
     }
-    classes = classes.filter {
-	!it.path.contains('io/reactivesw/catalog/grpc/')
-    }
-    classes = classes.filter {
-	!it.path.contains('com/google/protobuf/')
+    classes = classes.filter{
+        !it.path.contains(grpc_google_folder)
     }
 }

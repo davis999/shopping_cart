@@ -3,10 +3,17 @@ package io.reactivesw.shoppingcart.application.grpc;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
-import io.reactivesw.shoppingcart.application.AddToShoppingCartApp;
-import io.reactivesw.shoppingcart.application.ListShoppingCartApp;
+import io.reactivesw.shoppingcart.application.AddItemApp;
+import io.reactivesw.shoppingcart.application.ListItemsApp;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
-import io.reactivesw.shoppingcart.grpc.*;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct;
+import io.reactivesw.shoppingcart.grpc.AddReply;
+import io.reactivesw.shoppingcart.grpc.AddRequest;
+import io.reactivesw.shoppingcart.grpc.CustomerShoppingCartListRequest;
+import io.reactivesw.shoppingcart.grpc.GrpcShoppingCart;
+import io.reactivesw.shoppingcart.grpc.SessionShoppingCartListRequest;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartGrpc;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException;
@@ -23,24 +30,24 @@ import java.util.List;
  * @author janeli
  */
 @GRpcService
-public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
+public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
 
   /**
    * class logger.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ShoppingCartGrpcService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScGrpcService.class);
 
   /**
    * add to product application.
    */
   @Autowired
-  private transient AddToShoppingCartApp addToShoppingCartHandler;
+  private transient AddItemApp addItemApp;
 
   /**
    * list shopping cart application.
    */
   @Autowired
-  private transient ListShoppingCartApp listShoppingCartHandler;
+  private transient ListItemsApp listItemsApp;
 
   /**
    * add product to shopping cart and reply to the grpc client.
@@ -52,27 +59,23 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
                                 StreamObserver<AddReply> responseObserver) {
     LOGGER.info("grpc server: add product to shopping cart start, request: {}", request);
     try {
-      final ShoppingCart shoppingCart = ShoppingCartGrpcStream.grpcRequestToShoppingCart(request);
-      final ShoppingCart addResult = addToShoppingCartHandler.addToShoppingCart(shoppingCart);
-      final GrpcShoppingCart grpcShoppingCart = ShoppingCartGrpcStream.
-          shoppingCartToGrpcReply(addResult);
-      final AddReply replyMessage = AddReply.newBuilder().setShoppingCart(grpcShoppingCart).build();
-      ShoppingCartGrpcUtility.completeResponse(responseObserver, replyMessage);
+      ShoppingCart shoppingCart = ScGrpcStream.grpcRequestToShoppingCart(request);
+      ShoppingCart addResult = addItemApp.addToShoppingCart(shoppingCart);
+      GrpcShoppingCart grpcShoppingCart = ScGrpcStream.shoppingCartToGrpcReply(addResult);
+      AddReply replyMessage = AddReply.newBuilder().setShoppingCart(grpcShoppingCart).build();
+      ScGrpcUtility.completeResponse(responseObserver, replyMessage);
       LOGGER.info("grpc server: add product to shopping cart finished, reply: {}", replyMessage);
     } catch (ShoppingCartParamException scpException) {
       LOGGER.debug("parameters are invalid, throw ShoppingCartParamException: {}", scpException);
-      final Status status = Status.INVALID_ARGUMENT.withDescription(ShoppingCartGrpcUtility
-          .INVALID_ARGUMENT_MSG);
+      Status status = Status.INVALID_ARGUMENT.withDescription(ScGrpcUtility.INVALID_ARGUMENT_MSG);
       throw new StatusRuntimeException(status);
     } catch (ShoppingCartLimitException sclException) {
       LOGGER.debug("quantity is out of range, throw ShoppingCartLimitException: {}", sclException);
-      final Status status = Status.OUT_OF_RANGE.withDescription(ShoppingCartGrpcUtility
-          .OUT_OF_RANGE_MSG);
+      Status status = Status.OUT_OF_RANGE.withDescription(ScGrpcUtility.OUT_OF_RANGE_MSG);
       throw new StatusRuntimeException(status);
     } catch (ShoppingCartInventoryException sciException) {
-      LOGGER.debug("inventory is exhausted, throw ShoppingCartInventoryException: {}",
-          sciException);
-      final Status status = Status.RESOURCE_EXHAUSTED.withDescription(ShoppingCartGrpcUtility
+      LOGGER.debug("inventory is exhausted, throw ShoppingCartInventoryException: {}",sciException);
+      Status status = Status.RESOURCE_EXHAUSTED.withDescription(ScGrpcUtility
           .RESOURCE_EXHAUSTED_MSG);
       throw new StatusRuntimeException(status);
     }
@@ -86,14 +89,13 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
   @Override
   public void listShoppingCartForCustomer(CustomerShoppingCartListRequest request,
                                           StreamObserver<ShoppingCartListReply> responseObserver) {
-    LOGGER.info("grpc server: list shopping cart for customer start----");
-    final List<ShoppingCart> cartList =
-        listShoppingCartHandler.listCustomerShoppingCart(request.getCustomerId());
-    LOGGER.info("list shopping cart for customer finished----");
+    LOGGER.debug("grpc server: list shopping cart for customer. request: {}", request);
+    List<ShoppingCartProduct> cartList = listItemsApp.listByCustomerId(request.getCustomerId());
+    LOGGER.debug("list shopping cart for customer. shopping cart list: {}", cartList);
     // convert shopping cart list to reply builder
-    final ShoppingCartListReply.Builder replyBuilder =
-        ShoppingCartGrpcStream.repeatShoppingCart(cartList);
-    ShoppingCartGrpcUtility.completeResponse(responseObserver, replyBuilder.build());
+    ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList).build();
+    ScGrpcUtility.completeResponse(responseObserver, replyMessage);
+    LOGGER.debug("grpc server: list shopping cart for customer finished, reply: {}", replyMessage);
   }
 
   /**
@@ -104,14 +106,13 @@ public class ShoppingCartGrpcService extends ShoppingCartGrpc.ShoppingCartImplBa
   @Override
   public void listShoppingCartForSession(SessionShoppingCartListRequest request,
                                          StreamObserver<ShoppingCartListReply> responseObserver) {
-    LOGGER.info("grpc server: list shopping cart for customer start----");
-    final List<ShoppingCart> cartList =
-        listShoppingCartHandler.listSessionShoppingCart(request.getSessionId());
-    LOGGER.info("list shopping cart for customer finished----");
+    LOGGER.debug("grpc server: list shopping cart for session. request: {}", request);
+    List<ShoppingCartProduct> cartList = listItemsApp.listBySessionId(request.getSessionId());
+    LOGGER.info("list shopping cart for session. shopping cart list: {}", cartList);
     // convert shopping cart list to reply builder
-    final ShoppingCartListReply.Builder replyBuilder =
-        ShoppingCartGrpcStream.repeatShoppingCart(cartList);
-    ShoppingCartGrpcUtility.completeResponse(responseObserver, replyBuilder.build());
+    ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList).build();
+    ScGrpcUtility.completeResponse(responseObserver, replyMessage);
+    LOGGER.debug("grpc server: list shopping cart for session finished, reply: {}", replyMessage);
   }
 
 }

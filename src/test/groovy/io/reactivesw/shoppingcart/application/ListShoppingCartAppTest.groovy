@@ -31,19 +31,4 @@ class ListShoppingCartAppTest extends Specification {
     shoppingCartService.listShoppingCartBySessionId(_) >> cartList
     listShoppingCartApp.shoppingCartService = shoppingCartService
   }
-  
-  def "list for customer"() {
-    when:
-    List shoppingCartListCust = listShoppingCartApp.listCustomerShoppingCart(customerId)
-    then:
-    shoppingCartListCust == cartList
-  }
-  
-  def "list for session"() {
-    when:
-    List shoppingCartListSess = listShoppingCartApp.listSessionShoppingCart(sessionId)
-    then:
-    shoppingCartListSess == cartList
-  }
-
 }

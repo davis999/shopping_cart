@@ -20,6 +20,7 @@ jacocoTestReport {
                     'io/reactivesw/shoppingcart/grpc/*',
                     'com/google/protobuf/*',
                     'io/reactivesw/shoppingcart/ShoppingCartServiceStarter*',
+                    'io/reactivesw/shoppingcart/application/*',
                     'io/reactivesw/shoppingcart/application/grpc/*',
                     'io/reactivesw/shoppingcart/domain/model/*',
                     'io/reactivesw/shoppingcart/infrastructure/*'

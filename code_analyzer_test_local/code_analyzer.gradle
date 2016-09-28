@@ -9,18 +9,35 @@ apply from: 'code_analyzer_test/code_analyzer_config.gradle'
 
 checkstyle {
     //exclude the package you do not want to check
+    checkstyleMain.exclude 'io/reactivesw/shoppingcart/application/grpc/*'
     checkstyleMain.exclude 'io/reactivesw/shoppingcart/grpc/*'
+    checkstyleMain.exclude 'io/reactivesw/catalog/grpc/*'
+    checkstyleMain.exclude 'com/google/protobuf/*'
 }
 
 /*************PMD(Project Manager Design)***************/
 tasks.withType(Pmd) {
     //exclude the package you do not want to check
     exclude 'io/reactivesw/shoppingcart/grpc/*'
+    exclude 'io/reactivesw/shoppingcart/application/grpc/*'
+    exclude 'io/reactivesw/catalog/grpc/*'
     exclude 'io/reactivesw/shoppingcart/ShoppingCartServiceStarter*'
+    exclude 'com/google/protobuf/*'
 }
 
 /*************find bug***************/
 tasks.withType(FindBugs) {
     //exclude the package you do not want to check
-    !it.path.contains('io/reactivesw/shoppingcart/grpc/')
+    classes = classes.filter {
+	!it.path.contains('io/reactivesw/shoppingcart/application/grpc/')
+    }
+    classes = classes.filter {
+	!it.path.contains('io/reactivesw/shoppingcart/grpc/')
+    }
+    classes = classes.filter {
+	!it.path.contains('io/reactivesw/catalog/grpc/')
+    }
+    classes = classes.filter {
+	!it.path.contains('com/google/protobuf/')
+    }
 }

@@ -1,3 +1,6 @@
+# Proto gen files
+src/main/protoGen
+
 # Compiled source #
 ###################
 *.com

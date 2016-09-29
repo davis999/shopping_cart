@@ -6,11 +6,11 @@ import io.grpc.stub.StreamObserver;
 import io.reactivesw.shoppingcart.application.AddItemApp;
 import io.reactivesw.shoppingcart.application.ListItemsApp;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
-import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.AddReply;
 import io.reactivesw.shoppingcart.grpc.AddRequest;
 import io.reactivesw.shoppingcart.grpc.CustomerShoppingCartListRequest;
-import io.reactivesw.shoppingcart.grpc.GrpcShoppingCart;
+import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.SessionShoppingCartListRequest;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartGrpc;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
@@ -61,8 +61,8 @@ public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
     try {
       ShoppingCart shoppingCart = ScGrpcStream.grpcRequestToShoppingCart(request);
       ShoppingCart addResult = addItemApp.addToShoppingCart(shoppingCart);
-      GrpcShoppingCart grpcShoppingCart = ScGrpcStream.shoppingCartToGrpcReply(addResult);
-      AddReply replyMessage = AddReply.newBuilder().setShoppingCart(grpcShoppingCart).build();
+      GrpcShoppingCartSku grpcShoppingCartSku = ScGrpcStream.shoppingCartToGrpcReply(addResult);
+      AddReply replyMessage = AddReply.newBuilder().setShoppingCart(grpcShoppingCartSku).build();
       ScGrpcUtility.completeResponse(responseObserver, replyMessage);
       LOGGER.info("grpc server: add product to shopping cart finished, reply: {}", replyMessage);
     } catch (ShoppingCartParamException scpException) {
@@ -90,7 +90,7 @@ public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
   public void listShoppingCartForCustomer(CustomerShoppingCartListRequest request,
                                           StreamObserver<ShoppingCartListReply> responseObserver) {
     LOGGER.debug("grpc server: list shopping cart for customer. request: {}", request);
-    List<ShoppingCartProduct> cartList = listItemsApp.listByCustomerId(request.getCustomerId());
+    List<ShoppingCartSku> cartList = listItemsApp.listByCustomerId(request.getCustomerId());
     LOGGER.debug("list shopping cart for customer. shopping cart list: {}", cartList);
     // convert shopping cart list to reply builder
     ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList).build();
@@ -107,7 +107,7 @@ public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
   public void listShoppingCartForSession(SessionShoppingCartListRequest request,
                                          StreamObserver<ShoppingCartListReply> responseObserver) {
     LOGGER.debug("grpc server: list shopping cart for session. request: {}", request);
-    List<ShoppingCartProduct> cartList = listItemsApp.listBySessionId(request.getSessionId());
+    List<ShoppingCartSku> cartList = listItemsApp.listBySessionId(request.getSessionId());
     LOGGER.info("list shopping cart for session. shopping cart list: {}", cartList);
     // convert shopping cart list to reply builder
     ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList).build();

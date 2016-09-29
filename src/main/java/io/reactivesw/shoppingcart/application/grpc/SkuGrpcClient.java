@@ -1,15 +1,14 @@
 package io.reactivesw.shoppingcart.application.grpc;
 
-import com.google.protobuf.Int32Value;
-import com.google.protobuf.Int64Value;
-
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.reactivesw.catalog.grpc.IntValue;
+import io.reactivesw.catalog.grpc.LongValue;
 import io.reactivesw.catalog.grpc.SkuIdList;
 import io.reactivesw.catalog.grpc.SkuInformationList;
 import io.reactivesw.catalog.grpc.SkuServiceGrpc;
-import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,8 +67,8 @@ public class SkuGrpcClient {
     LOGGER.debug("grpc sku client: get inventory for sku id {}", skuId);
     int inventory = 0;
     try {
-      final Int64Value skuIdRequest = Int64Value.newBuilder().setValue(skuId).build();
-      Int32Value inventoryResponse = blockingStub.querySkuInventory(skuIdRequest);
+      final LongValue skuIdRequest = LongValue.newBuilder().setValue(skuId).build();
+      IntValue inventoryResponse = blockingStub.querySkuInventory(skuIdRequest);
       inventory = inventoryResponse.getValue();
       LOGGER.debug("grpc client response inventory: {}", inventory);
     } catch (StatusRuntimeException statusEx) {
@@ -82,13 +81,13 @@ public class SkuGrpcClient {
   /**
    * get shopping cart product info list.
    * @param skuIdList List long
-   * @return List ShoppingCartProduct
+   * @return List ShoppingCartSku
    */
-  public List<ShoppingCartProduct> getSkuInfoList(List<Long> skuIdList) {
+  public List<ShoppingCartSku> getSkuInfoList(List<Long> skuIdList) {
     LOGGER.debug("grpc sku client: get sku info list. sku id list {}", skuIdList);
     SkuIdList skuList = SkuGrpcStream.repeatSkuId(skuIdList);
     SkuInformationList skuInfoList = blockingStub.querySkuInformationList(skuList);
-    return SkuGrpcStream.convertToShoppingCartProduct(skuInfoList);
+    return SkuGrpcStream.convertToShoppingCartSku(skuInfoList);
   }
 
 }

@@ -1,9 +1,9 @@
 package io.reactivesw.shoppingcart.application.grpc;
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
-import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.AddRequest;
-import io.reactivesw.shoppingcart.grpc.GrpcShoppingCart;
+import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
 
 import org.modelmapper.ModelMapper;
@@ -32,22 +32,22 @@ public final class ScGrpcStream {
 
   /**
    * convert shopping cart list to reply builder.
-   * @param scList List ShoppingCartProduct
+   * @param scList List ShoppingCartSku
    * @return builder
    */
-  public static ShoppingCartListReply.Builder repeatShoppingCart(List<ShoppingCartProduct> scList) {
+  public static ShoppingCartListReply.Builder repeatShoppingCart(List<ShoppingCartSku> scList) {
     LOGGER.debug("convert to grpc repeated list. shopping cart product list {}", scList);
     final ShoppingCartListReply.Builder replyBuilder =
         ShoppingCartListReply.newBuilder();
     final ModelMapper modelMapper = new ModelMapper();
-    for (final ShoppingCartProduct scItem : scList) {
+    for (final ShoppingCartSku scItem : scList) {
       LOGGER.debug("shopping cart product item {}", scItem);
       // use model mapper to convert java class to grpc message class
-      final GrpcShoppingCart.Builder scbuilder =
-          modelMapper.map(scItem, GrpcShoppingCart.Builder.class);
-      final GrpcShoppingCart grpcShoppingCart = scbuilder.build();
+      final GrpcShoppingCartSku.Builder scbuilder =
+          modelMapper.map(scItem, GrpcShoppingCartSku.Builder.class);
+      final GrpcShoppingCartSku grpcShoppingCartSku = scbuilder.build();
       // repeated shopping cart
-      replyBuilder.addShoppingCart(grpcShoppingCart);
+      replyBuilder.addShoppingCart(grpcShoppingCartSku);
     }
     return replyBuilder;
   }
@@ -70,14 +70,14 @@ public final class ScGrpcStream {
    * @param shoppingCart ShoppingCartOuterClass.AddRequest
    * @return gShoppingCart
    */
-  public static GrpcShoppingCart shoppingCartToGrpcReply(ShoppingCart shoppingCart) {
+  public static GrpcShoppingCartSku shoppingCartToGrpcReply(ShoppingCart shoppingCart) {
     LOGGER.debug("convert shopping cart to grpc reply. shoppingCart: {}", shoppingCart);
     final ModelMapper modelMapper = new ModelMapper();
-    final GrpcShoppingCart.Builder scbuilder =
-        modelMapper.map(shoppingCart, GrpcShoppingCart.Builder.class);
-    final GrpcShoppingCart gShoppingCart = scbuilder.build();
-    LOGGER.debug("convert shopping cart to grpc reply. GrpcShoppingCart: {}", gShoppingCart);
-    return gShoppingCart;
+    final GrpcShoppingCartSku.Builder scbuilder =
+        modelMapper.map(shoppingCart, GrpcShoppingCartSku.Builder.class);
+    final GrpcShoppingCartSku gShoppingCartSku = scbuilder.build();
+    LOGGER.debug("convert shopping cart to grpc reply. GrpcShoppingCartSku: {}", gShoppingCartSku);
+    return gShoppingCartSku;
   }
 
 }

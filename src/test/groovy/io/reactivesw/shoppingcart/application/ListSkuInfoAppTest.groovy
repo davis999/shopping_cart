@@ -3,7 +3,7 @@ package io.reactivesw.shoppingcart.application
 import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient
 import io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
-import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -43,18 +43,18 @@ class ListSkuInfoAppTest extends Specification {
     ShoppingCart findSC1 = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: quantity)
     ShoppingCart findSC3 = new ShoppingCart(shoppingCartId: 1002L, customerId: customerId, skuId: 1002L, quantity: quantity)
     ShoppingCart findSC2 = new ShoppingCart(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId, quantity: quantity)
-    ShoppingCartProduct scProd1 = new ShoppingCartProduct(skuId: skuId, skuNumber: skuNumber, skuName: skuName, mediaUrl: mediaUrl, price: price)
-    ShoppingCartProduct scProd3 = new ShoppingCartProduct(skuId: 1002L, skuNumber: "test_sku_number_002", skuName: "test_sku_name_b",
+    ShoppingCartSku scProd1 = new ShoppingCartSku(skuId: skuId, skuNumber: skuNumber, skuName: skuName, mediaUrl: mediaUrl, price: price)
+    ShoppingCartSku scProd3 = new ShoppingCartSku(skuId: 1002L, skuNumber: "test_sku_number_002", skuName: "test_sku_name_b",
             mediaUrl: "http://sample.com/test_002.jpg", price: price)
-    ShoppingCartProduct scProd2 = new ShoppingCartProduct(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId,
+    ShoppingCartSku scProd2 = new ShoppingCartSku(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId,
             quantity: quantity, skuNumber: skuNumber, skuName: skuName, mediaUrl: mediaUrl, price: price)
-    ShoppingCartProduct scProd4 = new ShoppingCartProduct(shoppingCartId: 1002L, customerId: customerId, skuId: 1002L,
+    ShoppingCartSku scProd4 = new ShoppingCartSku(shoppingCartId: 1002L, customerId: customerId, skuId: 1002L,
             quantity: quantity, skuNumber: "test_sku_number_002", skuName: "test_sku_name_b", mediaUrl: "http://sample.com/test_002.jpg", price: price)
-    ShoppingCartProduct scProd5 = new ShoppingCartProduct(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId,
+    ShoppingCartSku scProd5 = new ShoppingCartSku(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId,
             quantity: quantity, skuNumber: skuNumber, skuName: skuName, mediaUrl: mediaUrl, price: price)
     List<ShoppingCart> scList = new ArrayList<>()
-    List<ShoppingCartProduct> skuList = new ArrayList<>()
-    List<ShoppingCartProduct> infoList = new ArrayList<>()
+    List<ShoppingCartSku> skuList = new ArrayList<>()
+    List<ShoppingCartSku> infoList = new ArrayList<>()
 
     def "list shopping cart sku info for customer"() {
         setup:
@@ -66,7 +66,7 @@ class ListSkuInfoAppTest extends Specification {
         listSkuInfoApp.skuGrpcConfig = skuGrpcConfig
 
         when:
-        List<ShoppingCartProduct> rList = listSkuInfoApp.listShoppingCartProductInfo(scList)
+        List<ShoppingCartSku> rList = listSkuInfoApp.listShoppingCartSkuInfo(scList)
         then:
         rList == infoList
     }
@@ -81,7 +81,7 @@ class ListSkuInfoAppTest extends Specification {
         listSkuInfoApp.skuGrpcConfig = skuGrpcConfig
 
         when:
-        List<ShoppingCartProduct> rList = listSkuInfoApp.listShoppingCartProductInfo(scList)
+        List<ShoppingCartSku> rList = listSkuInfoApp.listShoppingCartSkuInfo(scList)
         then:
         rList == infoList
     }
@@ -99,7 +99,7 @@ class ListSkuInfoAppTest extends Specification {
         listSkuInfoApp.skuGrpcConfig = skuGrpcConfig
 
         when:
-        List<ShoppingCartProduct> rList = listSkuInfoApp.listShoppingCartProductInfo(scList)
+        List<ShoppingCartSku> rList = listSkuInfoApp.listShoppingCartSkuInfo(scList)
         then:
         rList == infoList
     }

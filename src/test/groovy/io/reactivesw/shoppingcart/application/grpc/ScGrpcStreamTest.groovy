@@ -2,7 +2,7 @@ package io.reactivesw.shoppingcart.application.grpc
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.grpc.AddRequest
-import io.reactivesw.shoppingcart.grpc.GrpcShoppingCart
+import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -42,14 +42,14 @@ class ScGrpcStreamTest extends Specification {
 
     def "shopping cart to grpc reply"() {
         setup:
-        GrpcShoppingCart grpcSC = GrpcShoppingCart.newBuilder().
+        GrpcShoppingCartSku grpcSC = GrpcShoppingCartSku.newBuilder().
                 setCustomerId(customerId).
                 setSessionId(sessionId).
                 setSkuId(skuId).
                 setQuantity(quantity).build()
 
         when:
-        GrpcShoppingCart grpcReply = ScGrpcStream.shoppingCartToGrpcReply(requestSC)
+        GrpcShoppingCartSku grpcReply = ScGrpcStream.shoppingCartToGrpcReply(requestSC)
         then:
         grpcReply == grpcSC
     }

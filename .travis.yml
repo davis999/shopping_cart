@@ -2,5 +2,17 @@ sudo: required
 language: java
 jdk: oraclejdk8
 
+services:
+  - docker
+
+script:
+  - gradle clean
+  - gradle wrapper
+  - ./gradlew build buildDocker --info
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+after_script:
+  - docker login --username="$DOCKER_USERNAME" --password="$DOCKER_PASSWORD";
+    docker push reactivesw/customer-web;

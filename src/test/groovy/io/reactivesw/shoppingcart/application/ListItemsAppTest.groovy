@@ -1,7 +1,7 @@
 package io.reactivesw.shoppingcart.application
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
-import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartService
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException
 import spock.lang.Shared
@@ -30,14 +30,14 @@ class ListItemsAppTest extends Specification {
   ListSkuInfoApp listSkuInfoApp = Stub(ListSkuInfoApp)
   ShoppingCart findSC1 = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: quantity)
   ShoppingCart findSC2 = new ShoppingCart(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId, quantity: quantity)
-  List<ShoppingCartProduct> infoList = new ArrayList<>()
+  List<ShoppingCartSku> infoList = new ArrayList<>()
 
   def "list for customer"() {
     setup:
     List<ShoppingCart> cartList = new ArrayList<>()
     cartList.add(findSC1)
     shoppingCartService.listShoppingCartByCustomerId(_) >> cartList
-    listSkuInfoApp.listShoppingCartProductInfo(_) >> infoList
+    listSkuInfoApp.listShoppingCartSkuInfo(_) >> infoList
     listItemsApp.shoppingCartService = shoppingCartService
     listItemsApp.listSkuInfoApp = listSkuInfoApp
 
@@ -60,7 +60,7 @@ class ListItemsAppTest extends Specification {
     List<ShoppingCart> cartList = new ArrayList<>()
     cartList.add(findSC2)
     shoppingCartService.listShoppingCartBySessionId(_) >> cartList
-    listSkuInfoApp.listShoppingCartProductInfo(_) >> infoList
+    listSkuInfoApp.listShoppingCartSkuInfo(_) >> infoList
     listItemsApp.shoppingCartService = shoppingCartService
     listItemsApp.listSkuInfoApp = listSkuInfoApp
 

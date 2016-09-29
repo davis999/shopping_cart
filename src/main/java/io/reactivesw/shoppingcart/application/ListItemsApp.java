@@ -2,7 +2,7 @@ package io.reactivesw.shoppingcart.application;
 
 import io.reactivesw.shoppingcart.application.grpc.ScGrpcService;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
-import io.reactivesw.shoppingcart.domain.model.ShoppingCartProduct;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
 import io.reactivesw.shoppingcart.infrastructure.common.ConstantsUtility;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException;
@@ -42,9 +42,9 @@ public class ListItemsApp {
   /**
    * get shopping cart for customer.
    * @param customerId long customer id
-   * @return List ShoppingCartProduct
+   * @return List ShoppingCartSku
    */
-  public List<ShoppingCartProduct> listByCustomerId(long customerId) {
+  public List<ShoppingCartSku> listByCustomerId(long customerId) {
     LOGGER.debug("app service: list shopping cart for customer id {}", customerId);
     if (customerId == ConstantsUtility.INVALID_CUSTOMER_ID) {
       LOGGER.error("app service: customer id is null. throw ShoppingCartParamException.");
@@ -52,7 +52,7 @@ public class ListItemsApp {
     }
     List<ShoppingCart> itemList = shoppingCartService.listShoppingCartByCustomerId(customerId);
     LOGGER.debug("app service: list shopping cart {}", itemList);
-    return listSkuInfoApp.listShoppingCartProductInfo(itemList);
+    return listSkuInfoApp.listShoppingCartSkuInfo(itemList);
   }
 
   /**
@@ -60,7 +60,7 @@ public class ListItemsApp {
    * @param sessionId String session id
    * @return List
    */
-  public List<ShoppingCartProduct> listBySessionId(String sessionId) {
+  public List<ShoppingCartSku> listBySessionId(String sessionId) {
     LOGGER.debug("app service: list shopping cart for session id {}", sessionId);
     if (StringUtils.isEmpty(sessionId)) {
       LOGGER.error("app service: session id is null. throw ShoppingCartParamException.");
@@ -68,7 +68,7 @@ public class ListItemsApp {
     }
     List<ShoppingCart> itemList = shoppingCartService.listShoppingCartBySessionId(sessionId);
     LOGGER.debug("app service: list shopping cart {}", itemList);
-    return listSkuInfoApp.listShoppingCartProductInfo(itemList);
+    return listSkuInfoApp.listShoppingCartSkuInfo(itemList);
   }
 
 }

@@ -13,9 +13,6 @@ ext {
 
     grpc_cat_folder = 'io/reactivesw/catalog/grpc/'
     grpc_cat_folder_all = grpc_cat_folder + '*'
-
-    grpc_google_folder = 'com/google/protobuf/'
-    grpc_google_folder_all = grpc_google_folder + '*'
 }
 
 /*************checkstyle(use google java style)***************/
@@ -24,7 +21,6 @@ checkstyle {
     //exclude the package you do not want to check
     checkstyleMain.exclude grpc_sc_folder_all
     checkstyleMain.exclude grpc_cat_folder_all
-    checkstyleMain.exclude grpc_google_folder_all
 }
 
 /*************PMD(Project Manager Design)***************/
@@ -32,7 +28,6 @@ tasks.withType(Pmd) {
     //exclude the package you do not want to check
     exclude grpc_sc_folder_all
     exclude grpc_cat_folder_all
-    exclude grpc_google_folder_all
     exclude sc_starter
 }
 
@@ -44,8 +39,5 @@ tasks.withType(FindBugs) {
     }
     classes = classes.filter{
         !it.path.contains(grpc_cat_folder)
-    }
-    classes = classes.filter{
-        !it.path.contains(grpc_google_folder)
     }
 }

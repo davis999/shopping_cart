@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# the first paramerter is the exposed port number
+port=8080
+if [ $# > 1 ]; then 
+  port=$1
+fi
+
+containers=`docker ps -a -q`
+if [ ! -z "$containers" ]; then 
+  echo "stop running containers"
+  docker stop $containers
+  docker rm $containers
+fi
+
+docker run -p ${port}:8080 -t reactivesw/shopping-cart

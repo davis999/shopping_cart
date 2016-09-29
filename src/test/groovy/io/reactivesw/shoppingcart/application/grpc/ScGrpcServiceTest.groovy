@@ -6,7 +6,7 @@ import io.reactivesw.shoppingcart.application.ListItemsApp
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.grpc.AddReply
 import io.reactivesw.shoppingcart.grpc.AddRequest
-import io.reactivesw.shoppingcart.grpc.GrpcShoppingCart
+import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException
@@ -30,7 +30,7 @@ class ScGrpcServiceTest extends Specification {
 
   ScGrpcService scGrpc = new ScGrpcService()
   AddRequest request
-  GrpcShoppingCart grpcShoppingCart = new GrpcShoppingCart()
+  GrpcShoppingCartSku grpcShoppingCartSku = new GrpcShoppingCartSku()
   StreamObserver<AddReply> responseObserver = Mock()
 
   ShoppingCart requestSC
@@ -46,7 +46,7 @@ class ScGrpcServiceTest extends Specification {
     requestSC = new ShoppingCart(customerId: customerId, sessionId: sessionId, skuId: skuId, quantity: quantity)
 
     ScGrpcStream.grpcRequestToShoppingCart(_) >> requestSC
-    ScGrpcStream.shoppingCartToGrpcReply(_) >> grpcShoppingCart
+    ScGrpcStream.shoppingCartToGrpcReply(_) >> grpcShoppingCartSku
     scGrpc.addItemApp = addItemApp
   }
 

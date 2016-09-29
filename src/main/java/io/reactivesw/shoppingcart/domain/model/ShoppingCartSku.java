@@ -7,7 +7,7 @@ import java.util.Objects;
  * shopping cart product just for class mapper.
  * @author janeli
  */
-public class ShoppingCartProduct {
+public class ShoppingCartSku {
 
   /**
    * shopping cart id.
@@ -260,8 +260,8 @@ public class ShoppingCartProduct {
     boolean equalsResult = false;
     if (this == obj) {
       equalsResult = true;
-    } else if (obj instanceof ShoppingCartProduct) {
-      final ShoppingCartProduct other = (ShoppingCartProduct) obj;
+    } else if (obj instanceof ShoppingCartSku) {
+      final ShoppingCartSku other = (ShoppingCartSku) obj;
       equalsResult =
           Objects.equals(shoppingCartId, other.shoppingCartId)
               && Objects.equals(customerId, other.customerId)

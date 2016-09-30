@@ -15,4 +15,4 @@ after_success:
 
 after_script:
   - docker login --username="$DOCKER_USERNAME" --password="$DOCKER_PASSWORD";
-    docker push reactivesw/customer-web;
+    docker push reactivesw/shopping-cart;

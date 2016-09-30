@@ -1,6 +1,7 @@
 package io.reactivesw.shoppingcart.application;
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
 
 import org.slf4j.Logger;
@@ -45,11 +46,17 @@ public class AddItemApp {
   private transient CheckInventoryApp checkInventoryApp;
 
   /**
+   * get sku info service.
+   */
+  @Autowired
+  private transient GetSkuInfoSingleApp getSkuInfoSingleApp;
+
+  /**
    * organize the request data and add product to shopping cart.
    * @param shoppingCart ShoppingCart
-   * @return shoppingCartSaved shopping cart object
+   * @return scSku shopping cart sku object
    */
-  public ShoppingCart addToShoppingCart(ShoppingCart shoppingCart) {
+  public ShoppingCartSku addToShoppingCart(ShoppingCart shoppingCart) {
     LOGGER.info("app service: add to shopping cart start service. shopping cart: {}",
         shoppingCart);
     validateParamsApp.validateRequestParams(shoppingCart);
@@ -62,9 +69,9 @@ public class AddItemApp {
         .checkInventory(mergedShoppingCart.getSkuId(), mergedShoppingCart.getQuantity());
     // save shopping cart to DB.
     final ShoppingCart shoppingCartSaved = shoppingCartService.save(mergedShoppingCart);
-    LOGGER.info("app service: add to shopping cart service finished. saved shopping cart: {}",
-        shoppingCartSaved);
-    return shoppingCartSaved;
+    final ShoppingCartSku scSku = getSkuInfoSingleApp.getShoppingCartSkuInfo(shoppingCartSaved);
+    LOGGER.info("app service: add to shopping cart service finished. info: {}", scSku);
+    return scSku;
   }
 
   /**

@@ -33,15 +33,15 @@ public final class ScGrpcStream {
   /**
    * convert shopping cart list to reply builder.
    * @param scList List ShoppingCartSku
-   * @return builder
+   * @return ShoppingCartListReply
    */
-  public static ShoppingCartListReply.Builder repeatShoppingCart(List<ShoppingCartSku> scList) {
-    LOGGER.debug("convert to grpc repeated list. shopping cart product list {}", scList);
+  public static ShoppingCartListReply repeatShoppingCart(List<ShoppingCartSku> scList) {
+    LOGGER.debug("convert to grpc repeated list. shopping cart sku list {}", scList);
     final ShoppingCartListReply.Builder replyBuilder =
         ShoppingCartListReply.newBuilder();
     final ModelMapper modelMapper = new ModelMapper();
     for (final ShoppingCartSku scItem : scList) {
-      LOGGER.debug("shopping cart product item {}", scItem);
+      LOGGER.debug("shopping cart sku item {}", scItem);
       // use model mapper to convert java class to grpc message class
       final GrpcShoppingCartSku.Builder scbuilder =
           modelMapper.map(scItem, GrpcShoppingCartSku.Builder.class);
@@ -49,7 +49,7 @@ public final class ScGrpcStream {
       // repeated shopping cart
       replyBuilder.addShoppingCart(grpcShoppingCartSku);
     }
-    return replyBuilder;
+    return replyBuilder.build();
   }
 
   /**
@@ -67,14 +67,14 @@ public final class ScGrpcStream {
 
   /**
    * convert grpc request to shopping cart domain.
-   * @param shoppingCart ShoppingCartOuterClass.AddRequest
+   * @param shoppingCartSku ShoppingCartOuterClass.AddRequest
    * @return gShoppingCart
    */
-  public static GrpcShoppingCartSku shoppingCartToGrpcReply(ShoppingCart shoppingCart) {
-    LOGGER.debug("convert shopping cart to grpc reply. shoppingCart: {}", shoppingCart);
+  public static GrpcShoppingCartSku shoppingCartToGrpcReply(ShoppingCartSku shoppingCartSku) {
+    LOGGER.debug("convert shopping cart to grpc reply. shoppingCartSku: {}", shoppingCartSku);
     final ModelMapper modelMapper = new ModelMapper();
     final GrpcShoppingCartSku.Builder scbuilder =
-        modelMapper.map(shoppingCart, GrpcShoppingCartSku.Builder.class);
+        modelMapper.map(shoppingCartSku, GrpcShoppingCartSku.Builder.class);
     final GrpcShoppingCartSku gShoppingCartSku = scbuilder.build();
     LOGGER.debug("convert shopping cart to grpc reply. GrpcShoppingCartSku: {}", gShoppingCartSku);
     return gShoppingCartSku;

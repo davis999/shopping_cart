@@ -13,14 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * business service for shopping cart list.
  * @author janeli
  */
 @Service
-public class ListSkuInfoApp {
+public class GetSkuInfoApp {
 
   /**
    * class logger.
@@ -34,49 +33,57 @@ public class ListSkuInfoApp {
   private transient SkuGrpcConfig skuGrpcConfig;
 
   /**
-   * get sku info for shopping cart.
-   * @param itemList List ShoppingCart
-   * @return List
+   * get sku info.
+   * @param skuId long
+   * @return ShoppingCartSku
    */
-  public List<ShoppingCartSku> listShoppingCartSkuInfo(List<ShoppingCart> itemList) {
-    LOGGER.debug("app service: get product info list for shopping cart list {}", itemList);
-    List<Long> skuIdList = this.getSkuIdList(itemList);
-    List<ShoppingCartSku> skuInfoList = this.getSkuInfoList(skuIdList);
-    return this.listShoppingCartSku(itemList, skuInfoList);
-  }
-
-  /**
-   * get sku id list.
-   * @param itemList ShoppingCart List
-   * @return List long
-   */
-  private List getSkuIdList(List<ShoppingCart> itemList) {
-    LOGGER.debug("app service: get sku id list of shopping cart list {}", itemList);
-    List<Long> skuIdList =
-        itemList.stream().map(ShoppingCart::getSkuId).collect(Collectors.toList());
-    LOGGER.debug("app service: sku id list {}", skuIdList);
-    return skuIdList;
+  public ShoppingCartSku getSkuInfo(long skuId) {
+    LOGGER.debug("app service: get sku info for sku id {}", skuId);
+    SkuGrpcClient skuClient = skuGrpcConfig.skuGrpcClient();
+    return skuClient.getSkuInfo(skuId);
   }
 
   /**
    * get sku info list.
    * @param skuIdList List long
-   * @return List ShoppingCart
+   * @return List ShoppingCartSku
    */
-  private List<ShoppingCartSku> getSkuInfoList(List<Long> skuIdList) {
+  public List<ShoppingCartSku> getSkuInfoList(List<Long> skuIdList) {
     LOGGER.debug("app service: get sku info for sku id list {}", skuIdList);
     SkuGrpcClient skuClient = skuGrpcConfig.skuGrpcClient();
     return skuClient.getSkuInfoList(skuIdList);
   }
 
   /**
-   * generate shopping cart list.
+   * organize the shopping cart sku info.
+   * @param sc ShoppingCart
+   * @param scProduct ShoppingCartSku
+   * @return ShoppingCartSku
+   */
+  public ShoppingCartSku organizeShoppingCartSku(ShoppingCart sc,
+                                                 ShoppingCartSku scProduct) {
+    LOGGER.debug("app service: get shopping cart product info.");
+    scProduct.setQuantity(sc.getQuantity());
+    scProduct.setShoppingCartId(sc.getShoppingCartId());
+    if (sc.getCustomerId() == ConstantsUtility.INVALID_CUSTOMER_ID) {
+      LOGGER.debug("app service: session id is {}", sc.getSessionId());
+      scProduct.setSessionId(sc.getSessionId());
+    } else {
+      LOGGER.debug("app service: customer id is {}", sc.getCustomerId());
+      scProduct.setCustomerId(sc.getCustomerId());
+    }
+    LOGGER.debug("app service: shopping cart product info {}", scProduct);
+    return scProduct;
+  }
+
+  /**
+   * organize the shopping cart sku info list.
    * @param shoppingCartList List ShoppingCart
    * @param skuInfoList List ShoppingCartSku
    * @return List ShoppingCartSku
    */
-  private List<ShoppingCartSku> listShoppingCartSku(List<ShoppingCart> shoppingCartList,
-                                                    List<ShoppingCartSku> skuInfoList) {
+  public List<ShoppingCartSku> organizeShoppingCartSkuList(List<ShoppingCart> shoppingCartList,
+                                                           List<ShoppingCartSku> skuInfoList) {
     LOGGER.debug("app service: get shopping cart product info list.");
     LOGGER.debug("app service: shopping cart list {} and sku info list {}",
         shoppingCartList, skuInfoList);
@@ -95,28 +102,6 @@ public class ListSkuInfoApp {
     }
     LOGGER.debug("app service: shopping cart product list {}", scProductList);
     return scProductList;
-  }
-
-  /**
-   * organize the shopping cart product info.
-   * @param sc ShoppingCart
-   * @param scProduct ShoppingCartSku
-   * @return ShoppingCartSku
-   */
-  private ShoppingCartSku organizeShoppingCartSku(ShoppingCart sc,
-                                                      ShoppingCartSku scProduct) {
-    LOGGER.debug("app service: get shopping cart product info.");
-    scProduct.setQuantity(sc.getQuantity());
-    scProduct.setShoppingCartId(sc.getShoppingCartId());
-    if (sc.getCustomerId() == ConstantsUtility.INVALID_CUSTOMER_ID) {
-      LOGGER.debug("app service: session id is {}", sc.getSessionId());
-      scProduct.setSessionId(sc.getSessionId());
-    } else {
-      LOGGER.debug("app service: customer id is {}", sc.getCustomerId());
-      scProduct.setCustomerId(sc.getCustomerId());
-    }
-    LOGGER.debug("app service: shopping cart product info {}", scProduct);
-    return scProduct;
   }
 
 }

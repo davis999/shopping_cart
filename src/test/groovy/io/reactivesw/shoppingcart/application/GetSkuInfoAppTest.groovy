@@ -7,7 +7,7 @@ import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import spock.lang.Shared
 import spock.lang.Specification
 
-class ListSkuInfoAppTest extends Specification {
+class GetSkuInfoAppTest extends Specification {
 
     @Shared
     long customerId = 1001L
@@ -36,13 +36,13 @@ class ListSkuInfoAppTest extends Specification {
     @Shared
     String price = "42.00"
 
-    ListSkuInfoApp listSkuInfoApp = new ListSkuInfoApp()
+    GetSkuInfoApp getSkuInfoApp = new GetSkuInfoApp()
 
     SkuGrpcConfig skuGrpcConfig = Stub(SkuGrpcConfig)
     SkuGrpcClient skuGrpcClient = Stub(SkuGrpcClient)
     ShoppingCart findSC1 = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: quantity)
-    ShoppingCart findSC3 = new ShoppingCart(shoppingCartId: 1002L, customerId: customerId, skuId: 1002L, quantity: quantity)
     ShoppingCart findSC2 = new ShoppingCart(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId, quantity: quantity)
+    ShoppingCart findSC3 = new ShoppingCart(shoppingCartId: 1002L, customerId: customerId, skuId: 1002L, quantity: quantity)
     ShoppingCartSku scProd1 = new ShoppingCartSku(skuId: skuId, skuNumber: skuNumber, skuName: skuName, mediaUrl: mediaUrl, price: price)
     ShoppingCartSku scProd3 = new ShoppingCartSku(skuId: 1002L, skuNumber: "test_sku_number_002", skuName: "test_sku_name_b",
             mediaUrl: "http://sample.com/test_002.jpg", price: price)
@@ -52,56 +52,63 @@ class ListSkuInfoAppTest extends Specification {
             quantity: quantity, skuNumber: "test_sku_number_002", skuName: "test_sku_name_b", mediaUrl: "http://sample.com/test_002.jpg", price: price)
     ShoppingCartSku scProd5 = new ShoppingCartSku(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId,
             quantity: quantity, skuNumber: skuNumber, skuName: skuName, mediaUrl: mediaUrl, price: price)
-    List<ShoppingCart> scList = new ArrayList<>()
     List<ShoppingCartSku> skuList = new ArrayList<>()
-    List<ShoppingCartSku> infoList = new ArrayList<>()
 
-    def "list shopping cart sku info for customer"() {
+    def "get sku info"() {
         setup:
-        scList.add(findSC1)
-        skuList.add(scProd1)
-        infoList.add(scProd2)
-        skuGrpcClient.getSkuInfoList(_) >> skuList
+        skuGrpcClient.getSkuInfo(_) >> scProd1
         skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        listSkuInfoApp.skuGrpcConfig = skuGrpcConfig
+        getSkuInfoApp.skuGrpcConfig = skuGrpcConfig
 
         when:
-        List<ShoppingCartSku> rList = listSkuInfoApp.listShoppingCartSkuInfo(scList)
+        ShoppingCartSku scProdGet = getSkuInfoApp.getSkuInfo(skuId)
         then:
-        rList == infoList
+        scProdGet == scProd1
     }
 
-    def "list shopping cart sku info for session"() {
-        setup:
-        scList.add(findSC2)
+    def "get sku info list"() {
+        List<Long> skuIdList = new ArrayList<>()
+        skuIdList.add(skuId)
         skuList.add(scProd1)
-        infoList.add(scProd5)
         skuGrpcClient.getSkuInfoList(_) >> skuList
         skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        listSkuInfoApp.skuGrpcConfig = skuGrpcConfig
+        getSkuInfoApp.skuGrpcConfig = skuGrpcConfig
 
         when:
-        List<ShoppingCartSku> rList = listSkuInfoApp.listShoppingCartSkuInfo(scList)
+        List<ShoppingCartSku> rList = getSkuInfoApp.getSkuInfoList(skuIdList)
         then:
-        rList == infoList
+        rList == skuList
     }
 
-    def "list shopping cart sku info for customer multi product"() {
+    def "organize shopping cart sku info for customer"() {
+        when:
+        ShoppingCartSku scSku = getSkuInfoApp.organizeShoppingCartSku(findSC1, scProd1)
+        then:
+        scSku == scProd2
+    }
+
+    def "organize shopping cart sku info for session"() {
+        when:
+        ShoppingCartSku scSku = getSkuInfoApp.organizeShoppingCartSku(findSC2, scProd1)
+        then:
+        scSku == scProd5
+    }
+
+    def "organize shopping cart sku info list"() {
         setup:
+        List<ShoppingCart> scList = new ArrayList<>()
+        List<ShoppingCartSku> skuList = new ArrayList<>()
+        List<ShoppingCartSku> infoList = new ArrayList<>()
         scList.add(findSC1)
         scList.add(findSC3)
         skuList.add(scProd1)
         skuList.add(scProd3)
         infoList.add(scProd2)
         infoList.add(scProd4)
-        skuGrpcClient.getSkuInfoList(_) >> skuList
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        listSkuInfoApp.skuGrpcConfig = skuGrpcConfig
-
         when:
-        List<ShoppingCartSku> rList = listSkuInfoApp.listShoppingCartSkuInfo(scList)
+        List<ShoppingCartSku> list = getSkuInfoApp.organizeShoppingCartSkuList(scList, skuList)
         then:
-        rList == infoList
+        list == infoList
     }
 
 }

@@ -6,6 +6,7 @@ import io.grpc.StatusRuntimeException;
 import io.reactivesw.catalog.grpc.IntValue;
 import io.reactivesw.catalog.grpc.LongValue;
 import io.reactivesw.catalog.grpc.SkuIdList;
+import io.reactivesw.catalog.grpc.SkuInformation;
 import io.reactivesw.catalog.grpc.SkuInformationList;
 import io.reactivesw.catalog.grpc.SkuServiceGrpc;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
@@ -65,9 +66,9 @@ public class SkuGrpcClient {
    */
   public int getInventoryForSku(long skuId) {
     LOGGER.debug("grpc sku client: get inventory for sku id {}", skuId);
-    int inventory = 0;
+    int inventory;
     try {
-      final LongValue skuIdRequest = LongValue.newBuilder().setValue(skuId).build();
+      final LongValue skuIdRequest = SkuGrpcStream.convertToLongValue(skuId);
       IntValue inventoryResponse = blockingStub.querySkuInventory(skuIdRequest);
       inventory = inventoryResponse.getValue();
       LOGGER.debug("grpc client response inventory: {}", inventory);
@@ -79,15 +80,43 @@ public class SkuGrpcClient {
   }
 
   /**
-   * get shopping cart product info list.
+   * get shopping cart sku info.
+   * @param skuId long
+   * @return ShoppingCartSku
+   */
+  public ShoppingCartSku getSkuInfo(long skuId) {
+    LOGGER.debug("grpc sku client: get sku info by sku id {}", skuId);
+    ShoppingCartSku scSku;
+    try {
+      LongValue skuIdRequest = SkuGrpcStream.convertToLongValue(skuId);
+      SkuInformation skuInfo = blockingStub.querySkuSimpleInformation(skuIdRequest);
+      LOGGER.debug("grpc client response sku info: {}", skuInfo);
+      scSku = SkuGrpcStream.convertToShoppingCartSku(skuInfo);
+    } catch (StatusRuntimeException statusEx) {
+      LOGGER.error("grpc client failed: {}", statusEx.getStatus());
+      throw new ShoppingCartInventoryException(ShoppingCartInventoryException.PRODUCT_UNAVAILABLE);
+    }
+    return scSku;
+  }
+
+  /**
+   * get shopping cart sku info list.
    * @param skuIdList List long
    * @return List ShoppingCartSku
    */
   public List<ShoppingCartSku> getSkuInfoList(List<Long> skuIdList) {
     LOGGER.debug("grpc sku client: get sku info list. sku id list {}", skuIdList);
-    SkuIdList skuList = SkuGrpcStream.repeatSkuId(skuIdList);
-    SkuInformationList skuInfoList = blockingStub.querySkuInformationList(skuList);
-    return SkuGrpcStream.convertToShoppingCartSku(skuInfoList);
+    List<ShoppingCartSku> scSkuList;
+    try {
+      SkuIdList skuList = SkuGrpcStream.repeatSkuId(skuIdList);
+      SkuInformationList skuInfoList = blockingStub.querySkuInformationList(skuList);
+      LOGGER.debug("grpc client response sku info list: {}", skuInfoList);
+      scSkuList = SkuGrpcStream.convertToShoppingCartSkuList(skuInfoList);
+    } catch (StatusRuntimeException statusEx) {
+      LOGGER.error("grpc client failed: {}", statusEx.getStatus());
+      throw new ShoppingCartInventoryException(ShoppingCartInventoryException.PRODUCT_UNAVAILABLE);
+    }
+    return scSkuList;
   }
 
 }

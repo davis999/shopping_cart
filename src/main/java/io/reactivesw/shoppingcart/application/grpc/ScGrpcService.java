@@ -60,7 +60,7 @@ public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
     LOGGER.info("grpc server: add product to shopping cart start, request: {}", request);
     try {
       ShoppingCart shoppingCart = ScGrpcStream.grpcRequestToShoppingCart(request);
-      ShoppingCart addResult = addItemApp.addToShoppingCart(shoppingCart);
+      ShoppingCartSku addResult = addItemApp.addToShoppingCart(shoppingCart);
       GrpcShoppingCartSku grpcShoppingCartSku = ScGrpcStream.shoppingCartToGrpcReply(addResult);
       AddReply replyMessage = AddReply.newBuilder().setShoppingCart(grpcShoppingCartSku).build();
       ScGrpcUtility.completeResponse(responseObserver, replyMessage);
@@ -93,7 +93,7 @@ public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
     List<ShoppingCartSku> cartList = listItemsApp.listByCustomerId(request.getCustomerId());
     LOGGER.debug("list shopping cart for customer. shopping cart list: {}", cartList);
     // convert shopping cart list to reply builder
-    ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList).build();
+    ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList);
     ScGrpcUtility.completeResponse(responseObserver, replyMessage);
     LOGGER.debug("grpc server: list shopping cart for customer finished, reply: {}", replyMessage);
   }
@@ -110,7 +110,7 @@ public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
     List<ShoppingCartSku> cartList = listItemsApp.listBySessionId(request.getSessionId());
     LOGGER.info("list shopping cart for session. shopping cart list: {}", cartList);
     // convert shopping cart list to reply builder
-    ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList).build();
+    ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList);
     ScGrpcUtility.completeResponse(responseObserver, replyMessage);
     LOGGER.debug("grpc server: list shopping cart for session finished, reply: {}", replyMessage);
   }

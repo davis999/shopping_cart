@@ -1,5 +1,6 @@
 package io.reactivesw.shoppingcart.application.grpc;
 
+import io.reactivesw.catalog.grpc.LongValue;
 import io.reactivesw.catalog.grpc.SkuIdList;
 import io.reactivesw.catalog.grpc.SkuInformation;
 import io.reactivesw.catalog.grpc.SkuInformationList;
@@ -44,24 +45,49 @@ public final class SkuGrpcStream {
   }
 
   /**
-   * convert sku info list to shopping cart product list.
+   * convert sku info list to shopping cart sku list.
    * @param skuInfoList List SkuInformation
+   * @return List ShoppingCartSku
+   */
+  public static List<ShoppingCartSku> convertToShoppingCartSkuList(
+      SkuInformationList skuInfoList) {
+    LOGGER.debug("convert grpc repeated list to shopping cart sku list. repeated list {}",
+        skuInfoList);
+    List<ShoppingCartSku> scSkuList = new ArrayList<>();
+    ModelMapper modelMapper = new ModelMapper();
+    List<SkuInformation> listSku = modelMapper.map(skuInfoList, List.class);
+    for (SkuInformation prodItem : listSku) {
+      // use model mapper to convert java class to grpc message class
+      ShoppingCartSku scSku = modelMapper.map(prodItem, ShoppingCartSku.class);
+      // repeated shopping cart
+      scSkuList.add(scSku);
+    }
+    return scSkuList;
+  }
+
+  /**
+   * conver java long to grpc long value.
+   * @param value long
+   * @return LongValue
+   */
+  public static LongValue convertToLongValue(long value) {
+    LOGGER.debug("convert value {} to grpc long value", value);
+    return LongValue.newBuilder().setValue(value).build();
+  }
+
+  /**
+   * convert sku info to shopping cart sku.
+   * @param skuInfo SkuInformation
    * @return builder
    */
-  public static List<ShoppingCartSku> convertToShoppingCartSku(
-      SkuInformationList skuInfoList) {
-    LOGGER.debug("convert grpc repeated list to shopping cart product list. repeated list {}",
-        skuInfoList);
-    List<ShoppingCartSku> scProductList = new ArrayList<>();
+  public static ShoppingCartSku convertToShoppingCartSku(
+      SkuInformation skuInfo) {
+    LOGGER.debug("convert grpc sku info {} to shopping cart sku", skuInfo);
     ModelMapper modelMapper = new ModelMapper();
-    List<SkuInformation> listProduct = modelMapper.map(skuInfoList, List.class);
-    for (SkuInformation prodItem : listProduct) {
-      // use model mapper to convert java class to grpc message class
-      ShoppingCartSku scProduct = modelMapper.map(prodItem, ShoppingCartSku.class);
-      // repeated shopping cart
-      scProductList.add(scProduct);
-    }
-    return scProductList;
+    // use model mapper to convert java class to grpc message class
+    ShoppingCartSku scSku = modelMapper.map(skuInfo, ShoppingCartSku.class);
+    LOGGER.debug("converted shopping cart sku", scSku);
+    return scSku;
   }
 
 }

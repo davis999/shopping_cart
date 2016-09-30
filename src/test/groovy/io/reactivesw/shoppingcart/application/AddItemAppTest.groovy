@@ -5,6 +5,7 @@ import io.grpc.StatusRuntimeException
 import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient
 import io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartConfigService
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartService
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException
@@ -38,6 +39,7 @@ class AddItemAppTest extends Specification {
     ValidateParamsApp validateParamsApp = Stub(ValidateParamsApp)
     CheckConfigLimitApp checkConfigLimitApp = Stub(CheckConfigLimitApp)
     CheckInventoryApp checkInventoryApp = Stub(CheckInventoryApp)
+    GetSkuInfoSingleApp getSkuInfoSingleApp = Stub(GetSkuInfoSingleApp)
 
     def "merge existed quantity not existed"() {
         setup:
@@ -69,19 +71,23 @@ class AddItemAppTest extends Specification {
         setup:
         requestSC = new ShoppingCart(customerId: customerId, sessionId: sessionId, skuId: skuId, quantity: quantity)
         ShoppingCart shoppingCartForSaveMock = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: 1)
+        ShoppingCartSku scProd = new ShoppingCartSku(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId,
+                quantity: quantity, skuNumber: "sku_no_001", skuName: "name 001", mediaUrl: "http://reactivesw.io/img001.jpg", price: "42.00")
         validateParamsApp.validateRequestParams(_) >> {}
         checkConfigLimitApp.checkQuantityLimit(_) >> {}
         checkInventoryApp.checkInventory(_, _) >> {}
         shoppingCartService.findOneBySkuIdForCustomer(_) >> null
         shoppingCartService.save(_) >> shoppingCartForSaveMock
+        getSkuInfoSingleApp.getShoppingCartSkuInfo(_) >> scProd
         addItemApp.validateParamsApp = validateParamsApp
         addItemApp.checkConfigLimitApp = checkConfigLimitApp
         addItemApp.checkInventoryApp = checkInventoryApp
         addItemApp.shoppingCartService = shoppingCartService
+        addItemApp.getSkuInfoSingleApp = getSkuInfoSingleApp
 
         when:
-        ShoppingCart shoppingCartSaved = addItemApp.addToShoppingCart(requestSC)
+        ShoppingCartSku scSku = addItemApp.addToShoppingCart(requestSC)
         then:
-        shoppingCartSaved == shoppingCartForSaveMock
+        scSku == scProd
     }
 }

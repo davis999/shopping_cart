@@ -27,7 +27,7 @@ class ListItemsAppTest extends Specification {
   ListItemsApp listItemsApp = new ListItemsApp()
 
   ShoppingCartService shoppingCartService = Stub(ShoppingCartService)
-  ListSkuInfoApp listSkuInfoApp = Stub(ListSkuInfoApp)
+  GetSkuInfoListApp getSkuInfoListApp = Stub(GetSkuInfoListApp)
   ShoppingCart findSC1 = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: quantity)
   ShoppingCart findSC2 = new ShoppingCart(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId, quantity: quantity)
   List<ShoppingCartSku> infoList = new ArrayList<>()
@@ -37,9 +37,9 @@ class ListItemsAppTest extends Specification {
     List<ShoppingCart> cartList = new ArrayList<>()
     cartList.add(findSC1)
     shoppingCartService.listShoppingCartByCustomerId(_) >> cartList
-    listSkuInfoApp.listShoppingCartSkuInfo(_) >> infoList
+    getSkuInfoListApp.getShoppingCartSkuInfoList(_) >> infoList
     listItemsApp.shoppingCartService = shoppingCartService
-    listItemsApp.listSkuInfoApp = listSkuInfoApp
+    listItemsApp.getSkuInfoListApp = getSkuInfoListApp
 
     when:
     List shoppingCartListCust = listItemsApp.listByCustomerId(customerId)
@@ -60,9 +60,9 @@ class ListItemsAppTest extends Specification {
     List<ShoppingCart> cartList = new ArrayList<>()
     cartList.add(findSC2)
     shoppingCartService.listShoppingCartBySessionId(_) >> cartList
-    listSkuInfoApp.listShoppingCartSkuInfo(_) >> infoList
+    getSkuInfoListApp.getShoppingCartSkuInfoList(_) >> infoList
     listItemsApp.shoppingCartService = shoppingCartService
-    listItemsApp.listSkuInfoApp = listSkuInfoApp
+    listItemsApp.getSkuInfoListApp = getSkuInfoListApp
 
     when:
     List shoppingCartListSess = listItemsApp.listBySessionId(sessionId)

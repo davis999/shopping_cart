@@ -4,6 +4,7 @@ import io.grpc.stub.StreamObserver
 import io.reactivesw.shoppingcart.application.AddItemApp
 import io.reactivesw.shoppingcart.application.ListItemsApp
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
+import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import io.reactivesw.shoppingcart.grpc.AddReply
 import io.reactivesw.shoppingcart.grpc.AddRequest
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku
@@ -28,12 +29,28 @@ class ScGrpcServiceTest extends Specification {
   @Shared
   int quantity = 1
 
+  @Shared
+  long shppingCartId = 1001L
+
+  @Shared
+  String skuNumber = "test_sku_number_001"
+
+  @Shared
+  String skuName = "test_sku_name_a"
+
+  @Shared
+  String mediaUrl = "http://sample.com/test_001.jpg"
+
+  @Shared
+  String price = "42.00"
+
   ScGrpcService scGrpc = new ScGrpcService()
   AddRequest request
   GrpcShoppingCartSku grpcShoppingCartSku = new GrpcShoppingCartSku()
   StreamObserver<AddReply> responseObserver = Mock()
 
   ShoppingCart requestSC
+  ShoppingCartSku scSku
   AddItemApp addItemApp = Stub(AddItemApp)
   ListItemsApp listItemsApp = Stub(ListItemsApp)
 
@@ -44,6 +61,8 @@ class ScGrpcServiceTest extends Specification {
             setSkuId(skuId).
             setQuantity(quantity).build()
     requestSC = new ShoppingCart(customerId: customerId, sessionId: sessionId, skuId: skuId, quantity: quantity)
+    scSku = new ShoppingCartSku(shoppingCartId: shppingCartId, customerId: customerId, sessionId: sessionId, skuId: skuId,
+            quantity: quantity, skuNumber: skuNumber, skuName: skuName, mediaUrl: mediaUrl, price: price)
 
     ScGrpcStream.grpcRequestToShoppingCart(_) >> requestSC
     ScGrpcStream.shoppingCartToGrpcReply(_) >> grpcShoppingCartSku
@@ -53,7 +72,7 @@ class ScGrpcServiceTest extends Specification {
   def "add to shopping cart" () {
     setup:
     requestSC.setShoppingCartId(1001L)
-    addItemApp.addToShoppingCart(_) >> requestSC
+    addItemApp.addToShoppingCart(_) >> scSku
     when:
     scGrpc.addToShoppingCart(request, responseObserver)
     then:

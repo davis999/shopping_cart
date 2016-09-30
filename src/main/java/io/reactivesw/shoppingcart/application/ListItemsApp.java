@@ -37,7 +37,7 @@ public class ListItemsApp {
    * get product info for shopping cart list service.
    */
   @Autowired
-  private transient ListSkuInfoApp listSkuInfoApp;
+  private transient GetSkuInfoListApp getSkuInfoListApp;
 
   /**
    * get shopping cart for customer.
@@ -52,7 +52,7 @@ public class ListItemsApp {
     }
     List<ShoppingCart> itemList = shoppingCartService.listShoppingCartByCustomerId(customerId);
     LOGGER.debug("app service: list shopping cart {}", itemList);
-    return listSkuInfoApp.listShoppingCartSkuInfo(itemList);
+    return getSkuInfoListApp.getShoppingCartSkuInfoList(itemList);
   }
 
   /**
@@ -68,7 +68,7 @@ public class ListItemsApp {
     }
     List<ShoppingCart> itemList = shoppingCartService.listShoppingCartBySessionId(sessionId);
     LOGGER.debug("app service: list shopping cart {}", itemList);
-    return listSkuInfoApp.listShoppingCartSkuInfo(itemList);
+    return getSkuInfoListApp.getShoppingCartSkuInfoList(itemList);
   }
 
 }

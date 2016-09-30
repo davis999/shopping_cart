@@ -12,8 +12,8 @@ import io.reactivesw.shoppingcart.grpc.AddRequest;
 import io.reactivesw.shoppingcart.grpc.CustomerShoppingCartListRequest;
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.SessionShoppingCartListRequest;
-import io.reactivesw.shoppingcart.grpc.ShoppingCartGrpc;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartServiceGrpc;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author janeli
  */
 @GRpcService
-public class ScGrpcService extends ShoppingCartGrpc.ShoppingCartImplBase {
+public class ScGrpcService extends ShoppingCartServiceGrpc.ShoppingCartServiceImplBase {
 
   /**
    * class logger.

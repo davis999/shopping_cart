@@ -1,9 +1,9 @@
 [submodule "code_analyzer_test"]
 	path = code_analyzer_test
 	url = https://github.com/reactivesw/code_analyzer_test.git
-[submodule "src/main/proto/catalog_proto"]
-	path = src/main/proto/catalog_proto
+[submodule "protos/catalog_proto"]
+	path = protos/catalog_proto
 	url = https://github.com/reactivesw/catalog_proto.git
-[submodule "src/main/proto/shopping_cart_proto"]
-	path = src/main/proto/shopping_cart_proto
+[submodule "protos/shopping_cart_proto"]
+	path = protos/shopping_cart_proto
 	url = https://github.com/reactivesw/shopping_cart_proto.git

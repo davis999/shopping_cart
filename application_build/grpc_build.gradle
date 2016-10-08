@@ -15,7 +15,10 @@ dependencies {
 
 // for protobuf generation
 sourceSets {
-    main { java { srcDir 'src/main/protoGen' } }
+    main {
+        proto { srcDir 'protos'}
+        java { srcDir 'src/main/grpc' }
+    }
 }
 protobuf {
     protoc {
@@ -32,12 +35,12 @@ protobuf {
         ofSourceSet('main').each { task ->
             task.builtins {
                 java {
-                    outputSubDir = 'protoGen'
+                    outputSubDir = 'grpc'
                 }
             }
             task.plugins {
                 grpc {
-                    outputSubDir = 'protoGen'
+                    outputSubDir = 'grpc'
                 }
             }
         }
@@ -47,6 +50,6 @@ protobuf {
 
 // clean protobuf generation
 task cleanProtoGen {
-    doFirst { delete("$projectDir/src/main/protoGen") }
+    doFirst { delete("$projectDir/src/main/grpc") }
 }
 clean.dependsOn cleanProtoGen

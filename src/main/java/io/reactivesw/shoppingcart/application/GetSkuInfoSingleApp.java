@@ -1,6 +1,6 @@
 package io.reactivesw.shoppingcart.application;
 
-import io.reactivesw.shoppingcart.application.grpc.ScGrpcService;
+import io.reactivesw.shoppingcart.application.grpc.ScGrpcAddService;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class GetSkuInfoSingleApp {
   /**
    * class logger.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScGrpcService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScGrpcAddService.class);
 
   /**
    * get sku info service.

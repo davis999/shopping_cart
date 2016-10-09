@@ -2,7 +2,6 @@ package io.reactivesw.shoppingcart.application.grpc
 
 import io.grpc.stub.StreamObserver
 import io.reactivesw.shoppingcart.application.AddItemApp
-import io.reactivesw.shoppingcart.application.ListItemsApp
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import io.reactivesw.shoppingcart.grpc.AddReply
@@ -15,7 +14,7 @@ import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamExce
 import spock.lang.Shared
 import spock.lang.Specification
 
-class ScGrpcServiceTest extends Specification {
+class ScGrpcAddServiceTest extends Specification {
 
   @Shared
   long customerId = 1001L
@@ -44,7 +43,7 @@ class ScGrpcServiceTest extends Specification {
   @Shared
   String price = "42.00"
 
-  ScGrpcService scGrpc = new ScGrpcService()
+  ScGrpcAddService scGrpc = new ScGrpcAddService()
   AddRequest request
   GrpcShoppingCartSku grpcShoppingCartSku = new GrpcShoppingCartSku()
   StreamObserver<AddReply> responseObserver = Mock()
@@ -52,7 +51,6 @@ class ScGrpcServiceTest extends Specification {
   ShoppingCart requestSC
   ShoppingCartSku scSku
   AddItemApp addItemApp = Stub(AddItemApp)
-  ListItemsApp listItemsApp = Stub(ListItemsApp)
 
   def setup() {
     request = AddRequest.newBuilder().
@@ -111,22 +109,4 @@ class ScGrpcServiceTest extends Specification {
     RuntimeException e = thrown()
     assert e.message == "RESOURCE_EXHAUSTED: inventory resource is exhausted"
   }
-
-//  def "shopping cart list to repeated"() {
-//    setup:
-//    ShoppingCart findSC = new ShoppingCart()
-//    List<ShoppingCart> cartList = new ArrayList<>()
-//    findSC.setCustomerId(customerId)
-//    findSC.setSessionId(sessionId)
-//    findSC.setQuantity(quantity)
-//    findSC.setSkuId(skuId)
-//    findSC.setShoppingCartId(1001L)
-//    findSC.setModifiedDate(new Date())
-//    cartList.add(findSC)
-//    when:
-//    ShoppingCartListReply.Builder replyBuilder = scGrpc.repeatShoppingCart(cartList)
-//    then:
-//    replyBuilder.getShoppingCart(0).customerId == findSC.getCustomerId()
-//    replyBuilder.getShoppingCart(0).skuId == findSC.getSkuId()
-//  }
 }

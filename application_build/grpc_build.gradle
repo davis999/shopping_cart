@@ -16,7 +16,7 @@ dependencies {
 // for protobuf generation
 sourceSets {
     main {
-        proto { srcDir 'protos'}
+        proto { srcDir 'protos' }
         java { srcDir 'src/main/grpc' }
     }
 }

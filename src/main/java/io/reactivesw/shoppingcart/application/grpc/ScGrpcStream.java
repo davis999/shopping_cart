@@ -42,6 +42,9 @@ public final class ScGrpcStream {
     final ModelMapper modelMapper = new ModelMapper();
     for (final ShoppingCartSku scItem : scList) {
       LOGGER.debug("shopping cart sku item {}", scItem);
+      if (scItem.getSessionId() == null) {
+        scItem.setSessionId("");
+      }
       // use model mapper to convert java class to grpc message class
       final GrpcShoppingCartSku.Builder scbuilder =
           modelMapper.map(scItem, GrpcShoppingCartSku.Builder.class);
@@ -73,6 +76,9 @@ public final class ScGrpcStream {
   public static GrpcShoppingCartSku shoppingCartToGrpcReply(ShoppingCartSku shoppingCartSku) {
     LOGGER.debug("convert shopping cart to grpc reply. shoppingCartSku: {}", shoppingCartSku);
     final ModelMapper modelMapper = new ModelMapper();
+    if (shoppingCartSku.getSessionId() == null) {
+      shoppingCartSku.setSessionId("");
+    }
     final GrpcShoppingCartSku.Builder scbuilder =
         modelMapper.map(shoppingCartSku, GrpcShoppingCartSku.Builder.class);
     final GrpcShoppingCartSku gShoppingCartSku = scbuilder.build();

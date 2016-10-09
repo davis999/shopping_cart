@@ -55,7 +55,7 @@ public final class SkuGrpcStream {
         skuInfoList);
     List<ShoppingCartSku> scSkuList = new ArrayList<>();
     ModelMapper modelMapper = new ModelMapper();
-    List<SkuInformation> listSku = modelMapper.map(skuInfoList, List.class);
+    List<SkuInformation> listSku = skuInfoList.getSkuInformationList();
     for (SkuInformation prodItem : listSku) {
       // use model mapper to convert java class to grpc message class
       ShoppingCartSku scSku = modelMapper.map(prodItem, ShoppingCartSku.class);

@@ -71,8 +71,6 @@ public class CheckInventoryApp {
       LOGGER.error("app service: product is unavailable. sku id: {}. StatusRuntimeException {}",
           skuId, grpcEx);
       throw new ShoppingCartInventoryException(ShoppingCartInventoryException.PRODUCT_UNAVAILABLE);
-    } finally {
-      skuClient.shutdown();
     }
     return inventory;
   }

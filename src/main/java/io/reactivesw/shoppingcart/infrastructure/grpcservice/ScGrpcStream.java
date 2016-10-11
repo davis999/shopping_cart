@@ -2,9 +2,9 @@ package io.reactivesw.shoppingcart.infrastructure.grpcservice;
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
-import io.reactivesw.shoppingcart.grpc.AddRequest;
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartRequest;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,10 +57,10 @@ public final class ScGrpcStream {
 
   /**
    * convert grpc request to shopping cart domain.
-   * @param grpcRequest ShoppingCartOuterClass.AddRequest
+   * @param grpcRequest ShoppingCartOuterClass.ShoppingCartRequest
    * @return shoppingCart
    */
-  public static ShoppingCart grpcRequestToShoppingCart(AddRequest grpcRequest) {
+  public static ShoppingCart grpcRequestToShoppingCart(ShoppingCartRequest grpcRequest) {
     LOGGER.debug("convert grpc request to shopping cart. request: {}", grpcRequest);
     final ModelMapper modelMapper = new ModelMapper();
     final ShoppingCart shoppingCart = modelMapper.map(grpcRequest, ShoppingCart.class);
@@ -70,7 +70,7 @@ public final class ScGrpcStream {
 
   /**
    * convert grpc request to shopping cart domain.
-   * @param shoppingCartSku ShoppingCartOuterClass.AddRequest
+   * @param shoppingCartSku ShoppingCartOuterClass.ShoppingCartRequest
    * @return gShoppingCart
    */
   public static GrpcShoppingCartSku shoppingCartToGrpcReply(ShoppingCartSku shoppingCartSku) {

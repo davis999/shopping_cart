@@ -41,6 +41,28 @@ class DeleteItemAppTest extends Specification {
         deleted == false
     }
 
+    def "delete all for customer"() {
+        setup:
+        shoppingCartRepository.deleteByCustomerId(_) >> 1L
+        deleteItemApp.shoppingCartRepository = shoppingCartRepository
+
+        when:
+        boolean deleted = deleteItemApp.deleteByCustomerId(customerId)
+        then:
+        deleted == true
+    }
+
+    def "delete all for customer none"() {
+        setup:
+        shoppingCartRepository.deleteByCustomerId(_) >> -1L
+        deleteItemApp.shoppingCartRepository = shoppingCartRepository
+
+        when:
+        boolean deleted = deleteItemApp.deleteByCustomerId(customerId)
+        then:
+        deleted == false
+    }
+
     def "delete for session"() {
         setup:
         shoppingCartRepository.deleteBySessionIdAndSkuId(_, _) >> 1L
@@ -52,13 +74,35 @@ class DeleteItemAppTest extends Specification {
         deleted == true
     }
 
-    def "list for session none"() {
+    def "delete for session none"() {
         setup:
         shoppingCartRepository.deleteBySessionIdAndSkuId(_, _) >> -1L
         deleteItemApp.shoppingCartRepository = shoppingCartRepository
 
         when:
         boolean deleted = deleteItemApp.deleteSkuBySessionId(sessionId, skuId)
+        then:
+        deleted == false
+    }
+
+    def "delete all for session"() {
+        setup:
+        shoppingCartRepository.deleteBySessionId(_) >> 1L
+        deleteItemApp.shoppingCartRepository = shoppingCartRepository
+
+        when:
+        boolean deleted = deleteItemApp.deleteBySessionId(sessionId)
+        then:
+        deleted == true
+    }
+
+    def "delete all for session none"() {
+        setup:
+        shoppingCartRepository.deleteBySessionId(_) >> -1L
+        deleteItemApp.shoppingCartRepository = shoppingCartRepository
+
+        when:
+        boolean deleted = deleteItemApp.deleteBySessionId(sessionId)
         then:
         deleted == false
     }

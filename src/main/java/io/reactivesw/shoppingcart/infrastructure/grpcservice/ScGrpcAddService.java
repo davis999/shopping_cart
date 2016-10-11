@@ -6,9 +6,9 @@ import io.grpc.stub.StreamObserver;
 import io.reactivesw.shoppingcart.application.AddItemApp;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
-import io.reactivesw.shoppingcart.grpc.AddReply;
-import io.reactivesw.shoppingcart.grpc.AddRequest;
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartReply;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartRequest;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartServiceGrpc;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException;
@@ -38,19 +38,20 @@ public class ScGrpcAddService extends ShoppingCartServiceGrpc.ShoppingCartServic
 
   /**
    * add product to shopping cart and reply to the grpc client.
-   * @param request ShoppingCartOuterClass.AddRequest
-   * @param responseObserver StreamObserver ShoppingCartOuterClass.AddReply
+   * @param request ShoppingCartOuterClass.ShoppingCartRequest
+   * @param responseObserver StreamObserver ShoppingCartOuterClass.ShoppingCartReply
    */
   @Override
-  public void addToShoppingCart(AddRequest request,
-                                StreamObserver<AddReply> responseObserver) {
+  public void addToShoppingCart(ShoppingCartRequest request,
+                                StreamObserver<ShoppingCartReply> responseObserver) {
     LOGGER.info("grpc server: add product to shopping cart start, request: {}", request);
     try {
       ShoppingCart shoppingCart = ScGrpcStream.grpcRequestToShoppingCart(request);
       ShoppingCartSku addResult = addItemApp.addToShoppingCart(shoppingCart);
       GrpcShoppingCartSku grpcShoppingCartSku = ScGrpcStream.shoppingCartToGrpcReply(addResult);
 
-      AddReply replyMessage = AddReply.newBuilder().setShoppingCart(grpcShoppingCartSku).build();
+      ShoppingCartReply replyMessage =
+          ShoppingCartReply.newBuilder().setShoppingCart(grpcShoppingCartSku).build();
       ScGrpcUtility.completeResponse(responseObserver, replyMessage);
       LOGGER.info("grpc server: add product to shopping cart finished, reply: {}", replyMessage);
     } catch (ShoppingCartParamException scpException) {

@@ -3,8 +3,8 @@ package io.reactivesw.shoppingcart.infrastructure.grpcservice;
 import io.grpc.stub.StreamObserver;
 import io.reactivesw.shoppingcart.application.ListItemsApp;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
-import io.reactivesw.shoppingcart.grpc.CustomerShoppingCartListRequest;
-import io.reactivesw.shoppingcart.grpc.SessionShoppingCartListRequest;
+import io.reactivesw.shoppingcart.grpc.CustomerRequest;
+import io.reactivesw.shoppingcart.grpc.SessionRequest;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartServiceGrpc;
 import org.lognet.springboot.grpc.GRpcService;
@@ -34,11 +34,11 @@ public class ScGrpcListService extends ShoppingCartServiceGrpc.ShoppingCartServi
 
   /**
    * list customer shopping cart and reply to grpc client.
-   * @param request ShoppingCartOuterClass.CustomerListRequest
+   * @param request ShoppingCartOuterClass.CustomerRequest
    * @param responseObserver StreamObserver ShoppingCartListReply
    */
   @Override
-  public void listShoppingCartForCustomer(CustomerShoppingCartListRequest request,
+  public void listShoppingCartForCustomer(CustomerRequest request,
                                           StreamObserver<ShoppingCartListReply> responseObserver) {
     LOGGER.debug("grpc server: list shopping cart for customer. request: {}", request);
     List<ShoppingCartSku> cartList = listItemsApp.listByCustomerId(request.getCustomerId());
@@ -56,7 +56,7 @@ public class ScGrpcListService extends ShoppingCartServiceGrpc.ShoppingCartServi
    * @param responseObserver StreamObserver ShoppingCartListReply
    */
   @Override
-  public void listShoppingCartForSession(SessionShoppingCartListRequest request,
+  public void listShoppingCartForSession(SessionRequest request,
                                          StreamObserver<ShoppingCartListReply> responseObserver) {
     LOGGER.debug("grpc server: list shopping cart for session. request: {}", request);
     List<ShoppingCartSku> cartList = listItemsApp.listBySessionId(request.getSessionId());

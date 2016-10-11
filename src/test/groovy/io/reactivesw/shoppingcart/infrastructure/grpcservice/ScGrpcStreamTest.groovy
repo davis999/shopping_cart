@@ -2,8 +2,8 @@ package io.reactivesw.shoppingcart.infrastructure.grpcservice
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
-import io.reactivesw.shoppingcart.grpc.AddRequest
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku
+import io.reactivesw.shoppingcart.grpc.ShoppingCartRequest
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -47,7 +47,7 @@ class ScGrpcStreamTest extends Specification {
 
     def "grpc request to shopping cart"() {
         setup:
-        AddRequest request = AddRequest.newBuilder().
+        ShoppingCartRequest request = ShoppingCartRequest.newBuilder().
                 setCustomerId(customerId).
                 setSessionId(sessionId).
                 setSkuId(skuId).

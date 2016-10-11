@@ -1,16 +1,16 @@
 package io.reactivesw.shoppingcart.infrastructure.grpcservice
 
 import io.grpc.stub.StreamObserver
-import io.reactivesw.shoppingcart.grpc.AddReply
+import io.reactivesw.shoppingcart.grpc.ShoppingCartReply
 import spock.lang.Specification
 
 class ScGrpcUtilityTest extends Specification {
 
-    StreamObserver<AddReply> responseObserver = Mock()
+    StreamObserver<ShoppingCartReply> responseObserver = Mock()
 
     def "response to grpc client"() {
         setup:
-        AddReply addReply = AddReply.newBuilder().build()
+        ShoppingCartReply addReply = ShoppingCartReply.newBuilder().build()
         when:
         ScGrpcUtility.completeResponse(responseObserver, addReply)
         then:

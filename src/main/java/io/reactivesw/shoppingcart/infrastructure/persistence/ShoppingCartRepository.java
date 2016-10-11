@@ -39,12 +39,26 @@ public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Lon
   Long deleteByCustomerIdAndSkuId(long customerId, long skuId);
 
   /**
+   * delete shopping cart record by customer id.
+   * @param customerId long
+   * @return long
+   */
+  Long deleteByCustomerId(long customerId);
+
+  /**
    * delete shopping cart record by session id and sku id.
    * @param sessionId String
    * @param skuId long
    * @return long
    */
   Long deleteBySessionIdAndSkuId(String sessionId, long skuId);
+
+  /**
+   * delete shopping cart record by session id.
+   * @param sessionId String
+   * @return long
+   */
+  Long deleteBySessionId(String sessionId);
 
   /**
    * list shopping cart record by customer id.

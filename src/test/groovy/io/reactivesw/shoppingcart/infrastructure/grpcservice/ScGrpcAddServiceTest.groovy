@@ -4,9 +4,9 @@ import io.grpc.stub.StreamObserver
 import io.reactivesw.shoppingcart.application.AddItemApp
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
-import io.reactivesw.shoppingcart.grpc.AddReply
-import io.reactivesw.shoppingcart.grpc.AddRequest
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku
+import io.reactivesw.shoppingcart.grpc.ShoppingCartReply
+import io.reactivesw.shoppingcart.grpc.ShoppingCartRequest
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException
@@ -43,16 +43,16 @@ class ScGrpcAddServiceTest extends Specification {
     String price = "42.00"
 
     ScGrpcAddService scGrpc = new ScGrpcAddService()
-    AddRequest request
+    ShoppingCartRequest request
     GrpcShoppingCartSku grpcShoppingCartSku = new GrpcShoppingCartSku()
-    StreamObserver<AddReply> responseObserver = Mock()
+    StreamObserver<ShoppingCartReply> responseObserver = Mock()
 
     ShoppingCart requestSC
     ShoppingCartSku scSku
     AddItemApp addItemApp = Stub(AddItemApp)
 
     def setup() {
-        request = AddRequest.newBuilder().
+        request = ShoppingCartRequest.newBuilder().
                 setCustomerId(customerId).
                 setSessionId(sessionId).
                 setSkuId(skuId).
@@ -68,7 +68,6 @@ class ScGrpcAddServiceTest extends Specification {
 
     def "add to shopping cart"() {
         setup:
-        requestSC.setShoppingCartId(1001L)
         addItemApp.addToShoppingCart(_) >> scSku
         when:
         scGrpc.addToShoppingCart(request, responseObserver)

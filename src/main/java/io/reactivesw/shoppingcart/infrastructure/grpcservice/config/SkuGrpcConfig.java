@@ -1,6 +1,6 @@
-package io.reactivesw.shoppingcart.application.grpc.config;
+package io.reactivesw.shoppingcart.infrastructure.grpcservice.config;
 
-import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

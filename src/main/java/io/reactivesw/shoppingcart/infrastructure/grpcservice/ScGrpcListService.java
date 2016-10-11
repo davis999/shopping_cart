@@ -1,4 +1,4 @@
-package io.reactivesw.shoppingcart.application.grpc;
+package io.reactivesw.shoppingcart.infrastructure.grpcservice;
 
 import io.grpc.stub.StreamObserver;
 import io.reactivesw.shoppingcart.application.ListItemsApp;
@@ -43,6 +43,7 @@ public class ScGrpcListService extends ShoppingCartServiceGrpc.ShoppingCartServi
     LOGGER.debug("grpc server: list shopping cart for customer. request: {}", request);
     List<ShoppingCartSku> cartList = listItemsApp.listByCustomerId(request.getCustomerId());
     LOGGER.debug("list shopping cart for customer. shopping cart list: {}", cartList);
+
     // convert shopping cart list to reply builder
     ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList);
     ScGrpcUtility.completeResponse(responseObserver, replyMessage);
@@ -59,7 +60,8 @@ public class ScGrpcListService extends ShoppingCartServiceGrpc.ShoppingCartServi
                                          StreamObserver<ShoppingCartListReply> responseObserver) {
     LOGGER.debug("grpc server: list shopping cart for session. request: {}", request);
     List<ShoppingCartSku> cartList = listItemsApp.listBySessionId(request.getSessionId());
-    LOGGER.info("list shopping cart for session. shopping cart list: {}", cartList);
+    LOGGER.debug("list shopping cart for session. shopping cart list: {}", cartList);
+
     // convert shopping cart list to reply builder
     ShoppingCartListReply replyMessage = ScGrpcStream.repeatShoppingCart(cartList);
     ScGrpcUtility.completeResponse(responseObserver, replyMessage);

@@ -1,4 +1,4 @@
-package io.reactivesw.shoppingcart.application.grpc
+package io.reactivesw.shoppingcart.infrastructure.grpcservice
 
 import io.grpc.stub.StreamObserver
 import io.reactivesw.shoppingcart.grpc.AddReply

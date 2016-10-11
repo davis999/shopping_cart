@@ -1,11 +1,11 @@
 package io.reactivesw.shoppingcart.application;
 
 import io.grpc.StatusRuntimeException;
-import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient;
-import io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig;
 import io.reactivesw.shoppingcart.infrastructure.common.ConstantsUtility;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.config.SkuGrpcConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +44,12 @@ public class CheckInventoryApp {
       LOGGER.error("app service: client shut down throw InterruptedException {}", interruptedEx);
       throw new ShoppingCartException(ShoppingCartException.INTERNAL);
     }
+
     if (inventory == ConstantsUtility.NULL_INVENTORY) {
       LOGGER.error("app service: zero inventory for sku id {}", skuId);
       throw new ShoppingCartInventoryException(ShoppingCartInventoryException.ZERO_INVENTORY);
     }
+
     final boolean validateInventory = quantity > inventory ? false : true;
     // inventory exhausted exception.
     if (!validateInventory) {

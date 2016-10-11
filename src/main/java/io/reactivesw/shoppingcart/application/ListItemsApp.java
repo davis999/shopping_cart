@@ -1,6 +1,5 @@
 package io.reactivesw.shoppingcart.application;
 
-import io.reactivesw.shoppingcart.application.grpc.ScGrpcAddService;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartService;
@@ -25,7 +24,7 @@ public class ListItemsApp {
   /**
    * class logger.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScGrpcAddService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListItemsApp.class);
 
   /**
    * shopping cart service.
@@ -50,6 +49,7 @@ public class ListItemsApp {
       LOGGER.error("app service: customer id is null. throw ShoppingCartParamException.");
       throw new ShoppingCartParamException(ShoppingCartParamException.CUSTOMER_ID_REQUIRED);
     }
+
     List<ShoppingCart> itemList = shoppingCartService.listShoppingCartByCustomerId(customerId);
     LOGGER.debug("app service: list shopping cart {}", itemList);
     return getSkuInfoListApp.getShoppingCartSkuInfoList(itemList);
@@ -66,6 +66,7 @@ public class ListItemsApp {
       LOGGER.error("app service: session id is null. throw ShoppingCartParamException.");
       throw new ShoppingCartParamException(ShoppingCartParamException.SESSION_ID_REQUIRED);
     }
+
     List<ShoppingCart> itemList = shoppingCartService.listShoppingCartBySessionId(sessionId);
     LOGGER.debug("app service: list shopping cart {}", itemList);
     return getSkuInfoListApp.getShoppingCartSkuInfoList(itemList);

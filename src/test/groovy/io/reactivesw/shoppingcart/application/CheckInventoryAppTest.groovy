@@ -2,9 +2,9 @@ package io.reactivesw.shoppingcart.application
 
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
-import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient
-import io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.config.SkuGrpcConfig
 import spock.lang.Shared
 import spock.lang.Specification
 

@@ -57,7 +57,7 @@ public class AddItemApp {
    * @return scSku shopping cart sku object
    */
   public ShoppingCartSku addToShoppingCart(ShoppingCart shoppingCart) {
-    LOGGER.info("app service: add to shopping cart start service. shopping cart: {}",
+    LOGGER.debug("app service: add to shopping cart start service. shopping cart: {}",
         shoppingCart);
     validateParamsApp.validateRequestParams(shoppingCart);
     // merge existed sku quantity which has been in shopping cart.
@@ -69,8 +69,9 @@ public class AddItemApp {
         .checkInventory(mergedShoppingCart.getSkuId(), mergedShoppingCart.getQuantity());
     // save shopping cart to DB.
     final ShoppingCart shoppingCartSaved = shoppingCartService.save(mergedShoppingCart);
+
     final ShoppingCartSku scSku = getSkuInfoSingleApp.getShoppingCartSkuInfo(shoppingCartSaved);
-    LOGGER.info("app service: add to shopping cart service finished. info: {}", scSku);
+    LOGGER.debug("app service: add to shopping cart service finished. info: {}", scSku);
     return scSku;
   }
 
@@ -83,6 +84,7 @@ public class AddItemApp {
     LOGGER.debug("app service: merge existed shopping cart start. shopping cart: {}", shoppingCart);
     final ShoppingCart oldCart = shoppingCartService.findOneBySkuIdForCustomer(shoppingCart);
     LOGGER.debug("app service: find an old shopping cart {}", oldCart);
+
     if (oldCart != null) {
       LOGGER.debug("app service: old shopping cart id: {} existed quantity: {}",
           oldCart.getShoppingCartId(), oldCart.getQuantity());

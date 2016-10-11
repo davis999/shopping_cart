@@ -44,6 +44,7 @@ public class ShoppingCartService {
     }
     shoppingCart.setModifiedTime(new Date());
     LOGGER.debug("domain service: modified time {}", shoppingCart.getModifiedTime());
+
     return shoppingCartRepository.save(shoppingCart);
   }
 
@@ -60,6 +61,7 @@ public class ShoppingCartService {
     final long skuId = shoppingCart.getSkuId();
     LOGGER.debug("domain service: find by sku id {} customer id {} session id {}",
         skuId, customerId, sessionId);
+
     // only when customer is empty, find existed sku record of session.
     if (shoppingCart.getCustomerId() == ConstantsUtility.INVALID_CUSTOMER_ID) {
       LOGGER.debug("domain service: null customer id. sku id {} session id {}", skuId, sessionId);
@@ -71,6 +73,7 @@ public class ShoppingCartService {
       existedCart =
           shoppingCartRepository.findOneByCustomerIdAndSkuId(customerId, skuId);
     }
+
     LOGGER.debug("domain service: found an existed shopping cart {}", existedCart);
     return existedCart;
   }
@@ -88,6 +91,7 @@ public class ShoppingCartService {
     final long skuId = shoppingCart.getSkuId();
     LOGGER.debug("domain service: delete by sku id {} customer id {} session id {}",
         skuId, customerId, sessionId);
+
     // only when customer is empty, find existed sku record of session.
     if (shoppingCart.getCustomerId() == ConstantsUtility.INVALID_CUSTOMER_ID) {
       LOGGER.debug("domain service: null customer id. sku id {} session id {}", skuId, sessionId);
@@ -96,6 +100,7 @@ public class ShoppingCartService {
       LOGGER.debug("domain service: null session id. sku id {} customer id {}", skuId, customerId);
       deleteCount = shoppingCartRepository.deleteByCustomerIdAndSkuId(customerId, skuId);
     }
+
     LOGGER.debug("domain service: total delete count is {}", deleteCount);
     return deleteCount;
   }
@@ -110,6 +115,7 @@ public class ShoppingCartService {
     int totalQuantity = 0;
     final List<ShoppingCart> resultList = this.listShoppingCartForCustomer(shoppingCart);
     LOGGER.debug("domain service: find shopping cart list {}", resultList);
+
     for (final ShoppingCart scItem : resultList) {
       if (scItem.getSkuId() == shoppingCart.getSkuId()) {
         LOGGER.debug("domain service: current shopping cart sku id {} quantity {}",
@@ -121,6 +127,7 @@ public class ShoppingCartService {
         totalQuantity = totalQuantity + scItem.getQuantity();
       }
     }
+
     LOGGER.debug("domain service: total quantity is {}", totalQuantity);
     return totalQuantity;
   }
@@ -136,6 +143,7 @@ public class ShoppingCartService {
     final String sessionId = shoppingCart.getSessionId();
     final long customerId = shoppingCart.getCustomerId();
     LOGGER.debug("domain service: find by customer id {} session id {}", customerId, sessionId);
+
     // only when customer is empty, find shopping cart record by session.
     if (shoppingCart.getCustomerId() == ConstantsUtility.INVALID_CUSTOMER_ID) {
       LOGGER.debug("domain service: null customer. session id {}", sessionId);

@@ -1,4 +1,4 @@
-package io.reactivesw.shoppingcart.application.grpc;
+package io.reactivesw.shoppingcart.infrastructure.grpcservice;
 
 import io.grpc.stub.StreamObserver;
 import io.reactivesw.shoppingcart.application.DeleteItemApp;
@@ -41,6 +41,7 @@ public class ScGrpcDeleteService extends ShoppingCartServiceGrpc.ShoppingCartSer
     long skuId = request.getSkuId();
     LOGGER.debug("grpc server: delete sku {} from shopping cart by customer {}", skuId, customerId);
     boolean deleted = deleteItemApp.deleteSkuByCustomerId(customerId, skuId);
+
     // convert shopping cart list to reply builder
     SkuDeleteReply replyMessage = SkuDeleteReply.newBuilder().setDeleted(deleted).build();
     ScGrpcUtility.completeResponse(responseObserver, replyMessage);
@@ -59,6 +60,7 @@ public class ScGrpcDeleteService extends ShoppingCartServiceGrpc.ShoppingCartSer
     long skuId = request.getSkuId();
     LOGGER.debug("grpc server: delete sku {} from shopping cart by session {}", skuId, sessionId);
     boolean deleted = deleteItemApp.deleteSkuBySessionId(sessionId, skuId);
+
     // convert shopping cart list to reply builder
     SkuDeleteReply replyMessage = SkuDeleteReply.newBuilder().setDeleted(deleted).build();
     ScGrpcUtility.completeResponse(responseObserver, replyMessage);

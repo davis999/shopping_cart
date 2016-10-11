@@ -1,11 +1,10 @@
 package io.reactivesw.shoppingcart.application;
 
-import io.reactivesw.shoppingcart.application.grpc.ScGrpcAddService;
-import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient;
-import io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.infrastructure.common.ConstantsUtility;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.config.SkuGrpcConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class GetSkuInfoApp {
   /**
    * class logger.
    */
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScGrpcAddService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetSkuInfoApp.class);
 
   /**
    * grpc configuration.
@@ -65,6 +64,7 @@ public class GetSkuInfoApp {
     LOGGER.debug("app service: get shopping cart product info.");
     scProduct.setQuantity(sc.getQuantity());
     scProduct.setShoppingCartId(sc.getShoppingCartId());
+
     if (sc.getCustomerId() == ConstantsUtility.INVALID_CUSTOMER_ID) {
       LOGGER.debug("app service: session id is {}", sc.getSessionId());
       scProduct.setSessionId(sc.getSessionId());
@@ -88,6 +88,7 @@ public class GetSkuInfoApp {
     LOGGER.debug("app service: shopping cart list {} and sku info list {}",
         shoppingCartList, skuInfoList);
     List<ShoppingCartSku> scProductList = new ArrayList<>();
+
     for (ShoppingCartSku scProduct : skuInfoList) {
       LOGGER.debug("app service: get shopping cart product info use sku info {}", scProduct);
       shoppingCartList.stream()

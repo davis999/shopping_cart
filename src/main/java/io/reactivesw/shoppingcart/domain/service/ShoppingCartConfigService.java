@@ -35,6 +35,7 @@ public class ShoppingCartConfigService {
     int limit = 0;
     final ShoppingCartConfig shoppingCartConfig = shoppingCartConfigRepository
         .findOneByConfigKey("total_limit");
+
     if (shoppingCartConfig != null) {
       LOGGER.debug("domain service: find a shopping cart config {}", shoppingCartConfig);
       limit = Integer.parseInt(shoppingCartConfig.getConfigValue());

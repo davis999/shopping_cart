@@ -1,5 +1,5 @@
 # Proto gen files
-src/main/protoGen
+src/main/grpc
 
 # Compiled source #
 ###################

@@ -1,4 +1,4 @@
-package io.reactivesw.shoppingcart.application.grpc;
+package io.reactivesw.shoppingcart.infrastructure.grpcservice;
 
 import io.reactivesw.catalog.grpc.LongValue;
 import io.reactivesw.catalog.grpc.SkuIdList;
@@ -55,6 +55,7 @@ public final class SkuGrpcStream {
         skuInfoList);
     List<ShoppingCartSku> scSkuList = new ArrayList<>();
     ModelMapper modelMapper = new ModelMapper();
+
     List<SkuInformation> listSku = skuInfoList.getSkuInformationList();
     for (SkuInformation prodItem : listSku) {
       // use model mapper to convert java class to grpc message class

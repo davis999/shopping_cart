@@ -43,6 +43,7 @@ public class ValidateParamsApp {
         sessionId);
     final boolean customerEmpty = customerId == ConstantsUtility.INVALID_CUSTOMER_ID;
     final boolean sessionEmpty = StringUtils.isEmpty(sessionId);
+
     if (customerEmpty && sessionEmpty) {
       LOGGER.error("app service: customer and session are null. throw ShoppingCartParamException.");
       throw new ShoppingCartParamException(ShoppingCartParamException.CUSTOMER_REQUIRED);
@@ -56,6 +57,7 @@ public class ValidateParamsApp {
   private void validateQuantity(int quantity) {
     LOGGER.debug("app service: check quantity. quantity: {}", quantity);
     final boolean quantityEmpty = quantity == ConstantsUtility.INVALID_ZERO_QUANTITY;
+
     if (quantityEmpty) {
       LOGGER.error("app service: quantity is null. throw ShoppingCartParamException.");
       throw new ShoppingCartParamException(ShoppingCartParamException.QUANTITY_REQUIRED);

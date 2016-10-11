@@ -1,17 +1,8 @@
 package io.reactivesw.shoppingcart.application
 
-import io.grpc.Status
-import io.grpc.StatusRuntimeException
-import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient
-import io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
-import io.reactivesw.shoppingcart.domain.service.ShoppingCartConfigService
 import io.reactivesw.shoppingcart.domain.service.ShoppingCartService
-import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException
-import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException
-import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException
-
 import spock.lang.Shared
 import spock.lang.Specification
 

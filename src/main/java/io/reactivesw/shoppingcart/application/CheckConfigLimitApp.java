@@ -43,6 +43,7 @@ public class CheckConfigLimitApp {
     final int totalQuantity = shoppingCartService.getTotalQuantityForCustomer(shoppingCart);
     final int limitQuantity = shoppingCartConfigService.getTotalQuantityLimit();
     LOGGER.debug("app service: total quantity is {} and limit is {}", totalQuantity, limitQuantity);
+
     if (limitQuantity != ConstantsUtility.QUANTITY_UNLIMITED) {
       LOGGER.debug("app service: quantity is limited");
       final boolean validateQuantityLimit = limitQuantity < totalQuantity ? false : true;

@@ -1,4 +1,4 @@
-package io.reactivesw.shoppingcart.application.grpc
+package io.reactivesw.shoppingcart.infrastructure.grpcservice
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku

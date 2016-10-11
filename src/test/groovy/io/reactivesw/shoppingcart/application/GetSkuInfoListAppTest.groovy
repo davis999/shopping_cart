@@ -1,7 +1,5 @@
 package io.reactivesw.shoppingcart.application
 
-import io.reactivesw.shoppingcart.application.grpc.SkuGrpcClient
-import io.reactivesw.shoppingcart.application.grpc.config.SkuGrpcConfig
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import spock.lang.Shared

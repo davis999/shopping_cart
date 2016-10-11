@@ -1,11 +1,10 @@
-package io.reactivesw.shoppingcart.application.grpc;
+package io.reactivesw.shoppingcart.infrastructure.grpcservice;
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.AddRequest;
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +39,7 @@ public final class ScGrpcStream {
     final ShoppingCartListReply.Builder replyBuilder =
         ShoppingCartListReply.newBuilder();
     final ModelMapper modelMapper = new ModelMapper();
+
     for (final ShoppingCartSku scItem : scList) {
       LOGGER.debug("shopping cart sku item {}", scItem);
       if (scItem.getSessionId() == null) {
@@ -79,6 +79,7 @@ public final class ScGrpcStream {
     if (shoppingCartSku.getSessionId() == null) {
       shoppingCartSku.setSessionId("");
     }
+
     final GrpcShoppingCartSku.Builder scbuilder =
         modelMapper.map(shoppingCartSku, GrpcShoppingCartSku.Builder.class);
     final GrpcShoppingCartSku gShoppingCartSku = scbuilder.build();

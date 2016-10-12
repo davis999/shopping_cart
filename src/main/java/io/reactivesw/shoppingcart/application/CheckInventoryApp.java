@@ -4,8 +4,7 @@ import io.grpc.StatusRuntimeException;
 import io.reactivesw.shoppingcart.infrastructure.common.ConstantsUtility;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException;
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient;
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.config.SkuGrpcConfig;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class CheckInventoryApp {
    * grpc configuration.
    */
   @Autowired
-  private transient SkuGrpcConfig skuGrpcConfig;
+  private transient SkuGrpcService skuGrpcService;
 
   /**
    * check if the inventory is enough.
@@ -66,9 +65,8 @@ public class CheckInventoryApp {
   private int getInventoryBySkuId(long skuId) throws InterruptedException {
     LOGGER.debug("app service: call product service to get inventory for sku id {}", skuId);
     int inventory;
-    SkuGrpcClient skuClient = skuGrpcConfig.skuGrpcClient();
     try {
-      inventory = skuClient.getInventoryForSku(skuId);
+      inventory = skuGrpcService.getInventoryForSku(skuId);
     } catch (StatusRuntimeException grpcEx) {
       LOGGER.error("app service: product is unavailable. sku id: {}. StatusRuntimeException {}",
           skuId, grpcEx);

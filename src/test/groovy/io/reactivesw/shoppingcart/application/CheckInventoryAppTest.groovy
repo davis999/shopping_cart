@@ -3,8 +3,7 @@ package io.reactivesw.shoppingcart.application
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.config.SkuGrpcConfig
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcService
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -15,14 +14,12 @@ class CheckInventoryAppTest extends Specification {
 
     CheckInventoryApp checkInventoryApp = new CheckInventoryApp()
 
-    SkuGrpcConfig skuGrpcConfig = Stub(SkuGrpcConfig)
-    SkuGrpcClient skuGrpcClient = Stub(SkuGrpcClient)
+    SkuGrpcService skuGrpcService = Stub(SkuGrpcService)
 
     def "get inventory for product"() {
         setup:
-        skuGrpcClient.getInventoryForSku(_) >> 10
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        checkInventoryApp.skuGrpcConfig = skuGrpcConfig
+        skuGrpcService.getInventoryForSku(_) >> 10
+        checkInventoryApp.skuGrpcService = skuGrpcService
 
         when:
         int inventory = checkInventoryApp.getInventoryBySkuId(skuId)
@@ -32,9 +29,8 @@ class CheckInventoryAppTest extends Specification {
 
     def "check inventory for product success"() {
         setup:
-        skuGrpcClient.getInventoryForSku(_) >> 10
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        checkInventoryApp.skuGrpcConfig = skuGrpcConfig
+        skuGrpcService.getInventoryForSku(_) >> 10
+        checkInventoryApp.skuGrpcService = skuGrpcService
 
         when:
         checkInventoryApp.checkInventory(1001L, 3)
@@ -45,9 +41,8 @@ class CheckInventoryAppTest extends Specification {
     def "check inventory unavailable"() {
         setup:
         final Status status = Status.NOT_FOUND;
-        skuGrpcClient.getInventoryForSku(_) >> { throw new StatusRuntimeException(status) }
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        checkInventoryApp.skuGrpcConfig = skuGrpcConfig
+        skuGrpcService.getInventoryForSku(_) >> { throw new StatusRuntimeException(status) }
+        checkInventoryApp.skuGrpcService = skuGrpcService
 
         when:
         checkInventoryApp.checkInventory(skuId, 3)
@@ -58,9 +53,8 @@ class CheckInventoryAppTest extends Specification {
 
     def "check inventory zero"() {
         setup:
-        skuGrpcClient.getInventoryForSku(_) >> 0
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        checkInventoryApp.skuGrpcConfig = skuGrpcConfig
+        skuGrpcService.getInventoryForSku(_) >> 0
+        checkInventoryApp.skuGrpcService = skuGrpcService
 
         when:
         checkInventoryApp.checkInventory(skuId, 3)
@@ -71,9 +65,8 @@ class CheckInventoryAppTest extends Specification {
 
     def "check inventory less"() {
         setup:
-        skuGrpcClient.getInventoryForSku(_) >> 2
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        checkInventoryApp.skuGrpcConfig = skuGrpcConfig
+        skuGrpcService.getInventoryForSku(_) >> 2
+        checkInventoryApp.skuGrpcService = skuGrpcService
 
         when:
         checkInventoryApp.checkInventory(skuId, 3)

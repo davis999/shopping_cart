@@ -1,8 +1,6 @@
 package io.reactivesw.shoppingcart.infrastructure.grpcservice.config;
 
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -52,14 +50,5 @@ public class SkuGrpcConfig {
    */
   public void setPort(int port) {
     this.port = port;
-  }
-
-  /**
-   * sku grpc client configration.
-   * @return SkuGrpcClient
-   */
-  @Bean
-  public SkuGrpcClient skuGrpcClient() {
-    return new SkuGrpcClient(this.getHost(), this.getPort());
   }
 }

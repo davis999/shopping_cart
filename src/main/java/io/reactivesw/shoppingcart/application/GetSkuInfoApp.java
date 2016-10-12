@@ -3,8 +3,7 @@ package io.reactivesw.shoppingcart.application;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.infrastructure.common.ConstantsUtility;
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient;
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.config.SkuGrpcConfig;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class GetSkuInfoApp {
    * grpc configuration.
    */
   @Autowired
-  private transient SkuGrpcConfig skuGrpcConfig;
+  private transient SkuGrpcService skuGrpcService;
 
   /**
    * get sku info.
@@ -38,8 +37,7 @@ public class GetSkuInfoApp {
    */
   public ShoppingCartSku getSkuInfo(long skuId) {
     LOGGER.debug("app service: get sku info for sku id {}", skuId);
-    SkuGrpcClient skuClient = skuGrpcConfig.skuGrpcClient();
-    return skuClient.getSkuInfo(skuId);
+    return skuGrpcService.getSkuInfo(skuId);
   }
 
   /**
@@ -49,8 +47,7 @@ public class GetSkuInfoApp {
    */
   public List<ShoppingCartSku> getSkuInfoList(List<Long> skuIdList) {
     LOGGER.debug("app service: get sku info for sku id list {}", skuIdList);
-    SkuGrpcClient skuClient = skuGrpcConfig.skuGrpcClient();
-    return skuClient.getSkuInfoList(skuIdList);
+    return skuGrpcService.getSkuInfoList(skuIdList);
   }
 
   /**

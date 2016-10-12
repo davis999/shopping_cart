@@ -2,8 +2,7 @@ package io.reactivesw.shoppingcart.application
 
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcClient
-import io.reactivesw.shoppingcart.infrastructure.grpcservice.config.SkuGrpcConfig
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.SkuGrpcService
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -38,8 +37,7 @@ class GetSkuInfoAppTest extends Specification {
 
     GetSkuInfoApp getSkuInfoApp = new GetSkuInfoApp()
 
-    SkuGrpcConfig skuGrpcConfig = Stub(SkuGrpcConfig)
-    SkuGrpcClient skuGrpcClient = Stub(SkuGrpcClient)
+    SkuGrpcService skuGrpcService = Stub(SkuGrpcService)
     ShoppingCart findSC1 = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: quantity)
     ShoppingCart findSC2 = new ShoppingCart(shoppingCartId: shppingCartId, sessionId: sessionId, skuId: skuId, quantity: quantity)
     ShoppingCart findSC3 = new ShoppingCart(shoppingCartId: 1002L, customerId: customerId, skuId: 1002L, quantity: quantity)
@@ -56,9 +54,8 @@ class GetSkuInfoAppTest extends Specification {
 
     def "get sku info"() {
         setup:
-        skuGrpcClient.getSkuInfo(_) >> scProd1
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        getSkuInfoApp.skuGrpcConfig = skuGrpcConfig
+        skuGrpcService.getSkuInfo(_) >> scProd1
+        getSkuInfoApp.skuGrpcService = skuGrpcService
 
         when:
         ShoppingCartSku scProdGet = getSkuInfoApp.getSkuInfo(skuId)
@@ -70,9 +67,8 @@ class GetSkuInfoAppTest extends Specification {
         List<Long> skuIdList = new ArrayList<>()
         skuIdList.add(skuId)
         skuList.add(scProd1)
-        skuGrpcClient.getSkuInfoList(_) >> skuList
-        skuGrpcConfig.skuGrpcClient() >> skuGrpcClient
-        getSkuInfoApp.skuGrpcConfig = skuGrpcConfig
+        skuGrpcService.getSkuInfoList(_) >> skuList
+        getSkuInfoApp.skuGrpcService = skuGrpcService
 
         when:
         List<ShoppingCartSku> rList = getSkuInfoApp.getSkuInfoList(skuIdList)

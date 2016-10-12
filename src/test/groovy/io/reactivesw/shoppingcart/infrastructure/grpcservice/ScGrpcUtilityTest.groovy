@@ -2,6 +2,7 @@ package io.reactivesw.shoppingcart.infrastructure.grpcservice
 
 import io.grpc.stub.StreamObserver
 import io.reactivesw.shoppingcart.grpc.ShoppingCartReply
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcUtility
 import spock.lang.Specification
 
 class ScGrpcUtilityTest extends Specification {

@@ -7,6 +7,8 @@ import io.reactivesw.shoppingcart.grpc.CustomerRequest;
 import io.reactivesw.shoppingcart.grpc.SessionRequest;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartServiceGrpc;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcStream;
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcUtility;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

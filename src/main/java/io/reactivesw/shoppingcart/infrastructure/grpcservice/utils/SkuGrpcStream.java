@@ -1,4 +1,4 @@
-package io.reactivesw.shoppingcart.infrastructure.grpcservice;
+package io.reactivesw.shoppingcart.infrastructure.grpcservice.utils;
 
 import io.reactivesw.catalog.grpc.LongValue;
 import io.reactivesw.catalog.grpc.SkuIdList;

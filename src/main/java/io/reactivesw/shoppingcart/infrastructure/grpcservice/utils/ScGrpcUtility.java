@@ -1,4 +1,4 @@
-package io.reactivesw.shoppingcart.infrastructure.grpcservice;
+package io.reactivesw.shoppingcart.infrastructure.grpcservice.utils;
 
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;

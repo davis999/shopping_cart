@@ -4,6 +4,7 @@ import io.reactivesw.shoppingcart.domain.model.ShoppingCart
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku
 import io.reactivesw.shoppingcart.grpc.ShoppingCartRequest
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcStream
 import spock.lang.Shared
 import spock.lang.Specification
 

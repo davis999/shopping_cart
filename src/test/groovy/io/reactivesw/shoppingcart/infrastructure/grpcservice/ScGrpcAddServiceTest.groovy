@@ -10,6 +10,7 @@ import io.reactivesw.shoppingcart.grpc.ShoppingCartRequest
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException
+import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcStream
 import spock.lang.Shared
 import spock.lang.Specification
 

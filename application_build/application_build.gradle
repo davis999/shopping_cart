@@ -22,6 +22,3 @@ dependencies {
     compileOnly('org.projectlombok:lombok:1.16.6')
     compileOnly("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
 }
-
-// apply for grpc supprt
-apply from: 'application_build/grpc_build.gradle'

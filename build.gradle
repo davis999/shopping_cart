@@ -31,14 +31,14 @@ buildscript {
 // init_build repository, java, wrapper
 apply from: 'application_build/init_build.gradle'
 
-// used by build
-jar {
-    baseName = 'shopping-cart'
-    version = '0.0.1'
-}
+// init application version settings
+apply from: 'application_build/version.gradle'
 
 // application build script
 apply from: 'application_build/application_build.gradle'
+
+// apply for grpc supprt
+apply from: 'application_build/grpc_build.gradle'
 
 // build docker image task
 apply from: 'application_build/docker_build.gradle'

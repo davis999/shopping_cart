@@ -1,14 +1,27 @@
 apply plugin: 'docker'
 
-group = "reactivesw"
-
-task buildDocker(type: Docker, dependsOn: build) {
+//build docker image
+//doc: https://github.com/Transmode/gradle-docker
+task buildDocker(type: Docker, dependsOn: [build]) {
     applicationName = jar.baseName
-    dockerfile = file('src/main/docker/Dockerfile')
-    doFirst {
-        copy {
-            from jar
-            into stageDir
-        }
-    }
+    tagVersion = jar.version
+
+    maintainer = 'Reactivesw <dev@reactivesw.com>'
+
+    baseImage='frolvlad/alpine-oraclejdk8:slim'
+    volume '/tmp'
+
+    def fileName = jar.archivePath
+    addFile(fileName,'app.jar')
+
+    runCommand("sh -c 'touch /app.jar'")
+
+    //the entryPoint
+    List<String> list = new ArrayList<String>()
+    list.add("java")
+    list.add("-Djava.security.egd=file:/dev/./urandom")
+    list.add("-jar")
+    list.add("/app.jar")
+    entryPoint(list)
 }
+

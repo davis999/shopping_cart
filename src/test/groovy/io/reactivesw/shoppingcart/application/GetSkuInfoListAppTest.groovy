@@ -70,4 +70,14 @@ class GetSkuInfoListAppTest extends Specification {
         rList == infoList
     }
 
+    def "get shopping cart sku info list null"() {
+        setup:
+        List<ShoppingCartSku> scList = new ArrayList<>();
+
+        when:
+        List<ShoppingCartSku> rList = getSkuInfoListApp.getShoppingCartSkuInfoList(scList)
+        then:
+        rList.size() == 0
+    }
+
 }

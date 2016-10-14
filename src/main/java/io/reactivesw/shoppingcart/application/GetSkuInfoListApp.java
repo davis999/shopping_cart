@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,9 +36,14 @@ public class GetSkuInfoListApp {
    */
   public List<ShoppingCartSku> getShoppingCartSkuInfoList(List<ShoppingCart> itemList) {
     LOGGER.debug("app service: get product info list for shopping cart list {}", itemList);
-    List<Long> skuIdList = this.getSkuIdList(itemList);
-    List<ShoppingCartSku> skuInfoList = getSkuInfoApp.getSkuInfoList(skuIdList);
-    return getSkuInfoApp.organizeShoppingCartSkuList(itemList, skuInfoList);
+    List<ShoppingCartSku> organizedList = new ArrayList<>();
+    if (!itemList.isEmpty()) {
+      List<Long> skuIdList = this.getSkuIdList(itemList);
+      LOGGER.debug("app service: sku id list is {}", skuIdList);
+      List<ShoppingCartSku> skuInfoList = getSkuInfoApp.getSkuInfoList(skuIdList);
+      organizedList = getSkuInfoApp.organizeShoppingCartSkuList(itemList, skuInfoList);
+    }
+    return organizedList;
   }
 
   /**

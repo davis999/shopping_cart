@@ -9,7 +9,7 @@ spring:
     password: root
     driver-class-name: com.mysql.jdbc.Driver
 grpc: 
-  port : 6565
+  port : 9001
   sku:
     host: localhost
     port: 9096

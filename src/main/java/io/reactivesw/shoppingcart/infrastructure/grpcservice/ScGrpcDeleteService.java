@@ -7,7 +7,7 @@ import io.reactivesw.shoppingcart.grpc.CustomerSkuRequest;
 import io.reactivesw.shoppingcart.grpc.DeleteReply;
 import io.reactivesw.shoppingcart.grpc.SessionRequest;
 import io.reactivesw.shoppingcart.grpc.SessionSkuRequest;
-import io.reactivesw.shoppingcart.grpc.ShoppingCartServiceGrpc;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartDeleteServiceGrpc;
 import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcUtility;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
@@ -19,7 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author janeli
  */
 @GRpcService
-public class ScGrpcDeleteService extends ShoppingCartServiceGrpc.ShoppingCartServiceImplBase {
+public class ScGrpcDeleteService
+    extends ShoppingCartDeleteServiceGrpc.ShoppingCartDeleteServiceImplBase {
 
   /**
    * class logger.
@@ -58,7 +59,7 @@ public class ScGrpcDeleteService extends ShoppingCartServiceGrpc.ShoppingCartSer
    */
   @Override
   public void deleteForCustomer(CustomerRequest request,
-                                   StreamObserver<DeleteReply> responseObserver) {
+                                StreamObserver<DeleteReply> responseObserver) {
     long customerId = request.getCustomerId();
     LOGGER.debug("grpc server: delete shopping cart by customer {}", customerId);
     boolean deleted = deleteItemApp.deleteByCustomerId(customerId);
@@ -95,7 +96,7 @@ public class ScGrpcDeleteService extends ShoppingCartServiceGrpc.ShoppingCartSer
    */
   @Override
   public void deleteForSession(SessionRequest request,
-                                  StreamObserver<DeleteReply> responseObserver) {
+                               StreamObserver<DeleteReply> responseObserver) {
     String sessionId = request.getSessionId();
     LOGGER.debug("grpc server: delete shopping cart by session {}", sessionId);
     boolean deleted = deleteItemApp.deleteBySessionId(sessionId);

@@ -7,9 +7,9 @@ import io.reactivesw.shoppingcart.application.EditItemApp;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.GrpcShoppingCartSku;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartEditServiceGrpc;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartReply;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartRequest;
-import io.reactivesw.shoppingcart.grpc.ShoppingCartServiceGrpc;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartInventoryException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartLimitException;
 import io.reactivesw.shoppingcart.infrastructure.exception.ShoppingCartParamException;
@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author janeli
  */
 @GRpcService
-public class ScGrpcEditService extends ShoppingCartServiceGrpc.ShoppingCartServiceImplBase {
+public class ScGrpcEditService extends ShoppingCartEditServiceGrpc.ShoppingCartEditServiceImplBase {
 
   /**
    * class logger.

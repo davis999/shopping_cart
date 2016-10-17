@@ -6,7 +6,7 @@ import io.reactivesw.shoppingcart.domain.model.ShoppingCartSku;
 import io.reactivesw.shoppingcart.grpc.CustomerRequest;
 import io.reactivesw.shoppingcart.grpc.SessionRequest;
 import io.reactivesw.shoppingcart.grpc.ShoppingCartListReply;
-import io.reactivesw.shoppingcart.grpc.ShoppingCartServiceGrpc;
+import io.reactivesw.shoppingcart.grpc.ShoppingCartListServiceGrpc;
 import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcStream;
 import io.reactivesw.shoppingcart.infrastructure.grpcservice.utils.ScGrpcUtility;
 import org.lognet.springboot.grpc.GRpcService;
@@ -21,7 +21,7 @@ import java.util.List;
  * @author janeli
  */
 @GRpcService
-public class ScGrpcListService extends ShoppingCartServiceGrpc.ShoppingCartServiceImplBase {
+public class ScGrpcListService extends ShoppingCartListServiceGrpc.ShoppingCartListServiceImplBase {
 
   /**
    * class logger.

@@ -21,12 +21,15 @@ When a customer successfully adds a product to the shopping cart or clicks the s
 * Customer can remove product from the shopping cart.
 
 ### 1.4. Clearing Shopping Cart 
+When customer click the "x" icon, the sku in the shopping cart will be deleted.  
+
+### 1.5. Delete Sku from Shopping Cart
 When customer submit the order, shopping cart will be cleaned.
 
-### 1.5. Abandoning Shopping Cart
+### 1.6. Abandoning Shopping Cart
 When the session of an anonymous customer is expired, the shopping cart will be abandoned. This can be performed by a separate daemon job. 
 
-### 1.6. Admin Panel
+### 1.7. Admin Panel
 
 ## 2. Error Handling
 We have some checks when updating shopping cart:

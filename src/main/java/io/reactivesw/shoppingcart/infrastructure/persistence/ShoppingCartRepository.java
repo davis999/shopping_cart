@@ -4,6 +4,7 @@ import io.reactivesw.shoppingcart.domain.model.ShoppingCart;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Lon
    * @param skuId long
    * @return long
    */
+  @Transactional(timeout = 10)
   Long deleteByCustomerIdAndSkuId(long customerId, long skuId);
 
   /**
@@ -43,6 +45,7 @@ public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Lon
    * @param customerId long
    * @return long
    */
+  @Transactional(timeout = 10)
   Long deleteByCustomerId(long customerId);
 
   /**
@@ -51,6 +54,7 @@ public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Lon
    * @param skuId long
    * @return long
    */
+  @Transactional(timeout = 10)
   Long deleteBySessionIdAndSkuId(String sessionId, long skuId);
 
   /**
@@ -58,6 +62,7 @@ public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Lon
    * @param sessionId String
    * @return long
    */
+  @Transactional(timeout = 10)
   Long deleteBySessionId(String sessionId);
 
   /**

@@ -43,20 +43,9 @@ This module is called when a customer clicks "add to cart" button in the product
 Client(e.g. web server) should supplie `sku_id`, `quantity`, `customer_id`, `session_id`.  
 If the page send request to client without quantity setting, client should set the `quantity` to be one.
 
-### 1.1. GRPC API
+### 1.1. Domain Service
 
-* service: addToShoppingCart (ShoppingCartRequest) returns (ShoppingCartReply)
-* param: ShoppingCartRequest(sku_id(Long), quantity(int), customer_id(Long), session_id(String))
-* return: ShoppingCartReply(shoppingCart(GrpcShoppingCart))
-* exception: StatusRuntimeException
- - INVALID_ARGUMENT
- - OUT_OF_RANGE
- - RESOURCE_EXHAUSTED
- - INTERNAL
-
-### 1.2. Domain Service
-
-#### 1.2.1. Workflow
+#### 1.1.1. Workflow
 * valiadte required parameters `void validateRequestParams(ShoppingCart)`
  - one of customer_id and session_id is required (both are not null, use customer id)
  - quantity is required (quantity = 0)
@@ -78,7 +67,7 @@ If the page send request to client without quantity setting, client should set t
   * check failed: throw exception(ShoppingCartInventoryException)
 * save shopping cart to database `ShoppingCart saveShoppingCart(ShoppingCart)`
 
-#### 1.2.2. Exception
+#### 1.1.2. Exception
 * ShoppingCartParamException
  - one of customer_id and session_id is required
  - quantity is required
@@ -89,6 +78,17 @@ If the page send request to client without quantity setting, client should set t
  - product is unavailable
  - inventory is 0
  - inventory is less than the quantity
+
+### 1.2. GRPC API
+
+* service: addToShoppingCart (ShoppingCartRequest) returns (ShoppingCartReply)
+* param: ShoppingCartRequest(sku_id(Long), quantity(int), customer_id(Long), session_id(String))
+* return: ShoppingCartReply(shoppingCart(GrpcShoppingCart))
+* exception: StatusRuntimeException
+ - INVALID_ARGUMENT
+ - OUT_OF_RANGE
+ - RESOURCE_EXHAUSTED
+ - INTERNAL
 
 ### 1.3. Error Handle
 
@@ -105,25 +105,9 @@ INTERNAL | add to shopping cart failed | Exception |
 
 ## 2. Displaying Shopping Cart Content
 
-### 2.1. Grpc API
+### 2.1. Domain Service
 
-#### 2.1.1. Request by customer id
-* service: listShoppingCartForCustomer (CustomerRequest) returns (ShoppingCartListReply)
-* param: CustomerRequest(customer_id(Long))
-* return: ShoppingCartListReply(List<GrpcShoppingCart>)
-* exception: StatusRuntimeException
- - INVALID_ARGUMENT
-
-#### 2.1.2. Request by session id
-* service: listShoppingCartForSession (SessionRequest) returns (ShoppingCartListReply)
-* param: SessionRequest(session_id(String))
-* return: ShoppingCartListReply(List<GrpcShoppingCart>)
-* exception: StatusRuntimeException
- - INVALID_ARGUMENT
-
-### 2.2. Domain Service
-
-#### 2.2.1. Workflow
+#### 2.1.1. Workflow
 * get shopping cart list
  - get shopping cart list by customer id `List<ShoppingCart> listShoppingCartByCustomerId(long customerId)`
  - get shopping cart list by session id `List<ShoppingCart> listShoppingCartBySessionId(String sessionId)`
@@ -132,10 +116,26 @@ INTERNAL | add to shopping cart failed | Exception |
  - call sku grpc service
  - list shopping cart product information
 
-#### 2.2.2. Exception
+#### 2.1.2. Exception
 * ShoppingCartParamException
  - customer_id is required: `listShoppingCartByCustomerId`
  - session_id is required: `listShoppingCartBySessionId`
+
+### 2.2. Grpc API
+
+#### 2.2.1. Request by customer id
+* service: listShoppingCartForCustomer (CustomerRequest) returns (ShoppingCartListReply)
+* param: CustomerRequest(customer_id(Long))
+* return: ShoppingCartListReply(List<GrpcShoppingCart>)
+* exception: StatusRuntimeException
+ - INVALID_ARGUMENT
+
+#### 2.2.2. Request by session id
+* service: listShoppingCartForSession (SessionRequest) returns (ShoppingCartListReply)
+* param: SessionRequest(session_id(String))
+* return: ShoppingCartListReply(List<GrpcShoppingCart>)
+* exception: StatusRuntimeException
+ - INVALID_ARGUMENT
 
 ### 2.3 Error Handle
 
@@ -149,20 +149,9 @@ This module is called when a customer clicks "+" or "-" icon in the shopping car
 Client(e.g. web server) should supplie `sku_id`, `quantity`, `customer_id`, `session_id`.  
 If the page send request to client without quantity setting, client should set the `quantity` to be one.
 
-### 3.1. GRPC API
+### 3.1. Domain Service
 
-* service: editShoppingCart (ShoppingCartRequest) returns (ShoppingCartReply)
-* param: ShoppingCartRequest(sku_id(Long), quantity(int), customer_id(Long), session_id(String))
-* return: ShoppingCartReply(shoppingCart(GrpcShoppingCart))
-* exception: StatusRuntimeException
- - INVALID_ARGUMENT
- - OUT_OF_RANGE
- - RESOURCE_EXHAUSTED
- - INTERNAL
-
-### 3.2. Domain Service
-
-#### 3.2.1. Workflow
+#### 3.1.1. Workflow
 * valiadte required parameters `void validateRequestParams(ShoppingCart)`
  - one of customer_id and session_id is required (both are not null, use customer id)
  - quantity is required (quantity = 0)
@@ -181,7 +170,7 @@ If the page send request to client without quantity setting, client should set t
   * check failed: throw exception(ShoppingCartInventoryException)
 * save shopping cart to database `ShoppingCart saveShoppingCart(ShoppingCart)`
 
-#### 3.2.2. Exception
+#### 3.1.2. Exception
 * ShoppingCartParamException
  - one of customer_id and session_id is required
  - quantity is required
@@ -192,6 +181,17 @@ If the page send request to client without quantity setting, client should set t
  - product is unavailable
  - inventory is 0
  - inventory is less than the quantity
+
+### 3.2. GRPC API
+
+* service: editShoppingCart (ShoppingCartRequest) returns (ShoppingCartReply)
+* param: ShoppingCartRequest(sku_id(Long), quantity(int), customer_id(Long), session_id(String))
+* return: ShoppingCartReply(shoppingCart(GrpcShoppingCart))
+* exception: StatusRuntimeException
+ - INVALID_ARGUMENT
+ - OUT_OF_RANGE
+ - RESOURCE_EXHAUSTED
+ - INTERNAL
 
 ### 3.3. Error Handle
 
@@ -209,33 +209,33 @@ INTERNAL | add to shopping cart failed | Exception |
 ## 4. Delete Sku from Shopping Cart 
 When customer click the "x" icon, the sku in the shopping cart will be deleted.
 
-### 4.1. Delete Sku Grpc API
+### 4.1. Domain Service
 
-#### 4.1.1. Request by customer id
+#### 4.1.1. Workflow
+* delete sku from shopping cart
+ - delete sku from shopping cart by customer id `boolean deleteSkuByCustomerId(long customerId)`
+ - delete sku from shopping cart by session id `boolean deleteSkuBySessionId(String sessionId)`
+
+#### 4.1.2. Exception
+* ShoppingCartParamException
+ - customer_id is required: `deleteSkuByCustomerId`
+ - session_id is required: `deleteSkuBySessionId`
+
+### 4.2. Grpc API
+
+#### 4.2.1. Request by customer id
 * service: deleteSkuForCustomer (CustomerRequest) returns (DeleteReply)
 * param: CustomerRequest(customer_id(Long))
 * return: DeleteReply(boolean)
 * exception: StatusRuntimeException
  - INVALID_ARGUMENT
 
-#### 4.1.2. Request by session id
+#### 4.2.2. Request by session id
 * service: deleteSkuForSession (SessionRequest) returns (DeleteReply)
 * param: SessionRequest(session_id(String))
 * return: DeleteReply(boolean)
 * exception: StatusRuntimeException
  - INVALID_ARGUMENT
-
-### 4.2. Domain Service
-
-#### 4.2.1. Workflow
-* delete sku from shopping cart
- - delete sku from shopping cart by customer id `boolean deleteSkuByCustomerId(long customerId)`
- - delete sku from shopping cart by session id `boolean deleteSkuBySessionId(String sessionId)`
-
-#### 4.2.2. Exception
-* ShoppingCartParamException
- - customer_id is required: `deleteSkuByCustomerId`
- - session_id is required: `deleteSkuBySessionId`
 
 ### 4.3 Error Handle
 
@@ -247,24 +247,24 @@ INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | session
 ## 5. Clearing Shopping Cart
 When customer submit the order, shopping cart will be cleaned.
 
-### 5.1. Grpc API
+### 5.1. Domain Service
 
-#### 5.1.1. Request service
+#### 5.1.1. Workflow
+* clear shopping cart
+ - clear shopping cart by customer id `boolean deleteByCustomerId(long customerId)`
+
+#### 5.1.2. Exception
+* ShoppingCartParamException
+ - customer_id is required: `deleteByCustomerId`
+
+### 5.2. Grpc API
+
+#### 5.2.1. Request service
 * service: deleteForCustomer (CustomerRequest) returns (DeleteReply)
 * param: CustomerRequest(customer_id(Long))
 * return: DeleteReply(boolean)
 * exception: StatusRuntimeException
  - INVALID_ARGUMENT
-
-### 5.2. Domain Service
-
-#### 5.2.1. Workflow
-* clear shopping cart
- - clear shopping cart by customer id `boolean deleteByCustomerId(long customerId)`
-
-#### 5.2.2. Exception
-* ShoppingCartParamException
- - customer_id is required: `deleteByCustomerId`
 
 ### 5.3 Error Handle
 
@@ -275,24 +275,24 @@ INVALID_ARGUMENT | parameters are invalid | ShoppingCartParamException | custome
 ## 6. Abandoning Shopping Cart
 When the session of an anonymous customer is expired, the shopping cart will be abandoned.
 
-### 6.1. Grpc API
+### 6.1. Domain Service
 
-#### 6.1.1. Request service
+#### 6.1.1. Workflow
+* clear shopping cart
+ - clear shopping cart by customer id `boolean deleteBySessionId(String sessionId)`
+
+#### 6.1.2. Exception
+* ShoppingCartParamException
+ - session_id is required: `deleteBySessionId`
+
+### 6.2. Grpc API
+
+#### 6.2.1. Request service
 * service: deleteForSession (SessionRequest) returns (DeleteReply)
 * param: SessionRequest(session_id(String))
 * return: DeleteReply(boolean)
 * exception: StatusRuntimeException
  - INVALID_ARGUMENT
-
-### 6.2. Domain Service
-
-#### 6.2.1. Workflow
-* clear shopping cart
- - clear shopping cart by customer id `boolean deleteBySessionId(String sessionId)`
-
-#### 6.2.2. Exception
-* ShoppingCartParamException
- - session_id is required: `deleteBySessionId`
 
 ### 6.3 Error Handle
 

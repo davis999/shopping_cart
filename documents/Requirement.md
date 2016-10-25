@@ -34,10 +34,10 @@ When a customer successfully adds a product to the shopping cart or clicks the s
 
 We have total quantity limit check and inventory check. If check failed adding product will failed.
 
-### 4.4. Clearing Shopping Cart
+### 4.4. Delete Sku from Shopping Cart
 When customer clicks the "x" icon, the sku in the shopping cart will be deleted.
 
-### 4.5. Delete Sku from Shopping Cart
+### 4.5. Clearing Shopping Cart
 When customer submits the order, shopping cart will be cleaned.
 
 ### 4.6. Abandoning Shopping Cart

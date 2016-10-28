@@ -23,6 +23,9 @@ class EditItemAppTest extends Specification {
     @Shared
     long shppingCartId = 1001L
 
+    @Shared
+    Date createdTime = new Date()
+
     EditItemApp editItemApp = new EditItemApp()
 
     ShoppingCart requestSC
@@ -47,7 +50,7 @@ class EditItemAppTest extends Specification {
     def "existed shopping cart existed"() {
         setup:
         requestSC = new ShoppingCart(customerId: customerId, sessionId: sessionId, skuId: skuId, quantity: quantity)
-        ShoppingCart shoppingCartExisted = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: 1)
+        ShoppingCart shoppingCartExisted = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: 1, createdTime: createdTime)
         shoppingCartService.findOneBySkuIdForCustomer(_) >> shoppingCartExisted
         editItemApp.shoppingCartService = shoppingCartService
 

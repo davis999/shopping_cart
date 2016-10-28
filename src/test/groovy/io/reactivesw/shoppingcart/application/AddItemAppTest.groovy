@@ -23,6 +23,9 @@ class AddItemAppTest extends Specification {
     @Shared
     long shppingCartId = 1001L
 
+    @Shared
+    Date createdTime = new Date()
+
     AddItemApp addItemApp = new AddItemApp()
 
     ShoppingCart requestSC
@@ -47,7 +50,7 @@ class AddItemAppTest extends Specification {
     def "merge existed quantity existed"() {
         setup:
         requestSC = new ShoppingCart(customerId: customerId, sessionId: sessionId, skuId: skuId, quantity: quantity)
-        ShoppingCart shoppingCartExisted = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: 1)
+        ShoppingCart shoppingCartExisted = new ShoppingCart(shoppingCartId: shppingCartId, customerId: customerId, skuId: skuId, quantity: 1, createdTime: createdTime)
         shoppingCartService.findOneBySkuIdForCustomer(_) >> shoppingCartExisted
         addItemApp.shoppingCartService = shoppingCartService
 

@@ -85,6 +85,7 @@ public class EditItemApp {
     if (oldCart != null) {
       LOGGER.debug("app service: old shopping cart id: {}", oldCart.getShoppingCartId());
       shoppingCart.setShoppingCartId(oldCart.getShoppingCartId());
+      shoppingCart.setCreatedTime(oldCart.getCreatedTime());
     }
     return shoppingCart;
   }

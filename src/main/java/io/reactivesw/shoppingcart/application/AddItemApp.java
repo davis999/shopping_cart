@@ -89,6 +89,7 @@ public class AddItemApp {
       LOGGER.debug("app service: old shopping cart id: {} existed quantity: {}",
           oldCart.getShoppingCartId(), oldCart.getQuantity());
       shoppingCart.setShoppingCartId(oldCart.getShoppingCartId());
+      shoppingCart.setCreatedTime(oldCart.getCreatedTime());
       final int newQuantity = shoppingCart.getQuantity() + oldCart.getQuantity();
       shoppingCart.setQuantity(newQuantity);
       LOGGER.debug("app service: after merge. shopping cart id: {} new quantity: {}",

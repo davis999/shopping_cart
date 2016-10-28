@@ -1,6 +1,5 @@
 package io.reactivesw.shoppingcart.domain.model;
 
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -53,16 +52,6 @@ public class ShoppingCartSku {
    * sku quantity.
    */
   private int quantity;
-
-  /**
-   * created time.
-   */
-  private Date createdTime;
-
-  /**
-   * modified time.
-   */
-  private Date modifiedTime;
 
   /**
    * get the shopping cart id.
@@ -209,38 +198,6 @@ public class ShoppingCartSku {
   }
 
   /**
-   * get the created time of the shopping cart.
-   * @return createdTime the createdTime
-   */
-  public Date getCreatedTime() {
-    return new Date(createdTime.getTime());
-  }
-
-  /**
-   * set the created time of the shopping cart.
-   * @param createdTime the createdTime to set
-   */
-  public void setCreatedTime(Date createdTime) {
-    this.createdTime = new Date(createdTime.getTime());
-  }
-
-  /**
-   * get the modified time of the shopping cart.
-   * @return modifiedTime the modifiedTime
-   */
-  public Date getModifiedTime() {
-    return new Date(modifiedTime.getTime());
-  }
-
-  /**
-   * set the modified time of the shopping cart.
-   * @param modifiedTime the modifiedTime to set
-   */
-  public void setModifiedTime(Date modifiedTime) {
-    this.modifiedTime = new Date(modifiedTime.getTime());
-  }
-
-  /**
    * generate hash code.
    * @see Object#hashCode()
    */
@@ -248,7 +205,7 @@ public class ShoppingCartSku {
   public int hashCode() {
     return Objects
         .hash(shoppingCartId, customerId, sessionId, skuId, skuNumber, skuName, mediaUrl, price,
-            quantity, createdTime, modifiedTime);
+            quantity);
   }
 
   /**
@@ -271,9 +228,7 @@ public class ShoppingCartSku {
               && Objects.equals(skuName, other.skuName)
               && Objects.equals(mediaUrl, other.mediaUrl)
               && Objects.equals(price, other.price)
-              && Objects.equals(quantity, other.quantity)
-              && Objects.equals(createdTime, other.createdTime)
-              && Objects.equals(modifiedTime, other.modifiedTime);
+              && Objects.equals(quantity, other.quantity);
     }
     return equalsResult;
   }

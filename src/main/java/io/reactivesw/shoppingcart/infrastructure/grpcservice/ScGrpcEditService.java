@@ -46,7 +46,7 @@ public class ScGrpcEditService extends ShoppingCartEditServiceGrpc.ShoppingCartE
   @Override
   public void editShoppingCart(ShoppingCartRequest request,
                                StreamObserver<ShoppingCartReply> responseObserver) {
-    LOGGER.info("grpc server: edit shopping cart start, request: {}", request);
+    LOGGER.debug("grpc server: edit shopping cart start, request: {}", request);
     try {
       ShoppingCart shoppingCart = ScGrpcStream.grpcRequestToShoppingCart(request);
       ShoppingCartSku addResult = editItemApp.editShoppingCart(shoppingCart);
@@ -55,7 +55,7 @@ public class ScGrpcEditService extends ShoppingCartEditServiceGrpc.ShoppingCartE
       ShoppingCartReply replyMessage =
           ShoppingCartReply.newBuilder().setShoppingCart(grpcShoppingCartSku).build();
       ScGrpcUtility.completeResponse(responseObserver, replyMessage);
-      LOGGER.info("grpc server: edit shopping cart finished, reply: {}", replyMessage);
+      LOGGER.debug("grpc server: edit shopping cart finished, reply: {}", replyMessage);
     } catch (ShoppingCartParamException scpException) {
       LOGGER.debug("parameters are invalid, throw ShoppingCartParamException: {}", scpException);
       Status status = Status.INVALID_ARGUMENT.withDescription(ScGrpcUtility.INVALID_ARGUMENT_MSG);

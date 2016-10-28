@@ -43,7 +43,7 @@ public final class ScGrpcUtility {
    * @param reply reply
    */
   public static <T> void completeResponse(StreamObserver<T> responseObserver, final T reply) {
-    LOGGER.info("grpc server: reply for client. reply: {}", reply);
+    LOGGER.debug("grpc server: reply for client. reply: {}", reply);
     responseObserver.onNext(reply);
     responseObserver.onCompleted();
   }
